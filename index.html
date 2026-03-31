@@ -260,7 +260,11 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
   #mp{bottom:20px !important;right:12px !important}
 }
 /* ─── THOUGHT CARD ─── */
-.thought-card{cursor:pointer;border:1px solid rgba(196,162,101,.15);padding:36px 32px;transition:all .5s var(--e2);position:relative;background:rgba(196,162,101,.02);min-height:100%;display:flex;flex-direction:column;justify-content:center}
+.thought-card{cursor:pointer;border:1px solid rgba(196,162,101,.12);padding:44px 36px;transition:all .5s var(--e2);position:relative;background:rgba(196,162,101,.015);min-height:100%;display:flex;flex-direction:column}
+.tc-divider{height:1px;background:linear-gradient(90deg,rgba(196,162,101,.25),rgba(196,162,101,.06));margin:24px 0 28px}
+.tc-btn{display:block;text-align:center;padding:14px 0;border:1px solid rgba(196,162,101,.2);font-size:12px;color:var(--gd);letter-spacing:5px;font-family:var(--ss);transition:all .4s var(--e2);margin-top:auto}
+.thought-card:hover .tc-btn{background:rgba(196,162,101,.06);border-color:rgba(196,162,101,.35);letter-spacing:7px}
+.tc-seal{text-align:center;margin-top:auto;opacity:.15}
 .thought-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.4;transition:opacity .4s}
 .thought-card:hover{border-color:rgba(196,162,101,.3);background:rgba(196,162,101,.04);box-shadow:0 0 40px rgba(196,162,101,.04)}
 .thought-card:hover::before{opacity:.7}
@@ -268,9 +272,6 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-label{font-size:11px;color:var(--gd);letter-spacing:5px;text-transform:uppercase;margin-bottom:20px;font-weight:400}
 .thought-title{font-family:var(--sf);font-size:clamp(20px,2.5vw,26px);color:var(--tx);line-height:1.5;margin-bottom:18px;font-weight:600}
 .thought-summary{font-size:14px;color:var(--tx3);line-height:2;margin-bottom:24px;font-weight:200}
-.thought-read{margin-top:auto;padding-top:24px}
-.thought-read span{transition:all .4s var(--e2)}
-.thought-card:hover .thought-read span{background:rgba(196,162,101,.06);border-color:rgba(196,162,101,.4);letter-spacing:6px}
 .thought-sign{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(196,162,101,.08)}
 .thought-sign span{font-size:10px;color:var(--tx5);letter-spacing:2px}
 /* ─── THOUGHT PANEL ─── */
@@ -333,23 +334,26 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 <div class="orn"><svg class="orn-seal" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="2"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
 <section class="S">
   <div class="glow-wrap"><span class="glow-b"></span><span class="glow-c"></span></div>
-  <div class="intro-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch">
+  <div class="intro-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch">
     <div class="rv">
       <div class="thought-card" onclick="openThought()">
         <span class="lb" style="text-align:left">DAILY INSIGHT</span>
-        <h2 style="font-family:var(--sf);font-size:clamp(24px,3vw,32px);color:var(--gd);letter-spacing:5px;margin:20px 0 28px;font-weight:600">明一带你看世界</h2>
-        <p style="font-size:11px;color:var(--tx5);letter-spacing:3px;margin-bottom:20px"><span style="color:var(--gd);opacity:.7">每日 9:00 更新</span><span style="margin:0 12px;opacity:.3">|</span><span id="thoughtDate">2026-03-31</span></p>
+        <h2 style="font-family:var(--sf);font-size:clamp(22px,2.8vw,28px);color:var(--gd);letter-spacing:4px;margin:16px 0 0;font-weight:600">明一带你看世界</h2>
+        <div class="tc-divider"></div>
+        <p style="font-size:11px;color:var(--tx5);letter-spacing:3px;margin-bottom:16px"><span style="color:var(--gd);opacity:.7">每日 9:00 更新</span><span style="margin:0 10px;opacity:.2">·</span><span id="thoughtDate">2026-03-31</span></p>
         <div class="thought-title" id="thoughtTitle">旧地图失效的一天</div>
         <div class="thought-summary" id="thoughtSummary">今天全世界都在讨论AI会不会取代人。但没有人问一个更重要的问题：你有没有值得被AI放大的东西？</div>
-        <div class="thought-read"><span style="border:1px solid rgba(196,162,101,.2);padding:10px 28px;font-size:12px;color:var(--gd);letter-spacing:4px;display:inline-block;transition:all .4s">展 开 阅 读</span></div>
+        <div class="tc-btn">展 开 阅 读</div>
       </div>
     </div>
     <div class="rv d2">
-      <div class="thought-card" style="cursor:default" onmouseover="" onclick="">
+      <div class="thought-card" style="cursor:default">
         <span class="lb" style="text-align:left">WHAT WE DO</span>
-        <h2 style="font-family:var(--sf);font-size:clamp(24px,3vw,32px);color:var(--gd);letter-spacing:5px;margin:20px 0 28px;font-weight:600">道序科技</h2>
-        <p style="font-size:16px;color:var(--tx3);line-height:2.8;font-weight:300;margin-bottom:20px">用AI帮你<span style="color:var(--tx);font-weight:500">突破天花板</span><br>用认知帮你<span style="color:var(--tx);font-weight:500">看清下一步</span><br>用生态帮你<span style="color:var(--tx);font-weight:500">找到同路人</span></p>
-        <p style="font-size:14px;letter-spacing:8px;color:var(--gd);font-weight:400;margin-top:auto">AI · 认知 · 影响力</p>
+        <h2 style="font-family:var(--sf);font-size:clamp(22px,2.8vw,28px);color:var(--gd);letter-spacing:4px;margin:16px 0 0;font-weight:600">道序科技</h2>
+        <div class="tc-divider"></div>
+        <p style="font-size:16px;color:var(--tx3);line-height:2.8;font-weight:300;margin-bottom:24px">用AI帮你<span style="color:var(--tx);font-weight:500">突破天花板</span><br>用认知帮你<span style="color:var(--tx);font-weight:500">看清下一步</span><br>用生态帮你<span style="color:var(--tx);font-weight:500">找到同路人</span></p>
+        <p style="font-size:13px;letter-spacing:7px;color:var(--gd);font-weight:400;margin-bottom:28px">AI · 认知 · 影响力</p>
+        <div class="tc-seal"><svg width="36" height="36" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="1.5"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div>
       </div>
     </div>
   </div>
