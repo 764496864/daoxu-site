@@ -259,6 +259,35 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
   .chat-fab{bottom:20px;right:64px}
   #mp{bottom:20px !important;right:12px !important}
 }
+/* ─── THOUGHT CARD ─── */
+.thought-card{cursor:pointer;border:1px solid rgba(196,162,101,.15);padding:36px 32px;transition:all .5s var(--e2);position:relative;background:rgba(196,162,101,.02);min-height:100%;display:flex;flex-direction:column;justify-content:center}
+.thought-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.4;transition:opacity .4s}
+.thought-card:hover{border-color:rgba(196,162,101,.3);background:rgba(196,162,101,.04);box-shadow:0 0 40px rgba(196,162,101,.04)}
+.thought-card:hover::before{opacity:.7}
+.thought-date{font-size:11px;color:var(--tx4);letter-spacing:3px;margin-bottom:14px}
+.thought-label{font-size:11px;color:var(--gd);letter-spacing:5px;text-transform:uppercase;margin-bottom:20px;font-weight:400}
+.thought-title{font-family:var(--sf);font-size:clamp(20px,2.5vw,26px);color:var(--tx);line-height:1.5;margin-bottom:18px;font-weight:600}
+.thought-summary{font-size:14px;color:var(--tx3);line-height:2;margin-bottom:24px;font-weight:200}
+.thought-read{font-size:11px;color:var(--gd);letter-spacing:3px;opacity:.6;transition:all .3s}
+.thought-card:hover .thought-read{opacity:1;letter-spacing:5px}
+.thought-sign{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(196,162,101,.08)}
+.thought-sign span{font-size:10px;color:var(--tx5);letter-spacing:2px}
+/* ─── THOUGHT PANEL ─── */
+.thought-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,7,10,.94);z-index:200;display:none;align-items:center;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.thought-overlay.open{display:flex}
+.thought-panel{max-width:680px;width:100%;max-height:85vh;overflow-y:auto;padding:48px 44px;border:1px solid rgba(196,162,101,.12);background:var(--bg);scrollbar-width:thin;scrollbar-color:rgba(196,162,101,.1) transparent;position:relative}
+.thought-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.5}
+.thought-panel::-webkit-scrollbar{width:3px}
+.thought-panel::-webkit-scrollbar-thumb{background:rgba(196,162,101,.1);border-radius:2px}
+.thought-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.thought-panel-date{font-size:11px;color:var(--tx4);letter-spacing:3px}
+.thought-panel-close{cursor:pointer;color:var(--tx4);font-size:16px;padding:4px 8px;transition:color .3s}
+.thought-panel-close:hover{color:var(--tx)}
+.thought-panel-title{font-family:var(--sf);font-size:clamp(20px,2.5vw,26px);color:var(--tx);font-weight:600;letter-spacing:2px;margin-bottom:36px;line-height:1.5}
+.thought-panel-body h3{font-family:var(--sf);font-size:16px;color:var(--gd);font-weight:400;margin:32px 0 16px;letter-spacing:2px;padding-left:12px;border-left:2px solid rgba(196,162,101,.3)}
+.thought-panel-body p{font-size:15px;color:var(--tx2);line-height:2.2;margin-bottom:18px;font-weight:200}
+.thought-panel-footer{display:flex;align-items:center;gap:10px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(196,162,101,.08)}
+.thought-panel-footer span{font-size:10px;color:var(--tx5);letter-spacing:2px}
 </style>
 </head>
 <body>
@@ -299,15 +328,25 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 <div class="orn"><svg class="orn-seal" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="2"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
 <section class="S">
   <div class="glow-wrap"><span class="glow-b"></span><span class="glow-c"></span></div>
-  <div class="intro-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center">
-    <div class="rv" style="text-align:right">
-      <div style="font-family:var(--sf);font-size:clamp(52px,8vw,88px);font-style:italic;color:var(--gd);opacity:.1;font-weight:300;line-height:1">Beyond</div>
+  <div class="intro-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch">
+    <div class="rv">
+      <div class="thought-card" onclick="openThought()">
+        <span class="lb" style="text-align:left">DAILY INSIGHT</span>
+        <h2 style="font-family:var(--sf);font-size:28px;letter-spacing:6px;margin:20px 0 24px;font-weight:600">明一看世界</h2>
+        <div class="thought-date" id="thoughtDate">2026-03-31</div>
+        <div class="thought-title" id="thoughtTitle">旧地图失效的一天</div>
+        <div class="thought-summary" id="thoughtSummary">今天全世界都在讨论AI会不会取代人。但没有人问一个更重要的问题：你有没有值得被AI放大的东西？</div>
+        <div class="thought-read">展开阅读 →</div>
+        <p style="font-size:11px;color:var(--tx5);letter-spacing:2px;margin-top:20px">每日 9:00 更新 · 明一带你看世界</p>
+      </div>
     </div>
-    <div class="rv d2" style="border-left:1px solid rgba(196,162,101,.06);padding-left:44px">
-      <span class="lb" style="text-align:left">WHAT WE DO</span>
-      <h2 style="font-family:var(--sf);font-size:34px;letter-spacing:8px;margin:20px 0 36px;font-weight:600">道序科技</h2>
-      <p style="font-size:17px;color:var(--tx3);line-height:3;font-weight:200">用AI帮你<span style="color:var(--tx)">突破天花板</span><br>用认知帮你<span style="color:var(--tx)">看清下一步</span><br>用生态帮你<span style="color:var(--tx)">找到同路人</span></p>
-      <p style="margin-top:32px;font-size:12px;letter-spacing:6px;color:var(--gd);font-weight:400">AI · 认知 · 影响力</p>
+    <div class="rv d2">
+      <div class="thought-card" style="cursor:default" onmouseover="" onclick="">
+        <span class="lb" style="text-align:left">WHAT WE DO</span>
+        <h2 style="font-family:var(--sf);font-size:28px;letter-spacing:6px;margin:20px 0 24px;font-weight:600">道序科技</h2>
+        <p style="font-size:15px;color:var(--tx3);line-height:2.8;font-weight:200;margin-bottom:16px">用AI帮你<span style="color:var(--tx)">突破天花板</span><br>用认知帮你<span style="color:var(--tx)">看清下一步</span><br>用生态帮你<span style="color:var(--tx)">找到同路人</span></p>
+        <p style="font-size:12px;letter-spacing:6px;color:var(--gd);font-weight:400;margin-top:auto">AI · 认知 · 影响力</p>
+      </div>
     </div>
   </div>
 </section>
@@ -619,6 +658,48 @@ function toggleMusic(){
   if(playing){fadeOut(a,800);ic.style.display='';bars.style.display='none';playing=false}
   else{fadeIn(a,0.15,2000);ic.style.display='none';bars.style.display='flex';playing=true}
 }
+var thoughtData=null;
+function loadThought(){
+  fetch('thought.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    thoughtData=d;
+    document.getElementById('thoughtDate').textContent=d.date;
+    document.getElementById('thoughtTitle').textContent=d.title;
+    document.getElementById('thoughtSummary').textContent=d.summary;
+  }).catch(function(){});
+}
+function openThought(){
+  if(!thoughtData)return;
+  var d=thoughtData;
+  document.getElementById('panelDate').textContent=d.date;
+  document.getElementById('panelTitle').textContent='明一看世界 · '+d.title;
+  var html='';
+  d.sections.forEach(function(s){
+    html+='<h3>'+s.heading+'</h3>';
+    s.content.split('\n\n').forEach(function(p){html+='<p>'+p+'</p>'});
+  });
+  document.getElementById('panelBody').innerHTML=html;
+  document.getElementById('thoughtOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeThought(){
+  document.getElementById('thoughtOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+loadThought();
 </script>
+<div class="thought-overlay" id="thoughtOverlay" onclick="if(event.target===this)closeThought()">
+  <div class="thought-panel">
+    <div class="thought-panel-header">
+      <span class="thought-panel-date" id="panelDate">2026-03-31</span>
+      <span class="thought-panel-close" onclick="closeThought()">✕</span>
+    </div>
+    <h2 class="thought-panel-title" id="panelTitle">明一看世界</h2>
+    <div class="thought-panel-body" id="panelBody"></div>
+    <div class="thought-panel-footer">
+      <svg width="20" height="20" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="28" fill="#07070A" stroke="#C4A265" stroke-width="1.5"/><path d="M19 42C23 32 27 24 33 20C38 18 42 22 40 30C38 36 32 36 30 30" stroke="#C4A265" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="30" cy="16" r="2" fill="#C4A265" opacity=".6"/></svg>
+      <span>明一 · 今日份思考</span>
+    </div>
+  </div>
+</div>
 </body>
 </html>
