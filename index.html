@@ -287,7 +287,8 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-panel-subtitle{font-size:12px;color:var(--tx5);letter-spacing:2px;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid rgba(196,162,101,.06)}
 .thought-panel-body h3{font-family:var(--sf);font-size:16px;color:var(--gd);font-weight:400;margin:36px 0 16px;letter-spacing:2px;padding-left:14px;border-left:2px solid rgba(196,162,101,.3);line-height:1.4}
 .thought-panel-body h3:first-child{margin-top:0}
-.thought-panel-body p{font-size:15px;color:var(--tx2);line-height:2.2;margin-bottom:18px;font-weight:200}
+.thought-panel-body p{font-size:15px;color:var(--tx2);line-height:2.2;margin-bottom:18px;font-weight:200;white-space:pre-line}
+.thought-panel-lead{font-size:16px;color:var(--tx);line-height:2;font-weight:300;padding-bottom:24px;margin-bottom:28px;border-bottom:1px solid rgba(196,162,101,.08)}
 .thought-panel-body p:last-child{margin-bottom:0}
 .thought-panel-footer{display:flex;align-items:center;justify-content:space-between;margin-top:36px;padding-top:24px;border-top:1px solid rgba(196,162,101,.06)}
 .thought-panel-footer .tpf-left{display:flex;align-items:center;gap:10px}
@@ -337,12 +338,10 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
   <div class="intro-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch">
     <div class="rv">
       <div class="thought-card" onclick="openThought()">
-        <span class="lb" style="text-align:left">DAILY INSIGHT</span>
-        <h2 style="font-family:var(--sf);font-size:clamp(22px,2.8vw,28px);color:var(--gd);letter-spacing:4px;margin:16px 0 0;font-weight:600">明一带你看世界</h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><span style="font-size:10px;color:var(--gd);letter-spacing:4px;font-weight:400">明一今日思考</span><span id="thoughtDate" style="font-size:10px;color:var(--tx5);letter-spacing:2px"></span></div>
+        <div class="thought-title" id="thoughtTitle" style="min-height:1.6em"></div>
         <div class="tc-divider"></div>
-        <p style="font-size:11px;color:var(--tx5);letter-spacing:3px;margin-bottom:16px"><span style="color:var(--gd);opacity:.7">每日 9:00 更新</span><span style="margin:0 10px;opacity:.2">·</span><span id="thoughtDate">2026-03-31</span></p>
-        <div class="thought-title" id="thoughtTitle">旧地图失效的一天</div>
-        <div class="thought-summary" id="thoughtSummary">今天全世界都在讨论AI会不会取代人。但没有人问一个更重要的问题：你有没有值得被AI放大的东西？</div>
+        <div class="thought-summary" id="thoughtSummary"></div>
         <div class="tc-btn">展 开 阅 读</div>
       </div>
     </div>
@@ -670,27 +669,28 @@ var thoughtData=null;
 function loadThought(){
   fetch('thought.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
     thoughtData=d;
-    document.getElementById('thoughtDate').textContent=d.date||'';
-    document.getElementById('thoughtTitle').textContent=d.title||'';
-    var sum=d.summary||(d.thought?d.thought.substring(0,80)+'...':'')||'';
-    document.getElementById('thoughtSummary').textContent=sum;
+    var dateEl=document.getElementById('thoughtDate');
+    var titleEl=document.getElementById('thoughtTitle');
+    var sumEl=document.getElementById('thoughtSummary');
+    if(dateEl)dateEl.textContent=d.date||'';
+    if(titleEl)titleEl.textContent=d.title||'明一今日思考';
+    if(sumEl)sumEl.textContent=d.summary||'';
   }).catch(function(e){console.log('thought.json load error:',e)});
 }
 function openThought(){
   if(!thoughtData)return;
   var d=thoughtData;
   document.getElementById('panelDate').textContent=d.date||'';
-  document.getElementById('panelTitle').textContent='明一看世界 · '+(d.title||'');
+  document.getElementById('panelTitle').textContent=d.title||'明一今日思考';
   var html='';
+  if(d.summary){html+='<p class="thought-panel-lead">'+d.summary+'</p>'}
   if(d.sections&&d.sections.length){
     d.sections.forEach(function(s){
       html+='<h3>'+s.heading+'</h3>';
-      s.content.split('\n\n').forEach(function(p){html+='<p>'+p+'</p>'});
+      s.content.split('\n').forEach(function(p){if(p.trim())html+='<p>'+p+'</p>'});
     });
-  }else if(d.thought){
-    d.thought.split('\n\n').forEach(function(p){if(p.trim())html+='<p>'+p+'</p>'});
-  }else if(d.content){
-    d.content.split('\n\n').forEach(function(p){if(p.trim())html+='<p>'+p+'</p>'});
+  }else if(d.summary){
+    html+='<p>'+d.summary+'</p>';
   }
   document.getElementById('panelBody').innerHTML=html;
   document.getElementById('thoughtOverlay').classList.add('open');
