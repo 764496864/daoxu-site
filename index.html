@@ -285,11 +285,14 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-panel-close:hover{color:var(--tx);border-color:rgba(255,255,255,.12)}
 .thought-panel-title{font-family:var(--sf);font-size:clamp(22px,3vw,28px);color:var(--tx);font-weight:600;letter-spacing:3px;margin-bottom:12px;line-height:1.5}
 .thought-panel-subtitle{font-size:12px;color:var(--tx5);letter-spacing:2px;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid rgba(196,162,101,.06)}
-.thought-panel-body h3{font-family:var(--sf);font-size:16px;color:var(--gd);font-weight:400;margin:36px 0 16px;letter-spacing:2px;padding-left:14px;border-left:2px solid rgba(196,162,101,.3);line-height:1.4}
-.thought-panel-body h3:first-child{margin-top:0}
-.thought-panel-body p{font-size:15px;color:var(--tx2);line-height:2.2;margin-bottom:18px;font-weight:200;white-space:pre-line}
-.thought-panel-lead{font-size:16px;color:var(--tx);line-height:2;font-weight:300;padding-bottom:24px;margin-bottom:28px;border-bottom:1px solid rgba(196,162,101,.08)}
+.thought-panel-body h3{font-family:var(--sf);font-size:clamp(17px,2vw,20px);color:var(--gd);font-weight:500;margin:40px 0 18px;letter-spacing:2px;padding-left:16px;border-left:2px solid rgba(196,162,101,.35);line-height:1.5}
+.thought-panel-body h3:first-child{margin-top:4px}
+.thought-panel-body h4{font-family:var(--sf);font-size:15px;color:var(--tx);font-weight:400;margin:28px 0 12px;letter-spacing:1px;line-height:1.6}
+.thought-panel-body p{font-size:14.5px;color:var(--tx2);line-height:2.2;margin-bottom:16px;font-weight:200}
 .thought-panel-body p:last-child{margin-bottom:0}
+.thought-panel-body strong{color:var(--tx);font-weight:500}
+.thought-panel-body code{font-size:13px;color:var(--gd);background:rgba(196,162,101,.06);padding:2px 6px;border-radius:3px;font-family:'Menlo','Consolas',monospace;letter-spacing:0}
+.thought-panel-lead{font-size:15px;color:var(--tx);line-height:2.2;font-weight:300;padding-bottom:24px;margin-bottom:32px;border-bottom:1px solid rgba(196,162,101,.08)}
 .thought-panel-footer{display:flex;align-items:center;justify-content:space-between;margin-top:36px;padding-top:24px;border-top:1px solid rgba(196,162,101,.06)}
 .thought-panel-footer .tpf-left{display:flex;align-items:center;gap:10px}
 .thought-panel-footer .tpf-left span{font-size:10px;color:var(--tx5);letter-spacing:2px}
@@ -550,6 +553,8 @@ function toggleChat(){
 
 /* ─── AGENT SELECT & WEBSOCKET ─── */
 function mdToHtml(s){return s.replace(/\*\*([^*]+)\*\*/g,"<strong>" +"$1"+"</strong>").replace(/\*([^*]+)\*/g,"<em>"+"$1"+"</em>").replace(/^- /gm,"• ");}
+function fmtContent(s){return s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>');}
+function renderContent(content){var html='';var lines=content.split('\n');for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;if(line.indexOf('### ')===0){html+='<h4>'+fmtContent(line.substring(4))+'</h4>'}else{html+='<p>'+fmtContent(line)+'</p>'}}return html;}
 function fmtTime(){var d=new Date();return d.getHours().toString().padStart(2,"0")+":"+d.getMinutes().toString().padStart(2,"0")}
 var ws=null,currentAgent='',streamingDiv=null,streamText='';
 function selectAgent(agentId,agentName){
@@ -685,14 +690,14 @@ function openThought(){
   document.getElementById('panelDate').textContent=d.date||'';
   document.getElementById('panelTitle').textContent=d.title||'明一今日思考';
   var html='';
-  if(d.summary){html+='<p class="thought-panel-lead">'+d.summary+'</p>'}
+  if(d.summary){html+='<p class="thought-panel-lead">'+fmtContent(d.summary)+'</p>'}
   if(d.sections&&d.sections.length){
     d.sections.forEach(function(s){
       html+='<h3>'+s.heading+'</h3>';
-      s.content.split('\n').forEach(function(p){if(p.trim())html+='<p>'+p+'</p>'});
+      html+=renderContent(s.content);
     });
   }else if(d.summary){
-    html+='<p>'+d.summary+'</p>';
+    html+='<p>'+fmtContent(d.summary)+'</p>';
   }
   document.getElementById('panelBody').innerHTML=html;
   document.getElementById('thoughtOverlay').classList.add('open');
