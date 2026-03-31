@@ -273,21 +273,25 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-sign{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(196,162,101,.08)}
 .thought-sign span{font-size:10px;color:var(--tx5);letter-spacing:2px}
 /* ─── THOUGHT PANEL ─── */
-.thought-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,7,10,.94);z-index:200;display:none;align-items:center;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.thought-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,7,10,.95);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:60px 20px;overflow-y:auto;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .thought-overlay.open{display:flex}
-.thought-panel{max-width:680px;width:100%;max-height:85vh;overflow-y:auto;padding:48px 44px;border:1px solid rgba(196,162,101,.12);background:var(--bg);scrollbar-width:thin;scrollbar-color:rgba(196,162,101,.1) transparent;position:relative}
-.thought-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.5}
-.thought-panel::-webkit-scrollbar{width:3px}
-.thought-panel::-webkit-scrollbar-thumb{background:rgba(196,162,101,.1);border-radius:2px}
-.thought-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
-.thought-panel-date{font-size:11px;color:var(--tx4);letter-spacing:3px}
-.thought-panel-close{cursor:pointer;color:var(--tx4);font-size:16px;padding:4px 8px;transition:color .3s}
-.thought-panel-close:hover{color:var(--tx)}
-.thought-panel-title{font-family:var(--sf);font-size:clamp(20px,2.5vw,26px);color:var(--tx);font-weight:600;letter-spacing:2px;margin-bottom:36px;line-height:1.5}
-.thought-panel-body h3{font-family:var(--sf);font-size:16px;color:var(--gd);font-weight:400;margin:32px 0 16px;letter-spacing:2px;padding-left:12px;border-left:2px solid rgba(196,162,101,.3)}
+.thought-panel{max-width:700px;width:100%;padding:52px 48px 44px;border:1px solid rgba(196,162,101,.1);background:var(--bg);position:relative;margin:auto}
+.thought-panel::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.4}
+.thought-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.thought-panel-date{font-size:11px;color:var(--tx5);letter-spacing:3px}
+.thought-panel-close{cursor:pointer;color:var(--tx5);font-size:14px;padding:6px 10px;transition:all .3s;border:1px solid rgba(255,255,255,.06);border-radius:4px}
+.thought-panel-close:hover{color:var(--tx);border-color:rgba(255,255,255,.12)}
+.thought-panel-title{font-family:var(--sf);font-size:clamp(22px,3vw,28px);color:var(--tx);font-weight:600;letter-spacing:3px;margin-bottom:12px;line-height:1.5}
+.thought-panel-subtitle{font-size:12px;color:var(--tx5);letter-spacing:2px;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid rgba(196,162,101,.06)}
+.thought-panel-body h3{font-family:var(--sf);font-size:16px;color:var(--gd);font-weight:400;margin:36px 0 16px;letter-spacing:2px;padding-left:14px;border-left:2px solid rgba(196,162,101,.3);line-height:1.4}
+.thought-panel-body h3:first-child{margin-top:0}
 .thought-panel-body p{font-size:15px;color:var(--tx2);line-height:2.2;margin-bottom:18px;font-weight:200}
-.thought-panel-footer{display:flex;align-items:center;gap:10px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(196,162,101,.08)}
-.thought-panel-footer span{font-size:10px;color:var(--tx5);letter-spacing:2px}
+.thought-panel-body p:last-child{margin-bottom:0}
+.thought-panel-footer{display:flex;align-items:center;justify-content:space-between;margin-top:36px;padding-top:24px;border-top:1px solid rgba(196,162,101,.06)}
+.thought-panel-footer .tpf-left{display:flex;align-items:center;gap:10px}
+.thought-panel-footer .tpf-left span{font-size:10px;color:var(--tx5);letter-spacing:2px}
+.thought-panel-footer .tpf-right{font-size:11px;color:var(--gd);letter-spacing:2px;cursor:pointer;opacity:.5;transition:opacity .3s}
+.thought-panel-footer .tpf-right:hover{opacity:1}
 </style>
 </head>
 <body>
@@ -332,12 +336,11 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
     <div class="rv">
       <div class="thought-card" onclick="openThought()">
         <span class="lb" style="text-align:left">DAILY INSIGHT</span>
-        <h2 style="font-family:var(--sf);font-size:28px;letter-spacing:6px;margin:20px 0 24px;font-weight:600">明一看世界</h2>
-        <div class="thought-date" id="thoughtDate">2026-03-31</div>
+        <p style="font-family:var(--sf);font-size:15px;color:var(--tx2);letter-spacing:3px;margin:18px 0 4px;font-weight:400">明一带你看世界<span style="font-size:11px;color:var(--gd);letter-spacing:2px;margin-left:12px;font-family:var(--ss);font-weight:300">每日 9:00 更新</span></p>
+        <div class="thought-date" id="thoughtDate" style="margin:16px 0 12px">2026-03-31</div>
         <div class="thought-title" id="thoughtTitle">旧地图失效的一天</div>
         <div class="thought-summary" id="thoughtSummary">今天全世界都在讨论AI会不会取代人。但没有人问一个更重要的问题：你有没有值得被AI放大的东西？</div>
         <div class="thought-read">展开阅读 →</div>
-        <p style="font-size:11px;color:var(--tx5);letter-spacing:2px;margin-top:20px">每日 9:00 更新 · 明一带你看世界</p>
       </div>
     </div>
     <div class="rv d2">
@@ -694,10 +697,14 @@ loadThought();
       <span class="thought-panel-close" onclick="closeThought()">✕</span>
     </div>
     <h2 class="thought-panel-title" id="panelTitle">明一看世界</h2>
+    <div class="thought-panel-subtitle">明一带你看世界 · 每日 9:00 更新</div>
     <div class="thought-panel-body" id="panelBody"></div>
     <div class="thought-panel-footer">
-      <svg width="20" height="20" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="28" fill="#07070A" stroke="#C4A265" stroke-width="1.5"/><path d="M19 42C23 32 27 24 33 20C38 18 42 22 40 30C38 36 32 36 30 30" stroke="#C4A265" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="30" cy="16" r="2" fill="#C4A265" opacity=".6"/></svg>
-      <span>明一 · 今日份思考</span>
+      <div class="tpf-left">
+        <svg width="18" height="18" viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="28" fill="#07070A" stroke="#C4A265" stroke-width="1.5"/><path d="M19 42C23 32 27 24 33 20C38 18 42 22 40 30C38 36 32 36 30 30" stroke="#C4A265" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="30" cy="16" r="2" fill="#C4A265" opacity=".6"/></svg>
+        <span>明一 · 今日份思考</span>
+      </div>
+      <span class="tpf-right" onclick="closeThought()">关闭 ✕</span>
     </div>
   </div>
 </div>
