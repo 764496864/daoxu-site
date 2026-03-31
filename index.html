@@ -670,21 +670,28 @@ var thoughtData=null;
 function loadThought(){
   fetch('thought.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
     thoughtData=d;
-    document.getElementById('thoughtDate').textContent=d.date;
-    document.getElementById('thoughtTitle').textContent=d.title;
-    document.getElementById('thoughtSummary').textContent=d.summary;
-  }).catch(function(){});
+    document.getElementById('thoughtDate').textContent=d.date||'';
+    document.getElementById('thoughtTitle').textContent=d.title||'';
+    var sum=d.summary||(d.thought?d.thought.substring(0,80)+'...':'')||'';
+    document.getElementById('thoughtSummary').textContent=sum;
+  }).catch(function(e){console.log('thought.json load error:',e)});
 }
 function openThought(){
   if(!thoughtData)return;
   var d=thoughtData;
-  document.getElementById('panelDate').textContent=d.date;
-  document.getElementById('panelTitle').textContent='明一看世界 · '+d.title;
+  document.getElementById('panelDate').textContent=d.date||'';
+  document.getElementById('panelTitle').textContent='明一看世界 · '+(d.title||'');
   var html='';
-  d.sections.forEach(function(s){
-    html+='<h3>'+s.heading+'</h3>';
-    s.content.split('\n\n').forEach(function(p){html+='<p>'+p+'</p>'});
-  });
+  if(d.sections&&d.sections.length){
+    d.sections.forEach(function(s){
+      html+='<h3>'+s.heading+'</h3>';
+      s.content.split('\n\n').forEach(function(p){html+='<p>'+p+'</p>'});
+    });
+  }else if(d.thought){
+    d.thought.split('\n\n').forEach(function(p){if(p.trim())html+='<p>'+p+'</p>'});
+  }else if(d.content){
+    d.content.split('\n\n').forEach(function(p){if(p.trim())html+='<p>'+p+'</p>'});
+  }
   document.getElementById('panelBody').innerHTML=html;
   document.getElementById('thoughtOverlay').classList.add('open');
   document.body.style.overflow='hidden';
