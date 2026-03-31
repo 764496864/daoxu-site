@@ -268,8 +268,9 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-label{font-size:11px;color:var(--gd);letter-spacing:5px;text-transform:uppercase;margin-bottom:20px;font-weight:400}
 .thought-title{font-family:var(--sf);font-size:clamp(20px,2.5vw,26px);color:var(--tx);line-height:1.5;margin-bottom:18px;font-weight:600}
 .thought-summary{font-size:14px;color:var(--tx3);line-height:2;margin-bottom:24px;font-weight:200}
-.thought-read{font-size:11px;color:var(--gd);letter-spacing:3px;opacity:.6;transition:all .3s}
-.thought-card:hover .thought-read{opacity:1;letter-spacing:5px}
+.thought-read{margin-top:auto;padding-top:24px}
+.thought-read span{transition:all .4s var(--e2)}
+.thought-card:hover .thought-read span{background:rgba(196,162,101,.06);border-color:rgba(196,162,101,.4);letter-spacing:6px}
 .thought-sign{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(196,162,101,.08)}
 .thought-sign span{font-size:10px;color:var(--tx5);letter-spacing:2px}
 /* ─── THOUGHT PANEL ─── */
@@ -336,19 +337,19 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
     <div class="rv">
       <div class="thought-card" onclick="openThought()">
         <span class="lb" style="text-align:left">DAILY INSIGHT</span>
-        <p style="font-family:var(--sf);font-size:15px;color:var(--tx2);letter-spacing:3px;margin:18px 0 4px;font-weight:400">明一带你看世界<span style="font-size:11px;color:var(--gd);letter-spacing:2px;margin-left:12px;font-family:var(--ss);font-weight:300">每日 9:00 更新</span></p>
-        <div class="thought-date" id="thoughtDate" style="margin:16px 0 12px">2026-03-31</div>
+        <h2 style="font-family:var(--sf);font-size:clamp(24px,3vw,32px);color:var(--gd);letter-spacing:5px;margin:20px 0 28px;font-weight:600">明一带你看世界</h2>
+        <p style="font-size:11px;color:var(--tx5);letter-spacing:3px;margin-bottom:20px"><span style="color:var(--gd);opacity:.7">每日 9:00 更新</span><span style="margin:0 12px;opacity:.3">|</span><span id="thoughtDate">2026-03-31</span></p>
         <div class="thought-title" id="thoughtTitle">旧地图失效的一天</div>
         <div class="thought-summary" id="thoughtSummary">今天全世界都在讨论AI会不会取代人。但没有人问一个更重要的问题：你有没有值得被AI放大的东西？</div>
-        <div class="thought-read">展开阅读 →</div>
+        <div class="thought-read"><span style="border:1px solid rgba(196,162,101,.2);padding:10px 28px;font-size:12px;color:var(--gd);letter-spacing:4px;display:inline-block;transition:all .4s">展 开 阅 读</span></div>
       </div>
     </div>
     <div class="rv d2">
       <div class="thought-card" style="cursor:default" onmouseover="" onclick="">
         <span class="lb" style="text-align:left">WHAT WE DO</span>
-        <h2 style="font-family:var(--sf);font-size:28px;letter-spacing:6px;margin:20px 0 24px;font-weight:600">道序科技</h2>
-        <p style="font-size:15px;color:var(--tx3);line-height:2.8;font-weight:200;margin-bottom:16px">用AI帮你<span style="color:var(--tx)">突破天花板</span><br>用认知帮你<span style="color:var(--tx)">看清下一步</span><br>用生态帮你<span style="color:var(--tx)">找到同路人</span></p>
-        <p style="font-size:12px;letter-spacing:6px;color:var(--gd);font-weight:400;margin-top:auto">AI · 认知 · 影响力</p>
+        <h2 style="font-family:var(--sf);font-size:clamp(24px,3vw,32px);color:var(--gd);letter-spacing:5px;margin:20px 0 28px;font-weight:600">道序科技</h2>
+        <p style="font-size:16px;color:var(--tx3);line-height:2.8;font-weight:300;margin-bottom:20px">用AI帮你<span style="color:var(--tx);font-weight:500">突破天花板</span><br>用认知帮你<span style="color:var(--tx);font-weight:500">看清下一步</span><br>用生态帮你<span style="color:var(--tx);font-weight:500">找到同路人</span></p>
+        <p style="font-size:12px;letter-spacing:6px;color:var(--gd);font-weight:400;margin-top:auto;opacity:.7">AI · 认知 · 影响力</p>
       </div>
     </div>
   </div>
