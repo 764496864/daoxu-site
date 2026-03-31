@@ -221,13 +221,17 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .msg-row.user{flex-direction:row-reverse;align-self:flex-end;max-width:75%}
 .msg-row.bot{align-self:flex-start}
 .msg-avatar{display:none}
-.msg-row.bot .msg-avatar{border:1px solid rgba(196,162,101,.25);background:rgba(196,162,101,.06)}
-.msg-row.user .msg-avatar{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05)}
-.msg-row.user .msg-avatar span{font-size:10px;color:var(--tx3);font-weight:400}
 .msg-bubble{padding:10px 14px;font-size:14px;line-height:1.65;border-radius:12px;word-break:break-word;font-family:var(--ss);font-weight:300;text-align:left;position:relative}
 .msg-row.user .msg-bubble{background:rgba(196,162,101,.1);color:var(--tx);border-radius:12px 12px 4px 12px}
 .msg-row.bot .msg-bubble{background:rgba(30,30,38,.9);color:var(--tx2);border-radius:12px 12px 12px 4px;border:1px solid rgba(255,255,255,.04)}
 .msg-row.bot .msg-bubble.streaming{border-left:2px solid rgba(196,162,101,.3)}
+#chatInput{display:flex;gap:8px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.03);background:rgba(7,7,10,.5);position:absolute;bottom:0;left:0;right:0}
+#chatInput textarea{flex:1;background:var(--bg3);border:1px solid rgba(255,255,255,.04);color:var(--tx);font-family:var(--ss);font-size:13px;padding:10px 14px;resize:none;height:40px;border-radius:8px;outline:none;font-weight:300;transition:border-color .3s;-moz-appearance:none;-webkit-appearance:none;appearance:none;overflow:hidden}
+#chatInput textarea::-webkit-scrollbar{display:none}
+#chatInput textarea::placeholder{color:var(--tx5)}
+#chatInput textarea:focus{border-color:rgba(196,162,101,.2)}
+#chatInput button{background:var(--gd);color:var(--bg);border:none;padding:0 18px;font-size:11px;letter-spacing:3px;cursor:pointer;border-radius:8px;font-family:var(--ss);font-weight:400;transition:all .3s}
+#chatInput button:hover{background:var(--gd2);letter-spacing:4px}
 .msg-time{font-size:10px;color:var(--tx5);margin-top:4px;padding:0 4px}
 .msg-welcome{text-align:center;padding:24px 16px}
 .msg-welcome .welcome-icon{width:48px;height:48px;margin:0 auto 12px;opacity:.4}
@@ -244,13 +248,6 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .mb:nth-child(3){height:8px;animation-delay:.3s}
 .mb:nth-child(4){height:14px;animation-delay:.1s}
 @keyframes mba{0%{height:4px}100%{height:16px}}
-#chatInput{display:flex;gap:8px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.03);background:rgba(7,7,10,.5);position:absolute;bottom:0;left:0;right:0}
-#chatInput textarea{flex:1;background:var(--bg3);border:1px solid rgba(255,255,255,.04);color:var(--tx);font-family:var(--ss);font-size:13px;padding:10px 14px;resize:none;height:40px;border-radius:8px;outline:none;font-weight:300;transition:border-color .3s;-moz-appearance:none;-webkit-appearance:none;appearance:none;overflow:hidden}
-#chatInput textarea::-webkit-scrollbar{display:none}
-#chatInput textarea::placeholder{color:var(--tx5)}
-#chatInput textarea:focus{border-color:rgba(196,162,101,.2)}
-#chatInput button{background:var(--gd);color:var(--bg);border:none;padding:0 18px;font-size:11px;letter-spacing:3px;cursor:pointer;border-radius:8px;font-family:var(--ss);font-weight:400;transition:all .3s}
-#chatInput button:hover{background:var(--gd2);letter-spacing:4px}
 .agent-item:hover:not(.disabled){border-color:rgba(196,162,101,.25) !important;background:rgba(196,162,101,.03)}
 .agent-item.active{border-color:rgba(196,162,101,.3) !important;background:rgba(196,162,101,.04)}
 #agentList::-webkit-scrollbar{width:3px}
@@ -265,16 +262,12 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .tc-divider{height:1px;background:linear-gradient(90deg,rgba(196,162,101,.25),rgba(196,162,101,.06));margin:24px 0 28px}
 .tc-btn{display:block;text-align:center;padding:14px 0;border:1px solid rgba(196,162,101,.2);font-size:12px;color:var(--gd);letter-spacing:5px;font-family:var(--ss);transition:all .4s var(--e2);margin-top:auto}
 .thought-card:hover .tc-btn{background:rgba(196,162,101,.06);border-color:rgba(196,162,101,.35);letter-spacing:7px}
-.tc-seal{text-align:center;margin-top:auto;opacity:.15}
 .thought-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.4;transition:opacity .4s}
 .thought-card:hover{border-color:rgba(196,162,101,.3);background:rgba(196,162,101,.04);box-shadow:0 0 40px rgba(196,162,101,.04)}
 .thought-card:hover::before{opacity:.7}
 .thought-date{font-size:11px;color:var(--tx4);letter-spacing:3px;margin-bottom:14px}
-.thought-label{font-size:11px;color:var(--gd);letter-spacing:5px;text-transform:uppercase;margin-bottom:20px;font-weight:400}
 .thought-title{font-family:var(--sf);font-size:clamp(18px,2.2vw,22px);color:var(--tx);line-height:1.6;margin-bottom:20px;font-weight:600}
 .thought-summary{font-size:13px;color:var(--tx4);line-height:2.2;margin-bottom:24px;font-weight:300;white-space:pre-line}
-.thought-sign{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(196,162,101,.08)}
-.thought-sign span{font-size:10px;color:var(--tx5);letter-spacing:2px}
 /* ─── THOUGHT PANEL ─── */
 .thought-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,7,10,.95);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:60px 20px;overflow-y:auto;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .thought-overlay.open{display:flex}
