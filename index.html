@@ -1,3 +1,64 @@
+<!--
+  道序科技官网 (DaoXu Technology)
+  Single-file static site deployed on Vercel
+
+  Architecture:
+  - Single HTML file with embedded CSS + JS
+  - thought.json: Daily insight data (pushed by backend "龙虾/Lobster")
+  - logo.png: Brand logo (transparent PNG)
+  - bgm.m4a: Background music
+
+  CSS Structure (in order):
+  1. Variables & Reset
+  2. Animations (@keyframes)
+  3. Hero entrance classes (.ha .h0-.h3)
+  4. Scroll reveal (.rv .v)
+  5. Layout (.S .Sn)
+  6. Ambient glows (.glow-*)
+  7. Decorations (.orn .dv)
+  8. Components (.lb .tag-seal .btn)
+  9. Navigation
+  10. Hero
+  11. Cards (.crd)
+  12. Products (.pg .pc)
+  13. Invitation (.inv)
+  14. Spirit (.spr)
+  15. Ecosystem (.eg)
+  16. CTA
+  17. Responsive breakpoints
+  18. Hamburger menu
+  19. Chat widget (fab + panel + messages + input + agents)
+  20. Music bars
+  21. Thought card + panel
+
+  JS Functions (DO NOT modify these):
+  - toggleMenu() - Hamburger menu
+  - toggleChat() - Chat panel open/close
+  - selectAgent() - Agent selection + WebSocket connect
+  - connectWS() - WebSocket connection to OpenClaw
+  - sendMsg() - Send chat message
+  - resetChat() - Reset chat to agent list
+  - toggleExpand() - Chat panel expand/collapse
+  - toggleMusic() - Background music toggle
+  - fadeIn/fadeOut() - Audio volume transitions
+  - loadThought() - Fetch thought.json
+  - openThought() - Open reading panel
+  - closeThought() - Close reading panel
+  - mdToHtml() - Markdown to HTML for chat
+  - fmtContent() - Bold + code formatting for thought panel
+  - renderContent() - Parse ### subheadings in thought content
+  - fmtTime() - Format current time HH:MM
+
+  Data flow:
+  - thought.json → loadThought() → card display → openThought() → panel display
+  - MINGYI_CHAT → connectWS() → WebSocket → chat messages
+
+  Key conventions:
+  - DO NOT touch @keyframes, transition, or animation properties
+  - DO NOT touch IntersectionObserver code
+  - thought.json is managed by backend, frontend NEVER commits it
+  - All inline styles on sections are legacy; override with classes + !important
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -16,6 +77,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><rect x='6' y='6' width='48' height='48' rx='2' stroke='%23C4A265' stroke-width='3' fill='none'/><path d='M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30' stroke='%23C4A265' stroke-width='2.8' fill='none' stroke-linecap='round'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200;300;400;500&family=Noto+Serif+SC:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
+/* ─── VARIABLES & RESET ─── */
 :root{
   --bg:#07070A;--bg2:#0D0D10;--bg3:#131316;
   --tx:#F2EDE4;--tx2:#C8C0B4;--tx3:#8A8480;--tx4:#5A5652;--tx5:#3A3836;
@@ -46,6 +108,7 @@ img{display:block}
 @keyframes btnpulse{0%,100%{box-shadow:0 0 20px rgba(196,162,101,0)}50%{box-shadow:0 0 30px rgba(196,162,101,.08)}}
 @keyframes bgbreathe{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
 
+/* ─── HERO ENTRANCE CLASSES ─── */
 .ha{opacity:0;filter:blur(16px)}
 .h0{animation:emerge 3s var(--e2) .3s forwards}
 .h1{animation:emerge 2.8s var(--e2) 1.8s forwards}
@@ -77,6 +140,7 @@ img{display:block}
 .orn-dots span{width:4px;height:4px;border-radius:50%;background:var(--gd);opacity:.25}
 .orn-dots span:nth-child(2){width:6px;height:6px;opacity:.4}
 .orn-dots span:nth-child(3){width:4px;height:4px;opacity:.18}
+/* ─── COMPONENTS (labels, tag-seals, buttons) ─── */
 .lb{font-size:11px;color:var(--tx4);letter-spacing:10px;text-transform:uppercase;text-align:center;display:block}
 .tag-seal{font-size:13px !important;letter-spacing:6px !important;padding:10px 24px !important;border:none !important;border-top:1px solid rgba(196,162,101,.3) !important;color:var(--tx2) !important;opacity:1 !important;display:inline-block !important;margin-bottom:20px !important;margin-top:-12px !important;margin-left:-6px !important;background:linear-gradient(180deg,rgba(196,162,101,.1),rgba(196,162,101,.02)) !important;animation:tagshine 5s ease-in-out infinite !important}
 @keyframes tagshine{0%,100%{background:linear-gradient(180deg,rgba(196,162,101,.08),rgba(196,162,101,.01));border-top-color:rgba(196,162,101,.2)}50%{background:linear-gradient(180deg,rgba(196,162,101,.15),rgba(196,162,101,.03));border-top-color:rgba(196,162,101,.4)}}
@@ -142,7 +206,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .cta::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.15),transparent)}
 .intro-grid{gap:40px !important}
 
-/* ─── RESPONSIVE ─── */
+/* ─── RESPONSIVE BREAKPOINTS ─── */
 @media(min-width:1600px){.S{max-width:1500px;padding:100px 80px}.Sn{max-width:960px}.crd{padding:52px 48px}.pc{padding:52px 48px}.intro-grid{gap:52px !important}.spr{margin-top:72px}}
 @media(max-width:1024px){.S{padding:80px 40px}.pg{gap:8px}.pc{padding:40px 36px}}
 @media(max-width:768px){
@@ -214,6 +278,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .chat-body{height:calc(100% - 52px);display:flex;align-items:center;justify-content:center;text-align:center;padding:32px;background:var(--bg)}
 .chat-body p{font-size:14px;color:var(--tx3);line-height:2.2}
 .chat-body a{color:var(--gd);border-bottom:1px solid rgba(196,162,101,.2)}
+/* Chat message list */
 #chatMessages{display:flex;flex-direction:column;gap:8px;overflow-y:auto;position:absolute;top:0;left:0;right:0;bottom:56px;padding:20px 16px;scrollbar-width:thin;scrollbar-color:rgba(196,162,101,.12) transparent}
 #chatMessages::-webkit-scrollbar{width:3px}
 #chatMessages::-webkit-scrollbar-thumb{background:rgba(196,162,101,.12);border-radius:2px}
@@ -225,6 +290,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .msg-row.user .msg-bubble{background:rgba(196,162,101,.1);color:var(--tx);border-radius:12px 12px 4px 12px}
 .msg-row.bot .msg-bubble{background:rgba(30,30,38,.9);color:var(--tx2);border-radius:12px 12px 12px 4px;border:1px solid rgba(255,255,255,.04)}
 .msg-row.bot .msg-bubble.streaming{border-left:2px solid rgba(196,162,101,.3)}
+/* Chat input bar */
 #chatInput{display:flex;gap:8px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.03);background:rgba(7,7,10,.5);position:absolute;bottom:0;left:0;right:0}
 #chatInput textarea{flex:1;background:var(--bg3);border:1px solid rgba(255,255,255,.04);color:var(--tx);font-family:var(--ss);font-size:13px;padding:10px 14px;resize:none;height:40px;border-radius:8px;outline:none;font-weight:300;transition:border-color .3s;-moz-appearance:none;-webkit-appearance:none;appearance:none;overflow:hidden}
 #chatInput textarea::-webkit-scrollbar{display:none}
@@ -248,6 +314,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .mb:nth-child(3){height:8px;animation-delay:.3s}
 .mb:nth-child(4){height:14px;animation-delay:.1s}
 @keyframes mba{0%{height:4px}100%{height:16px}}
+/* Agent selection list */
 .agent-item:hover:not(.disabled){border-color:rgba(196,162,101,.25) !important;background:rgba(196,162,101,.03)}
 .agent-item.active{border-color:rgba(196,162,101,.3) !important;background:rgba(196,162,101,.04)}
 #agentList::-webkit-scrollbar{width:3px}
@@ -295,7 +362,9 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 </style>
 </head>
 <body>
+<!-- ═══ PAGE START ═══ -->
 
+<!-- Navigation bar (fixed, auto-shrinks on scroll via JS) -->
 <nav id="nv">
   <a href="/" class="nl">
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 46C24 38 30 32 36 30" stroke="#C4A265" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".45"/></svg>
@@ -468,7 +537,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
   <p style="font-size:9px;color:var(--tx5);letter-spacing:1px">道序科技（北京）有限公司 · © 2024-2026 DaoXu Technology</p>
 </footer>
 
-<!-- 明一聊天浮窗 -->
+<!-- 明一聊天浮窗 (chat FAB + panel, opened by toggleChat()) -->
 <div class="chat-fab" onclick="toggleChat()">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -546,11 +615,16 @@ function toggleChat(){
 }
 
 /* ─── AGENT SELECT & WEBSOCKET ─── */
+// Markdown-to-HTML converter for chat bubbles (bold, italic, list items)
 function mdToHtml(s){return s.replace(/\*\*([^*]+)\*\*/g,"<strong>" +"$1"+"</strong>").replace(/\*([^*]+)\*/g,"<em>"+"$1"+"</em>").replace(/^- /gm,"• ");}
+// Bold + code formatting for thought panel content
 function fmtContent(s){return s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>');}
+// Parse ### subheadings in thought section content into h4 + p elements
 function renderContent(content){var html='';var lines=content.split('\n');for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;if(line.indexOf('### ')===0){html+='<h4>'+fmtContent(line.substring(4))+'</h4>'}else{html+='<p>'+fmtContent(line)+'</p>'}}return html;}
+// Format current time as HH:MM for chat timestamps
 function fmtTime(){var d=new Date();return d.getHours().toString().padStart(2,"0")+":"+d.getMinutes().toString().padStart(2,"0")}
 var ws=null,currentAgent='',streamingDiv=null,streamText='';
+// Select an agent, build chat UI, and initiate WebSocket connection
 function selectAgent(agentId,agentName){
   currentAgent=agentId;
   document.querySelector('.chat-header h4').textContent=agentName;
@@ -563,6 +637,7 @@ function selectAgent(agentId,agentName){
   
   connectWS(agentId,vid);
 }
+// Establish WebSocket connection to OpenClaw backend
 function connectWS(agentId,vid){
   if(ws)ws.close();
   var url=MINGYI_CHAT.replace('https://','wss://').replace('http://','ws://');
@@ -570,13 +645,16 @@ function connectWS(agentId,vid){
   ws.onopen=function(){};
   ws.onmessage=function(e){
     var d=JSON.parse(e.data);
+    // Handle connect challenge: respond with protocol handshake
     if(d.type==='event'&&d.event==='connect.challenge'){
       ws.send(JSON.stringify({type:'req',id:'c1',method:'connect',params:{minProtocol:3,maxProtocol:3,client:{id:'openclaw-control-ui',version:'control-ui',platform:'web',mode:'webchat'},role:'operator',scopes:['operator.admin','operator.read','operator.write','operator.approvals','operator.pairing'],caps:['tool-events'],auth:{},userAgent:navigator.userAgent,locale:'zh-CN'}}));
     }
+    // Handle hello-ok: connection established, request chat history
     if(d.type==='res'&&d.ok&&d.payload&&d.payload.type==='hello-ok'){
       document.getElementById('chatMessages').innerHTML='';
       ws.send(JSON.stringify({type:'req',id:'h1',method:'chat.history',params:{sessionKey:'agent:'+agentId+':'+vid,limit:50}}));
     }
+    // Handle chat history response: render past messages
     if(d.type==='res'&&d.ok&&d.payload&&d.payload.messages){
       var msgs=d.payload.messages;
       var box=document.getElementById('chatMessages');
@@ -589,6 +667,7 @@ function connectWS(agentId,vid){
       });
       box.scrollTop=box.scrollHeight;
     }
+    // Handle streaming chat events (delta = partial text, final = complete)
     if(d.type==='event'&&d.event==='chat'&&d.payload){
       var p=d.payload;
       var text='';
@@ -613,6 +692,7 @@ function connectWS(agentId,vid){
   ws.onerror=function(){document.getElementById('chatMessages').innerHTML='<div class="msg bot">连接失败，请稍后重试</div>'};
   ws.onclose=function(){};
 }
+// Send user message via WebSocket and show typing indicator
 function sendMsg(){
   var ta=document.querySelector('#chatInput textarea');
   var text=ta.value.trim();
@@ -633,6 +713,7 @@ function sendMsg(){
   var vid=localStorage.getItem('daoxu_vid');
   ws.send(JSON.stringify({type:'req',id:'s'+Date.now(),method:'chat.send',params:{sessionKey:'agent:'+currentAgent+':'+vid,message:text,deliver:false,idempotencyKey:'r'+Date.now()+Math.random().toString(36).substr(2,4)}}));
 }
+// Toggle chat panel between normal and expanded mode
 var chatExpanded=false;
 function toggleExpand(){
   chatExpanded=!chatExpanded;
@@ -640,6 +721,7 @@ function toggleExpand(){
   document.querySelector('.chat-expand').innerHTML=chatExpanded?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6m10-10h-6V4"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>';
   document.querySelector('.chat-expand').title=chatExpanded?'缩小':'放大';
 }
+// Reset chat panel back to agent selection list
 function resetChat(){
   if(ws)ws.close();
   ws=null;streamingDiv=null;currentAgent='';
@@ -651,21 +733,28 @@ function resetChat(){
 }
 
 /* ─── SCROLL ANIMATION ─── */
+// IntersectionObserver: adds/removes .v class for scroll-reveal (.rv elements)
 const ob=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v');else{const r=e.target.getBoundingClientRect();if(r.top>innerHeight||r.bottom<0)e.target.classList.remove('v')}})},{threshold:.04,rootMargin:'0px 0px -60px 0px'});
 document.querySelectorAll('.rv').forEach(e=>ob.observe(e));
 addEventListener('scroll',()=>document.getElementById('nv').classList.toggle('s',scrollY>80));
 document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'})}));
 
 /* ─── MUSIC PLAYER ─── */
+// Auto-play BGM on first user interaction, with fade-in
 let playing=false;
 (function(){var done=false;function go(){if(done||playing)return;done=true;var a=document.getElementById('bgm');a.volume=0;a.play().then(function(){fadeIn(a,0.15,3000);document.getElementById('mp-icon').style.display='none';document.getElementById('mp-bars').style.display='flex';playing=true}).catch(function(){})}['click','touchstart','scroll','mousemove','keydown'].forEach(function(e){document.addEventListener(e,function f(){go();document.removeEventListener(e,f)},{once:true,passive:true})});window.addEventListener('load',go)})();
+// Gradually increase audio volume over duration (ms)
 function fadeIn(audio,target,dur){audio.volume=0;audio.play();var step=target/(dur/50);var iv=setInterval(function(){if(audio.volume+step>=target){audio.volume=target;clearInterval(iv)}else{audio.volume+=step}},50)}
+// Gradually decrease audio volume over duration (ms), then pause
 function fadeOut(audio,dur,cb){var step=audio.volume/(dur/50);var iv=setInterval(function(){if(audio.volume-step<=0){audio.volume=0;audio.pause();clearInterval(iv);if(cb)cb()}else{audio.volume-=step}},50)}
+// Toggle background music play/pause with fade transitions
 function toggleMusic(){
   var a=document.getElementById('bgm'),ic=document.getElementById('mp-icon'),bars=document.getElementById('mp-bars');
   if(playing){fadeOut(a,800);ic.style.display='';bars.style.display='none';playing=false}
   else{fadeIn(a,0.15,2000);ic.style.display='none';bars.style.display='flex';playing=true}
 }
+/* ─── THOUGHT / DAILY INSIGHT ─── */
+// Fetch thought.json and populate the daily insight card
 var thoughtData=null;
 function loadThought(){
   fetch('thought.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
@@ -678,6 +767,7 @@ function loadThought(){
     if(sumEl)sumEl.textContent=d.summary||'';
   }).catch(function(e){console.log('thought.json load error:',e)});
 }
+// Open the full thought reading overlay panel
 function openThought(){
   if(!thoughtData)return;
   var d=thoughtData;
@@ -697,12 +787,14 @@ function openThought(){
   document.getElementById('thoughtOverlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
+// Close the thought reading overlay and restore body scroll
 function closeThought(){
   document.getElementById('thoughtOverlay').classList.remove('open');
   document.body.style.overflow='';
 }
 loadThought();
 </script>
+<!-- Thought reading overlay (opened by openThought()) -->
 <div class="thought-overlay" id="thoughtOverlay" onclick="if(event.target===this)closeThought()">
   <div class="thought-panel">
     <div class="thought-panel-header">
