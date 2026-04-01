@@ -354,10 +354,17 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-panel-body strong{color:var(--tx);font-weight:400}
 .thought-panel-body code{font-size:inherit;color:var(--tx2);border-bottom:1px solid rgba(196,162,101,.25);padding-bottom:1px}
 .thought-panel-lead{font-size:15px;color:var(--tx2);line-height:2.4;font-weight:300;padding-bottom:24px;margin-bottom:32px;border-bottom:1px solid rgba(196,162,101,.08);text-align:justify}
+.tp-section{margin-bottom:8px}
+.tp-fold-head{cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.tp-fold-hint{font-family:var(--ss);font-size:11px;color:var(--tx4);font-weight:300;letter-spacing:1px}
+.tp-fold-head:hover .tp-fold-hint{color:var(--gd)}
+.tp-subs{padding:8px 0 8px 16px;border-left:1px solid rgba(196,162,101,.1)}
+.tp-sub{font-size:13px;color:var(--tx3);line-height:2;font-weight:300;padding:4px 0}
+.tp-fold-body{padding-top:8px}
 .thought-panel-footer{display:flex;align-items:center;justify-content:space-between;margin-top:36px;padding-top:24px;border-top:1px solid rgba(196,162,101,.06)}
-.thought-panel-footer .tpf-left{display:flex;align-items:center;gap:10px}
-.thought-panel-footer .tpf-left span{font-size:10px;color:var(--tx5);letter-spacing:2px}
-.thought-panel-footer .tpf-right{font-size:11px;color:var(--gd);letter-spacing:2px;cursor:pointer;opacity:.5;transition:opacity .3s}
+.thought-panel-footer .tpf-left{display:flex;align-items:center;gap:12px}
+.thought-panel-footer .tpf-left span{font-size:12px;color:var(--tx4);letter-spacing:3px}
+.thought-panel-footer .tpf-right{font-size:13px;color:var(--gd);letter-spacing:3px;cursor:pointer;opacity:.6;transition:opacity .3s}
 .thought-panel-footer .tpf-right:hover{opacity:1}
 </style>
 </head>
@@ -774,10 +781,23 @@ function openThought(){
   document.getElementById('panelTitle').textContent=d.title||'明一今日思考';
   var html='';
   if(d.summary){html+='<p class="thought-panel-lead">'+fmtContent(d.summary)+'</p>'}
+  var noFold=['今天的世界','明一的思考'];
   if(d.sections&&d.sections.length){
-    d.sections.forEach(function(s){
-      html+='<h3>'+s.heading+'</h3>';
-      html+=renderContent(s.content);
+    d.sections.forEach(function(s,idx){
+      var isFolded=noFold.indexOf(s.heading)===-1;
+      var rendered=renderContent(s.content);
+      if(!isFolded){
+        html+='<h3>'+s.heading+'</h3>';
+        html+=rendered;
+      }else{
+        var lines=s.content.split('\n');var subTitles='';
+        for(var i=0;i<lines.length;i++){var l=lines[i].trim();if(l.indexOf('### ')===0){subTitles+='<div class="tp-sub">'+fmtContent(l.substring(4))+'</div>'}}
+        html+='<div class="tp-section">';
+        html+='<h3 class="tp-fold-head" onclick="toggleFold(this)">'+s.heading+'<span class="tp-fold-hint">点击展开详情 ▾</span></h3>';
+        if(subTitles){html+='<div class="tp-subs">'+subTitles+'</div>'}
+        html+='<div class="tp-fold-body" style="display:none">'+rendered+'</div>';
+        html+='</div>';
+      }
     });
   }else if(d.summary){
     html+='<p>'+fmtContent(d.summary)+'</p>';
@@ -785,6 +805,21 @@ function openThought(){
   document.getElementById('panelBody').innerHTML=html;
   document.getElementById('thoughtOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+}
+function toggleFold(el){
+  var section=el.parentElement;
+  var body=section.querySelector('.tp-fold-body');
+  var hint=el.querySelector('.tp-fold-hint');
+  var subs=section.querySelector('.tp-subs');
+  if(body.style.display==='none'){
+    body.style.display='block';
+    if(hint)hint.textContent='收起 ▴';
+    if(subs)subs.style.display='none';
+  }else{
+    body.style.display='none';
+    if(hint)hint.textContent='点击展开详情 ▾';
+    if(subs)subs.style.display='block';
+  }
 }
 // Close the thought reading overlay and restore body scroll
 function closeThought(){
