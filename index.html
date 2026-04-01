@@ -374,6 +374,31 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-panel-footer .tpf-left span{font-size:12px;color:var(--tx4);letter-spacing:3px}
 .thought-panel-footer .tpf-right{font-size:13px;color:var(--gd);letter-spacing:3px;cursor:pointer;opacity:.6;transition:opacity .3s}
 .thought-panel-footer .tpf-right:hover{opacity:1}
+/* ─── AGENT SQUARE ─── */
+.sq-overlay{position:fixed;inset:0;background:rgba(7,7,10,.97);z-index:200;display:none;overflow-y:auto;padding:0}
+.sq-overlay.open{display:block}
+.sq-wrap{max-width:1200px;margin:0 auto;padding:60px 40px 80px}
+.sq-header{text-align:center;margin-bottom:52px}
+.sq-close{position:fixed;top:24px;right:32px;cursor:pointer;color:var(--tx4);font-size:14px;padding:8px 14px;border:1px solid rgba(255,255,255,.06);border-radius:4px;z-index:201;transition:all .3s}
+.sq-close:hover{color:var(--tx);border-color:rgba(255,255,255,.12)}
+.sq-cat{font-size:10px;color:var(--gd);letter-spacing:6px;text-transform:uppercase;margin:48px 0 20px;padding-bottom:12px;border-bottom:1px solid rgba(196,162,101,.08)}
+.sq-cat:first-of-type{margin-top:0}
+.sq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sq-card{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:32px 28px;cursor:pointer;transition:all .5s var(--e2);position:relative;display:flex;flex-direction:column}
+.sq-card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.1),transparent);transition:all .8s}
+.sq-card:hover{border-color:rgba(196,162,101,.15)}
+.sq-card:hover::before{left:10%;right:10%;background:linear-gradient(90deg,transparent,rgba(196,162,101,.2),transparent)}
+.sq-card.featured{border-color:rgba(196,162,101,.2)}
+.sq-card.featured::after{content:'推荐';position:absolute;top:12px;right:12px;font-size:9px;color:var(--bg);background:var(--gd);padding:3px 10px;letter-spacing:2px}
+.sq-name{font-family:var(--sf);font-size:18px;color:var(--tx);letter-spacing:3px;font-weight:600;margin-bottom:6px}
+.sq-line{font-size:12px;color:var(--gd);letter-spacing:2px;margin-bottom:16px;font-weight:300}
+.sq-desc{font-size:13px;color:var(--tx3);line-height:2;font-weight:200;margin-bottom:16px;flex:1}
+.sq-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.sq-tags span{font-size:10px;color:var(--tx4);letter-spacing:1px;padding:3px 10px;border:1px solid rgba(196,162,101,.08)}
+.sq-go{display:block;text-align:center;padding:10px 0;border:1px solid rgba(196,162,101,.15);font-size:11px;color:var(--gd);letter-spacing:4px;transition:all .4s var(--e2)}
+.sq-card:hover .sq-go{border-color:rgba(196,162,101,.3);background:rgba(196,162,101,.04);letter-spacing:6px}
+@media(max-width:1024px){.sq-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.sq-grid{grid-template-columns:1fr}.sq-wrap{padding:40px 20px 60px}.sq-close{top:16px;right:16px}}
 </style>
 </head>
 <body>
@@ -385,7 +410,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 46C24 38 30 32 36 30" stroke="#C4A265" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".45"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr"><a href="#abt">关于</a><a href="#svc">服务</a><a href="#eco">生态</a><a href="#cnt">联系</a><a href="#" class="nc" onclick="toggleChat();return false">体验明一</a></div>
+  <div class="nr"><a href="#abt">关于</a><a href="#svc">服务</a><a href="#eco">生态</a><a href="#cnt">联系</a><a href="#" class="nc" onclick="openSquare();return false">智能体广场</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 <div class="overlay" onclick="toggleMenu()"></div>
@@ -435,7 +460,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
         <div class="tc-divider"></div>
         <p style="font-size:16px;color:var(--tx3);line-height:2.8;font-weight:300;margin-bottom:24px">用AI帮你<span style="color:var(--tx);font-weight:500">突破天花板</span><br>用认知帮你<span style="color:var(--tx);font-weight:500">看清下一步</span><br>用生态帮你<span style="color:var(--tx);font-weight:500">找到同路人</span></p>
         <p style="font-size:15px;letter-spacing:8px;color:var(--gd);font-weight:400;margin-bottom:28px">AI · 认知 · 影响力</p>
-        <a class="tc-btn" href="#" onclick="toggleChat();return false" style="cursor:pointer;text-decoration:none;color:var(--gd)">体 验 明 一</a>
+        <a class="tc-btn" href="#" onclick="openSquare();return false" style="cursor:pointer;text-decoration:none;color:var(--gd)">智 能 体 广 场</a>
       </div>
     </div>
   </div>
@@ -530,7 +555,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
     <p style="font-family:var(--sf);font-size:22px;color:var(--tx);margin-top:8px;font-weight:500">走多远，取决于你自己</p>
     <div style="width:32px;height:1px;background:rgba(196,162,101,.15);margin:36px auto"></div>
     <p style="font-family:var(--sf);font-size:clamp(18px,2.5vw,24px);color:var(--tx3);line-height:2.6;font-weight:300">如果你心里也有那个声音<br><span style="color:var(--tx)">那么，你来对地方了</span></p>
-    <div style="margin-top:44px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap"><a class="btn bs" href="#cnt">加入启门 ¥99</a><a class="btn bg" href="#" onclick="toggleChat();return false">体验明一</a></div>
+    <div style="margin-top:44px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap"><a class="btn bs" href="#cnt">加入启门 ¥99</a><a class="btn bg" href="#" onclick="openSquare();return false">智能体广场</a></div>
   </div>
 </section>
 
@@ -872,5 +897,72 @@ loadThought();
     </div>
   </div>
 </div>
+
+<!-- ═══ AGENT SQUARE ═══ -->
+<div class="sq-overlay" id="sqOverlay">
+<span class="sq-close" onclick="closeSquare()">✕ 关闭</span>
+<div class="sq-wrap">
+  <div class="sq-header">
+    <p style="font-size:10px;color:var(--tx5);letter-spacing:6px;text-transform:uppercase;margin-bottom:16px">AGENT SQUARE</p>
+    <h2 style="font-family:var(--sf);font-size:clamp(24px,3vw,32px);color:var(--tx);letter-spacing:4px;font-weight:600;margin-bottom:16px">智 能 体 广 场</h2>
+    <p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:200">每一位智能体，都承载道序体系的一部分智慧。<br>选择你需要的，开始对话。</p>
+  </div>
+
+  <div class="sq-cat">核心入口</div>
+  <div class="sq-grid">
+    <div class="sq-card featured" onclick="startAgent('main','明一')"><div class="sq-name">明一</div><div class="sq-line">道序体系孕育的AI信使</div><div class="sq-desc">什么都可以聊的入口。AI赋能、认知提升、创业方向、新媒体策略。明一不是客服，是有独立思想的思维伙伴。</div><div class="sq-tags"><span>综合</span><span>总控</span><span>默认入口</span></div><div class="sq-go">开 始 对 话</div></div>
+  </div>
+
+  <div class="sq-cat">商业与创业</div>
+  <div class="sq-grid">
+    <div class="sq-card" onclick="startAgent('biz-doctor','商业诊断师')"><div class="sq-name">商业诊断师</div><div class="sq-line">帮你看清生意的真相</div><div class="sq-desc">不回答你的问题，而是帮你发现问题本身可能是错的。用道序独创的消解漏斗，把模糊的商业困惑拆到你能看清、能行动的程度。</div><div class="sq-tags"><span>商业诊断</span><span>模式验证</span><span>对标分析</span></div><div class="sq-go">开 始 对 话</div></div>
+    <div class="sq-card" onclick="startAgent('startup-coach','创业教练')"><div class="sq-name">创业教练</div><div class="sq-line">从想法到可执行方案的全流程陪跑</div><div class="sq-desc">不鼓励创业，帮你搞清楚值不值得做。六步逼问法，每一步都会推到你不舒服。最后产出一份完整的设计文档，不是鸡血，是路线图。</div><div class="sq-tags"><span>创业诊断</span><span>战略规划</span><span>设计文档</span></div><div class="sq-go">开 始 对 话</div></div>
+  </div>
+
+  <div class="sq-cat">内容与IP</div>
+  <div class="sq-grid">
+    <div class="sq-card" onclick="startAgent('content-ops','内容操盘手')"><div class="sq-name">内容操盘手</div><div class="sq-line">让你的内容真正有效</div><div class="sq-desc">诊断你的内容哪里出了问题，优化短视频开头让完播率翻倍。不教理论，直接上手改你的文案。</div><div class="sq-tags"><span>内容诊断</span><span>开头优化</span><span>文案创作</span></div><div class="sq-go">开 始 对 话</div></div>
+    <div class="sq-card" onclick="startAgent('ip-builder','IP操盘教练')"><div class="sq-name">IP操盘教练</div><div class="sq-line">帮你从0到1做起个人品牌</div><div class="sq-desc">先判断你在哪个阶段，再给对应策略。没定位聊定位，有定位没流量聊内容，有流量没变现聊产品。不灌鸡汤，只给路径。</div><div class="sq-tags"><span>IP定位</span><span>内容策略</span><span>变现路径</span></div><div class="sq-go">开 始 对 话</div></div>
+  </div>
+
+  <div class="sq-cat">AI与工具</div>
+  <div class="sq-grid">
+    <div class="sq-card" onclick="startAgent('ai-advisor','AI赋能顾问')"><div class="sq-name">AI赋能顾问</div><div class="sq-line">帮你把AI真正用起来</div><div class="sq-desc">不讲概念，只聊落地。帮你找到AI在你业务里的最佳切入点，从工具选择到流程改造，给你一套可执行的方案。</div><div class="sq-tags"><span>AI落地</span><span>智能体定制</span><span>流程自动化</span></div><div class="sq-go">开 始 对 话</div></div>
+    <div class="sq-card" onclick="startAgent('prompt-engineer','提示词工程师')"><div class="sq-name">提示词工程师</div><div class="sq-line">帮你写出真正好用的提示词</div><div class="sq-desc">不教你"提示词101"，直接帮你写、帮你调。用道序的四要素法构建专属提示词，让AI真正变成你的工具而不是玩具。</div><div class="sq-tags"><span>提示词</span><span>智能体设计</span><span>AI工具</span></div><div class="sq-go">开 始 对 话</div></div>
+    <div class="sq-card" onclick="startAgent('knowledge-distiller','知识萃取师')"><div class="sq-name">知识萃取师</div><div class="sq-line">把你脑子里的经验变成可传承的系统</div><div class="sq-desc">你做了十年行业，脑子里有无数经验。知识萃取师通过结构化引导，帮你把「我就是这么做的」变成一套别人也能学、AI也能用的方法论。</div><div class="sq-tags"><span>知识萃取</span><span>经验结构化</span><span>方法论提炼</span></div><div class="sq-go">开 始 对 话</div></div>
+  </div>
+
+  <div class="sq-cat">深度思考</div>
+  <div class="sq-grid">
+    <div class="sq-card" onclick="startAgent('think-room','思想聊天室')"><div class="sq-name">思想聊天室</div><div class="sq-line">和大师一起思考</div><div class="sq-desc">给出一个话题，道序为你召集最合适的思想家——可能是维特根斯坦、塔勒布、阿德勒。多视角交叉碰撞，帮你看到一个人永远看不到的角度。</div><div class="sq-tags"><span>多视角</span><span>深度思考</span><span>概念探索</span></div><div class="sq-go">开 始 对 话</div></div>
+    <div class="sq-card" onclick="startAgent('deep-analyst','深度分析师')"><div class="sq-name">深度分析师</div><div class="sq-line">帮你看透一个人、一家公司、一个决策</div><div class="sq-desc">用道序的九维推理框架，从情感、动机、认知偏差、行为推演等多个维度交叉分析。不做道德判断，只照出事实。</div><div class="sq-tags"><span>人物分析</span><span>决策诊断</span><span>趋势推演</span></div><div class="sq-go">开 始 对 话</div></div>
+    <div class="sq-card" onclick="startAgent('concept-breaker','概念拆解师')"><div class="sq-name">概念拆解师</div><div class="sq-line">把模糊的词拆到你真正理解</div><div class="sq-desc">「赋能」「闭环」「生态」——这些词你真的知道什么意思吗？专门拆掉那些听起来正确但实际模糊的大词，让你的思考不再被语言绑架。</div><div class="sq-tags"><span>概念澄清</span><span>语言审查</span><span>思维清洗</span></div><div class="sq-go">开 始 对 话</div></div>
+    <div class="sq-card" onclick="startAgent('austrian-room','奥派经济聊天室')"><div class="sq-name">奥派经济聊天室</div><div class="sq-line">用奥派经济学视角拆解商业和社会</div><div class="sq-desc">哈耶克谈自发秩序，米塞斯谈人的行为，明一补充现代视角。三人围绕你的话题展开真正的思想碰撞，不是科普，是辩论。</div><div class="sq-tags"><span>经济学</span><span>哈耶克</span><span>米塞斯</span></div><div class="sq-go">开 始 对 话</div></div>
+  </div>
+
+  <div class="sq-cat">自我探索</div>
+  <div class="sq-grid">
+    <div class="sq-card" onclick="startAgent('action-coach','执行力教练')"><div class="sq-name">执行力教练</div><div class="sq-line">诊断你「做不动」的真正原因</div><div class="sq-desc">拖延不是懒，是在保护什么。道序的执行力诊断不催你，而是帮你找到藏在「做不动」背后的真正阻力，然后给你一个今天就能迈出的最小一步。</div><div class="sq-tags"><span>执行力</span><span>拖延诊断</span><span>最小行动</span></div><div class="sq-go">开 始 对 话</div></div>
+    <div class="sq-card" onclick="startAgent('lacan-analyst','拉康分析师')"><div class="sq-name">拉康分析师</div><div class="sq-line">不给建议，帮你自己发现答案</div><div class="sq-desc">最安静的智能体。它不解释、不安慰、不建议。它只做一件事：指出你话语中自己没注意到的矛盾，然后等你自己走向答案。</div><div class="sq-tags"><span>精神分析</span><span>自我探索</span><span>深度对话</span></div><div class="sq-go">开 始 对 话</div></div>
+  </div>
+</div>
+</div>
+
+<script>
+/* ─── AGENT SQUARE ─── */
+function openSquare(){
+  document.getElementById('sqOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSquare(){
+  document.getElementById('sqOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function startAgent(agentId,agentName){
+  closeSquare();
+  if(!chatOpen)toggleChat();
+  setTimeout(function(){selectAgent(agentId,agentName)},300);
+}
+</script>
 </body>
 </html>
