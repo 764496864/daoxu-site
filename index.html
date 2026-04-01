@@ -173,16 +173,16 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .hscr span{font-size:7px;color:var(--tx5);letter-spacing:6px}
 
 /* ─── CARDS ─── */
-.crd{background:var(--bg2);border:1px solid rgba(255,255,255,.04);padding:48px 44px;transition:border-color 1.2s var(--e2);border-radius:4px;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(196,162,101,.04),inset 0 0 60px rgba(196,162,101,.015)}
+.crd{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;transition:border-color 1.2s var(--e2);border-radius:4px;position:relative;overflow:hidden}
 .crd::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.1),transparent);transition:all 1.2s}
 .crd:hover::before{left:10%;right:10%;background:linear-gradient(90deg,transparent,rgba(196,162,101,.2),transparent)}
-.crd:hover{border-color:rgba(196,162,101,.06)}
+.crd:hover{border-color:rgba(196,162,101,.15)}
 
 /* ─── PRODUCTS ─── */
 .pg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:52px}
-.pc{background:var(--bg2);border:1px solid rgba(255,255,255,.04);padding:48px 44px;position:relative;overflow:hidden;transition:all 1.2s var(--e2);border-radius:4px;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
+.pc{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;position:relative;overflow:hidden;transition:all 1.2s var(--e2);border-radius:4px}
 .pc::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,0),transparent);transition:all 1.2s}
-.pc:hover{border-color:rgba(196,162,101,.06)}.pc:hover::before{background:linear-gradient(90deg,transparent,rgba(196,162,101,.12),transparent);left:10%;right:10%}
+.pc:hover{border-color:rgba(196,162,101,.15)}.pc:hover::before{background:linear-gradient(90deg,transparent,rgba(196,162,101,.12),transparent);left:10%;right:10%}
 .pc.fw{grid-column:1/-1}
 .pn{font-family:var(--sf);font-size:96px;font-weight:900;color:var(--gd);opacity:.015;position:absolute;right:28px;top:-6px;line-height:1;pointer-events:none;transition:opacity 1.2s}.pc:hover .pn{opacity:.04}
 
@@ -325,12 +325,12 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
   #mp{bottom:20px !important;right:12px !important}
 }
 /* ─── THOUGHT CARD ─── */
-.thought-card{cursor:pointer;border:1px solid rgba(196,162,101,.12);padding:44px 36px;transition:all .5s var(--e2);position:relative;background:rgba(196,162,101,.015);min-height:100%;display:flex;flex-direction:column}
+.thought-card{cursor:pointer;border:1px solid rgba(196,162,101,.08);padding:44px 36px;transition:all .5s var(--e2);position:relative;background:var(--bg);min-height:100%;display:flex;flex-direction:column}
 .tc-divider{height:1px;background:linear-gradient(90deg,rgba(196,162,101,.25),rgba(196,162,101,.06));margin:24px 0 28px}
 .tc-btn{display:block;text-align:center;padding:14px 0;border:1px solid rgba(196,162,101,.2);font-size:12px;color:var(--gd);letter-spacing:5px;font-family:var(--ss);transition:all .4s var(--e2);margin-top:auto}
 .thought-card:hover .tc-btn{background:rgba(196,162,101,.06);border-color:rgba(196,162,101,.35);letter-spacing:7px}
 .thought-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.4;transition:opacity .4s}
-.thought-card:hover{border-color:rgba(196,162,101,.3);background:rgba(196,162,101,.04);box-shadow:0 0 40px rgba(196,162,101,.04)}
+.thought-card:hover{border-color:rgba(196,162,101,.15);background:var(--bg)}
 .thought-card:hover::before{opacity:.7}
 .thought-date{font-size:11px;color:var(--tx4);letter-spacing:3px;margin-bottom:14px}
 .thought-title{font-family:var(--sf);font-size:clamp(18px,2.2vw,22px);color:var(--tx);line-height:1.6;margin-bottom:20px;font-weight:600}
