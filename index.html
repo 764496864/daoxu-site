@@ -355,12 +355,17 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-panel-body code{font-size:inherit;color:var(--tx2);border-bottom:1px solid rgba(196,162,101,.25);padding-bottom:1px}
 .thought-panel-lead{font-size:15px;color:var(--tx2);line-height:2.4;font-weight:300;padding-bottom:24px;margin-bottom:32px;border-bottom:1px solid rgba(196,162,101,.08);text-align:justify}
 .tp-section{margin-bottom:8px}
-.tp-fold-head{cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.tp-fold-hint{font-family:var(--ss);font-size:11px;color:var(--tx4);font-weight:300;letter-spacing:1px}
-.tp-fold-head:hover .tp-fold-hint{color:var(--gd)}
-.tp-subs{padding:8px 0 8px 16px;border-left:1px solid rgba(196,162,101,.1)}
-.tp-sub{font-size:13px;color:var(--tx3);line-height:2;font-weight:300;padding:4px 0}
 .tp-fold-body{padding-top:8px}
+.tp-item{border-bottom:1px solid rgba(196,162,101,.06);padding:12px 0}
+.tp-item:last-child{border-bottom:none}
+.tp-item-head{display:flex;justify-content:space-between;align-items:flex-start;cursor:pointer;gap:16px}
+.tp-item-title{font-size:14px;color:var(--tx);font-weight:400;line-height:1.8;flex:1}
+.tp-item-arrow{font-size:11px;color:var(--gd);letter-spacing:2px;white-space:nowrap;opacity:.5;transition:opacity .3s;padding-top:4px}
+.tp-item-head:hover .tp-item-arrow{opacity:1}
+.tp-item-body{display:none;padding:12px 0 4px}
+.tp-item.open .tp-item-body{display:block}
+.tp-item.open .tp-item-arrow{opacity:1}
+.tp-item.open .tp-item-title{color:var(--gd)}
 .tp-inline-toggle{text-align:center;padding:16px 0 8px}
 .tp-inline-btn{font-size:12px;color:var(--gd);letter-spacing:3px;cursor:pointer;padding:8px 24px;border:1px solid rgba(196,162,101,.15);transition:all .3s;display:inline-block}
 .tp-inline-btn:hover{border-color:rgba(196,162,101,.3);background:rgba(196,162,101,.03);letter-spacing:4px}
@@ -628,8 +633,18 @@ function toggleChat(){
 function mdToHtml(s){return s.replace(/\*\*([^*]+)\*\*/g,"<strong>" +"$1"+"</strong>").replace(/\*([^*]+)\*/g,"<em>"+"$1"+"</em>").replace(/^- /gm,"• ");}
 // Bold + code formatting for thought panel content
 function fmtContent(s){return s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>');}
-// Parse ### subheadings in thought section content into h4 + p elements
-function renderContent(content){var html='';var lines=content.split('\n');for(var i=0;i<lines.length;i++){var line=lines[i].trim();if(!line)continue;if(line.indexOf('### ')===0){html+='<h4>'+fmtContent(line.substring(4))+'</h4>'}else{html+='<p>'+fmtContent(line)+'</p>'}}return html;}
+// Parse ### subheadings — each becomes a foldable item with title + hidden body
+function renderContent(content,foldable){
+  var html='';var lines=content.split('\n');
+  if(!foldable){for(var i=0;i<lines.length;i++){var l=lines[i].trim();if(!l)continue;if(l.indexOf('### ')===0){html+='<h4>'+fmtContent(l.substring(4))+'</h4>'}else{html+='<p>'+fmtContent(l)+'</p>'}}return html;}
+  var items=[];var cur=null;
+  for(var i=0;i<lines.length;i++){var l=lines[i].trim();if(!l)continue;if(l.indexOf('### ')===0){if(cur)items.push(cur);cur={title:fmtContent(l.substring(4)),body:''};}else if(cur){cur.body+='<p>'+fmtContent(l)+'</p>';}else{html+='<p>'+fmtContent(l)+'</p>';}}
+  if(cur)items.push(cur);
+  for(var j=0;j<items.length;j++){
+    html+='<div class="tp-item"><div class="tp-item-head" onclick="var p=this.parentElement;p.classList.toggle(\'open\');this.querySelector(\'.tp-item-arrow\').textContent=p.classList.contains(\'open\')?\'收起 ▴\':\'展开 ▾\'"><span class="tp-item-title">'+items[j].title+'</span><span class="tp-item-arrow">展开 ▾</span></div><div class="tp-item-body">'+items[j].body+'</div></div>';
+  }
+  return html;
+}
 // Format current time as HH:MM for chat timestamps
 function fmtTime(){var d=new Date();return d.getHours().toString().padStart(2,"0")+":"+d.getMinutes().toString().padStart(2,"0")}
 var ws=null,currentAgent='',streamingDiv=null,streamText='';
@@ -802,13 +817,8 @@ function openThought(){
           html+=rendered;
         }
       }else{
-        var lines=s.content.split('\n');var subTitles='';
-        for(var i=0;i<lines.length;i++){var l=lines[i].trim();if(l.indexOf('### ')===0){subTitles+='<div class="tp-sub">'+fmtContent(l.substring(4))+'</div>'}}
-        html+='<div class="tp-section">';
-        html+='<h3 class="tp-fold-head" onclick="toggleFold(this.parentElement)">'+s.heading+'<span class="tp-fold-hint">点击展开详情 ▾</span></h3>';
-        if(subTitles){html+='<div class="tp-subs">'+subTitles+'</div>'}
-        html+='<div class="tp-fold-body" style="display:none">'+rendered+'</div>';
-        html+='</div>';
+        html+='<h3>'+s.heading+'</h3>';
+        html+=renderContent(s.content,true);
       }
     });
   }else if(d.summary){
