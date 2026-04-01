@@ -106,7 +106,7 @@ img{display:block}
   50%{box-shadow:0 0 60px rgba(196,162,101,.04),inset 0 0 60px rgba(196,162,101,.02)}
 }
 @keyframes btnpulse{0%,100%{box-shadow:0 0 20px rgba(196,162,101,0)}50%{box-shadow:0 0 30px rgba(196,162,101,.08)}}
-@keyframes bgbreathe{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes bgbreathe{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
 
 /* ─── HERO ENTRANCE CLASSES ─── */
 .ha{opacity:0;filter:blur(16px)}
@@ -126,26 +126,26 @@ img{display:block}
 /* ─── flowing ambient glows ─── */
 .glow-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
 .glow-wrap span{position:absolute;border-radius:50%;filter:blur(80px)}
-.glow-a{width:400px;height:350px;background:rgba(196,162,101,.06);top:-10%;left:-5%;animation:bgbreathe 12s ease-in-out infinite}
-.glow-b{width:350px;height:300px;background:rgba(196,162,101,.045);bottom:-10%;right:-5%;animation:bgbreathe 14s ease-in-out 3s infinite}
-.glow-c{width:300px;height:350px;background:rgba(196,162,101,.05);top:20%;right:10%;animation:bgbreathe 16s ease-in-out 6s infinite}
-.glow-d{width:450px;height:400px;background:rgba(196,162,101,.04);bottom:5%;left:15%;animation:bgbreathe 11s ease-in-out 1s infinite}
-.dv{height:1px;max-width:120px;margin:0 auto;background:linear-gradient(90deg,transparent,rgba(196,162,101,.2),transparent)}
+.glow-a{width:400px;height:350px;background:rgba(196,162,101,.08);top:-10%;left:-5%;animation:bgbreathe 12s ease-in-out infinite}
+.glow-b{width:350px;height:300px;background:rgba(196,162,101,.065);bottom:-10%;right:-5%;animation:bgbreathe 14s ease-in-out 3s infinite}
+.glow-c{width:300px;height:350px;background:rgba(196,162,101,.07);top:20%;right:10%;animation:bgbreathe 16s ease-in-out 6s infinite}
+.glow-d{width:450px;height:400px;background:rgba(196,162,101,.06);bottom:5%;left:15%;animation:bgbreathe 11s ease-in-out 1s infinite}
+.dv{height:1px;max-width:120px;margin:0 auto;background:linear-gradient(90deg,transparent,rgba(196,162,101,.25),transparent)}
 /* 装饰符号 */
 .orn{text-align:center;padding:20px 0;position:relative}
-.orn svg{opacity:.3;transition:opacity 1.2s}.orn:hover svg{opacity:.45}
+.orn svg{opacity:.35;transition:opacity 1.2s}.orn:hover svg{opacity:.5}
 .orn-seal{width:48px;height:48px}
 .orn-cloud{width:120px;height:28px}
 .orn-dots{display:flex;gap:10px;justify-content:center;align-items:center;padding:12px 0}
 .orn-dots span{width:4px;height:4px;border-radius:50%;background:var(--gd);opacity:.25}
-.orn-dots span:nth-child(2){width:6px;height:6px;opacity:.4}
+.orn-dots span:nth-child(2){width:6px;height:6px;opacity:.5}
 .orn-dots span:nth-child(3){width:4px;height:4px;opacity:.18}
 /* ─── COMPONENTS (labels, tag-seals, buttons) ─── */
 .lb{font-size:11px;color:var(--tx4);letter-spacing:10px;text-transform:uppercase;text-align:center;display:block}
 .tag-seal{font-size:13px !important;letter-spacing:6px !important;padding:10px 24px !important;border:none !important;border-top:1px solid rgba(196,162,101,.3) !important;color:var(--tx2) !important;opacity:1 !important;display:inline-block !important;margin-bottom:20px !important;margin-top:-12px !important;margin-left:-6px !important;background:linear-gradient(180deg,rgba(196,162,101,.1),rgba(196,162,101,.02)) !important;animation:tagshine 5s ease-in-out infinite !important}
 @keyframes tagshine{0%,100%{background:linear-gradient(180deg,rgba(196,162,101,.08),rgba(196,162,101,.01));border-top-color:rgba(196,162,101,.2)}50%{background:linear-gradient(180deg,rgba(196,162,101,.15),rgba(196,162,101,.03));border-top-color:rgba(196,162,101,.4)}}
 .btn{display:inline-block;padding:18px 56px;font-size:12px;letter-spacing:5px;font-family:var(--ss);font-weight:400;cursor:pointer;transition:all .8s var(--e2)}
-.bo{border:1px solid rgba(196,162,101,.35);color:var(--gd)}.bo:hover{background:var(--gd);color:var(--bg);letter-spacing:7px}
+.bo{border:1px solid rgba(196,162,101,.4);color:var(--gd)}.bo:hover{background:var(--gd);color:var(--bg);letter-spacing:7px}
 .inv .bo{animation:btnpulse 3s ease-in-out infinite}
 .bs{background:var(--gd);color:var(--bg);border:1px solid var(--gd)}.bs:hover{background:var(--gd2);letter-spacing:7px}
 .bg{border:1px solid var(--tx5);color:var(--tx3)}.bg:hover{border-color:var(--gd);color:var(--gd)}
@@ -161,7 +161,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 
 /* ─── HERO ─── */
 .hero{min-height:100vh;min-height:100dvh;display:flex;justify-content:center;align-items:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 35%,rgba(22,20,16,.9),var(--bg))}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 35%,rgba(18,16,12,.95),var(--bg))}
 .hero::after{content:'';position:absolute;inset:0;opacity:.012;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='4' type='fractalNoise'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:256px}
 .hz{position:relative;z-index:2;text-align:center;padding:0 24px}
 .hl{width:140px;margin:0 auto 40px;opacity:.9}
@@ -173,14 +173,14 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .hscr span{font-size:7px;color:var(--tx5);letter-spacing:6px}
 
 /* ─── CARDS ─── */
-.crd{background:var(--bg2);border:1px solid rgba(255,255,255,.04);padding:48px 44px;transition:border-color 1.2s var(--e2);border-radius:4px;position:relative;overflow:hidden}
+.crd{background:var(--bg2);border:1px solid rgba(255,255,255,.04);padding:48px 44px;transition:border-color 1.2s var(--e2);border-radius:4px;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
 .crd::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.1),transparent);transition:all 1.2s}
 .crd:hover::before{left:10%;right:10%;background:linear-gradient(90deg,transparent,rgba(196,162,101,.2),transparent)}
 .crd:hover{border-color:rgba(196,162,101,.06)}
 
 /* ─── PRODUCTS ─── */
 .pg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:52px}
-.pc{background:var(--bg2);border:1px solid rgba(255,255,255,.04);padding:48px 44px;position:relative;overflow:hidden;transition:all 1.2s var(--e2);border-radius:4px}
+.pc{background:var(--bg2);border:1px solid rgba(255,255,255,.04);padding:48px 44px;position:relative;overflow:hidden;transition:all 1.2s var(--e2);border-radius:4px;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
 .pc::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,0),transparent);transition:all 1.2s}
 .pc:hover{border-color:rgba(196,162,101,.06)}.pc:hover::before{background:linear-gradient(90deg,transparent,rgba(196,162,101,.12),transparent);left:10%;right:10%}
 .pc.fw{grid-column:1/-1}
@@ -188,7 +188,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 
 /* ─── INVITATION ─── */
 .inv{position:relative;text-align:center;padding:60px 40px;background:var(--bg);border:1px solid rgba(255,255,255,.04);overflow:hidden;animation:glowpulse 8s ease-in-out infinite}
-.inv::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(196,162,101,.05),transparent)}
+.inv::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(196,162,101,.06),transparent)}
 .inv::after{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.35),transparent)}
 .inv-dot{width:8px;height:8px;border-radius:50%;background:var(--gd);opacity:.4;margin:0 auto 32px;animation:breathe 4s ease-in-out infinite;box-shadow:0 0 12px rgba(196,162,101,.3),0 0 24px rgba(196,162,101,.1)}
 
@@ -338,7 +338,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 /* ─── THOUGHT PANEL ─── */
 .thought-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,7,10,.95);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:60px 20px;overflow-y:auto;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .thought-overlay.open{display:flex}
-.thought-panel{max-width:700px;width:100%;padding:52px 48px 44px;border:1px solid rgba(196,162,101,.1);background:var(--bg);position:relative;margin:auto}
+.thought-panel{max-width:700px;width:100%;padding:52px 48px 44px;border:1px solid rgba(196,162,101,.1);background:var(--bg);position:relative;margin:auto;box-shadow:inset 0 0 80px rgba(196,162,101,.015)}
 .thought-panel::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.4}
 .thought-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .thought-panel-date{font-size:11px;color:var(--tx5);letter-spacing:3px}
@@ -349,9 +349,9 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .thought-panel-body h3{font-family:var(--sf);font-size:17px;color:var(--gd);font-weight:400;margin:44px 0 20px;letter-spacing:3px;padding-bottom:12px;border-bottom:1px solid rgba(196,162,101,.1);line-height:1.5}
 .thought-panel-body h3:first-child{margin-top:0}
 .thought-panel-body h4{font-family:var(--ss);font-size:14.5px;color:var(--tx);font-weight:400;margin:28px 0 10px;line-height:1.6;padding-left:12px;border-left:1px solid rgba(196,162,101,.2)}
-.thought-panel-body p{font-size:14.5px;color:var(--tx3);line-height:2.4;margin-bottom:14px;font-weight:300;text-align:justify}
+.thought-panel-body p{font-size:14.5px;color:var(--tx2);line-height:2.4;margin-bottom:14px;font-weight:300;text-align:justify}
 .thought-panel-body p:last-child{margin-bottom:0}
-.thought-panel-body strong{color:var(--tx2);font-weight:400}
+.thought-panel-body strong{color:var(--tx);font-weight:400}
 .thought-panel-body code{font-size:inherit;color:var(--tx2);border-bottom:1px solid rgba(196,162,101,.25);padding-bottom:1px}
 .thought-panel-lead{font-size:15px;color:var(--tx2);line-height:2.4;font-weight:300;padding-bottom:24px;margin-bottom:32px;border-bottom:1px solid rgba(196,162,101,.08);text-align:justify}
 .thought-panel-footer{display:flex;align-items:center;justify-content:space-between;margin-top:36px;padding-top:24px;border-top:1px solid rgba(196,162,101,.06)}
@@ -392,7 +392,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 <div class="orn-dots"><span></span><span></span><span></span></div>
 <section class="S Sn" style="text-align:center">
   <div class="glow-wrap"><span class="glow-a"></span><span class="glow-b"></span></div>
-  <div class="rv"><p style="color:var(--tx2);font-size:clamp(16px,1.8vw,19px);line-height:3;font-weight:200">你已经靠自己走出了一条路<br>你比大多数人看得清、想得深、走得远</p></div>
+  <div class="rv"><p style="color:var(--tx);font-size:clamp(16px,1.8vw,19px);line-height:3;font-weight:300">你已经靠自己走出了一条路<br>你比大多数人看得清、想得深、走得远</p></div>
   <div class="rv d2" style="margin-top:44px"><p style="color:var(--tx3);font-size:clamp(15px,1.6vw,17px);line-height:3;font-weight:200">但你也知道——<br>一个人的认知，终有边界<br>一个人的精力，终有尽头</p></div>
   <div class="rv d4" style="margin-top:52px"><p style="font-family:var(--sf);font-size:clamp(18px,2.4vw,26px);font-weight:400;line-height:2.6;color:var(--tx)">用对了工具，一个人可以抵得上一支军队<br>找对了同伴，一群人可以看见更大的世界</p></div>
 </section>
@@ -469,7 +469,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 <section class="S" style="text-align:center">
   <div class="glow-wrap"><span class="glow-c"></span><span class="glow-d"></span></div>
   <div class="rv"><span class="lb">PHILOSOPHY</span></div>
-  <div class="rv d2" style="margin-top:52px"><h2 style="font-family:var(--sf);font-size:clamp(52px,9vw,108px);letter-spacing:clamp(12px,3vw,28px);font-weight:900;color:var(--tx);opacity:.88">道序天成</h2></div>
+  <div class="rv d2" style="margin-top:52px"><h2 style="font-family:var(--sf);font-size:clamp(52px,9vw,108px);letter-spacing:clamp(12px,3vw,28px);font-weight:900;color:var(--tx);opacity:.92">道序天成</h2></div>
   <div class="spr">
     <div class="spi rv d1"><div class="spch">道</div><p style="font-size:13px;color:var(--tx3);line-height:2.4;font-weight:200">找到你<br>独特的路</p></div>
     <div class="spi rv d2"><div class="spch">序</div><p style="font-size:13px;color:var(--tx3);line-height:2.4;font-weight:200">让混沌<br>变成有序</p></div>
