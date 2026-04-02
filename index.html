@@ -708,7 +708,8 @@ function connectWS(agentId,vid){
     }
     // Handle hello-ok: connection established, request chat history
     if(d.type==='res'&&d.ok&&d.payload&&d.payload.type==='hello-ok'){
-      document.getElementById('chatMessages').innerHTML='';
+      // Keep welcome area + greeting, only remove loading indicators
+      var loadingHint=document.getElementById('typingHint');if(loadingHint)loadingHint.remove();
       ws.send(JSON.stringify({type:'req',id:'h1',method:'chat.history',params:{sessionKey:'agent:'+agentId+':'+vid,limit:50}}));
     }
     // Handle chat history response: render past messages
