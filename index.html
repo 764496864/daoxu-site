@@ -378,31 +378,23 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 /* ─── AGENT SQUARE ─── */
 .sq-overlay{position:fixed;inset:0;background:rgba(7,7,10,.97);z-index:200;display:none;overflow-y:auto}
 .sq-overlay.open{display:block}
-.sq-wrap{max-width:1200px;margin:0 auto;padding:48px 36px 60px}
-.sq-header{text-align:center;margin-bottom:40px}
+.sq-wrap{max-width:1100px;margin:0 auto;padding:48px 32px 60px}
+.sq-header{text-align:center;margin-bottom:36px}
 .sq-close{position:fixed;top:20px;right:28px;cursor:pointer;color:var(--tx4);font-size:13px;padding:6px 12px;border:1px solid rgba(255,255,255,.06);border-radius:4px;z-index:201;transition:all .3s}
 .sq-close:hover{color:var(--tx);border-color:rgba(255,255,255,.12)}
-.sq-cat{display:none}
-.sq-badge{font-size:8px;color:var(--tx5);letter-spacing:2px;padding:2px 8px;border:1px solid rgba(196,162,101,.05);margin-bottom:10px;display:inline-block}
-.sq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.sq-card{cursor:pointer;transition:all .4s var(--e2);position:relative}
-.sq-card:hover .sq-cover{border-color:rgba(196,162,101,.2);background:rgba(196,162,101,.03)}
-.sq-card.featured .sq-cover{border-color:rgba(196,162,101,.15)}
-.sq-card.featured::after{content:'推荐';position:absolute;top:8px;right:8px;font-size:8px;color:var(--bg);background:var(--gd);padding:2px 10px;letter-spacing:2px;z-index:1}
-.sq-cover{aspect-ratio:5/3;border:1px solid rgba(196,162,101,.08);border-bottom:none;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:all .4s var(--e2);overflow:hidden}
-.sq-cover img{width:50%;height:50%;object-fit:contain;opacity:.8;transition:opacity .4s}
-.sq-card:hover .sq-cover{border-color:rgba(196,162,101,.15)}
-.sq-card:hover .sq-cover img{opacity:1}
-.sq-info{padding:16px 16px 18px;border:1px solid rgba(196,162,101,.08);border-top:none}
-.sq-card:hover .sq-info{border-color:rgba(196,162,101,.15)}
-.sq-name{font-family:var(--sf);font-size:16px;color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:4px}
-.sq-line{font-size:11px;color:var(--gd);font-weight:300;letter-spacing:1px;margin-bottom:10px}
-.sq-desc{font-size:12px;color:var(--tx4);line-height:1.8;font-weight:200;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sq-go{display:block;text-align:center;padding:8px 0;border:1px solid rgba(196,162,101,.1);font-size:10px;color:var(--gd);letter-spacing:3px;transition:all .3s}
-.sq-card:hover .sq-go{border-color:rgba(196,162,101,.2);background:rgba(196,162,101,.03)}
-@media(max-width:1024px){.sq-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:768px){.sq-grid{grid-template-columns:repeat(2,1fr)}.sq-wrap{padding:32px 16px 48px}.sq-close{top:12px;right:12px}}
-@media(max-width:480px){.sq-grid{grid-template-columns:repeat(2,1fr)}}
+.sq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sq-card{display:flex;gap:14px;padding:16px;border:1px solid rgba(196,162,101,.06);cursor:pointer;transition:all .4s var(--e2);position:relative;align-items:flex-start}
+.sq-card:hover{border-color:rgba(196,162,101,.15);background:rgba(196,162,101,.01)}
+.sq-card.featured{border-color:rgba(196,162,101,.15)}
+.sq-card.featured::after{content:'推荐';position:absolute;top:8px;right:8px;font-size:8px;color:var(--bg);background:var(--gd);padding:1px 8px;letter-spacing:2px}
+.sq-avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid rgba(196,162,101,.1)}
+.sq-avatar img{width:100%;height:100%;object-fit:cover}
+.sq-info{flex:1;min-width:0}
+.sq-name{font-family:var(--sf);font-size:15px;color:var(--tx);letter-spacing:1px;font-weight:600;margin-bottom:3px}
+.sq-line{font-size:11px;color:var(--gd);font-weight:300;letter-spacing:1px;margin-bottom:6px}
+.sq-desc{font-size:11px;color:var(--tx4);line-height:1.7;font-weight:200;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:1024px){.sq-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.sq-grid{grid-template-columns:1fr}.sq-wrap{padding:32px 16px 48px}.sq-close{top:12px;right:12px}}
 </style>
 </head>
 <body>
@@ -924,20 +916,20 @@ loadThought();
   </div>
 
   <div class="sq-grid">
-    <div class="sq-card featured" onclick="startAgent('main','明一')"><div class="sq-cover"><img src="avatars/mingyi.png" alt="明一"></div><div class="sq-info"><div class="sq-name">明一</div><div class="sq-line">道序体系孕育的AI信使</div><div class="sq-desc">什么都可以聊。AI赋能、认知提升、创业方向、新媒体策略。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('biz-doctor','商业诊断师')"><div class="sq-cover"><img src="avatars/biz-doctor.png" alt="商业诊断师"></div><div class="sq-info"><div class="sq-name">商业诊断师</div><div class="sq-line">帮你看清生意的真相</div><div class="sq-desc">用消解漏斗把模糊困惑拆到你能看清、能行动的程度。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('startup-coach','创业教练')"><div class="sq-cover"><img src="avatars/startup-coach.png" alt="创业教练"></div><div class="sq-info"><div class="sq-name">创业教练</div><div class="sq-line">从想法到可执行方案</div><div class="sq-desc">六步逼问法，最后产出路线图，不是鸡血。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('content-ops','内容操盘手')"><div class="sq-cover"><img src="avatars/content-ops.png" alt="内容操盘手"></div><div class="sq-info"><div class="sq-name">内容操盘手</div><div class="sq-line">让你的内容真正有效</div><div class="sq-desc">诊断内容问题，优化开头，直接上手改你的文案。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('ip-builder','IP操盘教练')"><div class="sq-cover"><img src="avatars/ip-builder.png" alt="IP操盘教练"></div><div class="sq-info"><div class="sq-name">IP操盘教练</div><div class="sq-line">从0到1做起个人品牌</div><div class="sq-desc">没定位聊定位，有流量没变现聊产品，只给路径。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('ai-advisor','AI赋能顾问')"><div class="sq-cover"><img src="avatars/ai-advisor.png" alt="AI赋能顾问"></div><div class="sq-info"><div class="sq-name">AI赋能顾问</div><div class="sq-line">帮你把AI真正用起来</div><div class="sq-desc">不讲概念只聊落地，给你一套可执行的AI接入方案。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('prompt-engineer','提示词工程师')"><div class="sq-cover"><img src="avatars/prompt-engineer.png" alt="提示词工程师"></div><div class="sq-info"><div class="sq-name">提示词工程师</div><div class="sq-line">写出真正好用的提示词</div><div class="sq-desc">直接帮你写、帮你调，让AI变成工具而不是玩具。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('knowledge-distiller','知识萃取师')"><div class="sq-cover"><img src="avatars/knowledge-distiller.png" alt="知识萃取师"></div><div class="sq-info"><div class="sq-name">知识萃取师</div><div class="sq-line">经验变成可传承的系统</div><div class="sq-desc">把脑子里的经验变成别人能学、AI能用的方法论。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('think-room','思想聊天室')"><div class="sq-cover"><img src="avatars/think-room.png" alt="思想聊天室"></div><div class="sq-info"><div class="sq-name">思想聊天室</div><div class="sq-line">和大师一起思考</div><div class="sq-desc">维特根斯坦、塔勒布、阿德勒，多视角交叉碰撞。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('deep-analyst','深度分析师')"><div class="sq-cover"><img src="avatars/deep-analyst.png" alt="深度分析师"></div><div class="sq-info"><div class="sq-name">深度分析师</div><div class="sq-line">看透一个人、一家公司</div><div class="sq-desc">九维推理框架，不做道德判断，只照出事实。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('concept-breaker','概念拆解师')"><div class="sq-cover"><img src="avatars/concept-breaker.png" alt="概念拆解师"></div><div class="sq-info"><div class="sq-name">概念拆解师</div><div class="sq-line">把模糊的词拆到你真正理解</div><div class="sq-desc">拆掉那些听起来正确但实际模糊的大词。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('austrian-room','奥派经济聊天室')"><div class="sq-cover"><img src="avatars/austrian-room.png" alt="奥派经济聊天室"></div><div class="sq-info"><div class="sq-name">奥派经济聊天室</div><div class="sq-line">奥派视角拆解商业和社会</div><div class="sq-desc">哈耶克×米塞斯×明一，三人思想碰撞。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('action-coach','执行力教练')"><div class="sq-cover"><img src="avatars/action-coach.png" alt="执行力教练"></div><div class="sq-info"><div class="sq-name">执行力教练</div><div class="sq-line">诊断你「做不动」的真正原因</div><div class="sq-desc">找到阻力，给你今天就能迈出的最小一步。</div><div class="sq-go">开 始 对 话</div></div></div>
-    <div class="sq-card" onclick="startAgent('lacan-analyst','拉康分析师')"><div class="sq-cover"><img src="avatars/lacan-analyst.png" alt="拉康分析师"></div><div class="sq-info"><div class="sq-name">拉康分析师</div><div class="sq-line">不给建议，帮你发现答案</div><div class="sq-desc">指出你话语中没注意到的矛盾，等你走向答案。</div><div class="sq-go">开 始 对 话</div></div></div>
+    <div class="sq-card featured" onclick="startAgent('main','明一')"><div class="sq-avatar"><img src="avatars/mingyi.png" alt="明一"></div><div class="sq-info"><div class="sq-name">明一</div><div class="sq-line">道序体系孕育的AI信使</div><div class="sq-desc">什么都可以聊。AI赋能、认知提升、创业方向、新媒体策略。</div></div></div>
+    <div class="sq-card" onclick="startAgent('biz-doctor','商业诊断师')"><div class="sq-avatar"><img src="avatars/biz-doctor.png" alt="商业诊断师"></div><div class="sq-info"><div class="sq-name">商业诊断师</div><div class="sq-line">帮你看清生意的真相</div><div class="sq-desc">用消解漏斗把模糊困惑拆到你能看清、能行动的程度。</div></div></div>
+    <div class="sq-card" onclick="startAgent('startup-coach','创业教练')"><div class="sq-avatar"><img src="avatars/startup-coach.png" alt="创业教练"></div><div class="sq-info"><div class="sq-name">创业教练</div><div class="sq-line">从想法到可执行方案</div><div class="sq-desc">六步逼问法，最后产出路线图，不是鸡血。</div></div></div>
+    <div class="sq-card" onclick="startAgent('content-ops','内容操盘手')"><div class="sq-avatar"><img src="avatars/content-ops.png" alt="内容操盘手"></div><div class="sq-info"><div class="sq-name">内容操盘手</div><div class="sq-line">让你的内容真正有效</div><div class="sq-desc">诊断内容问题，优化开头，直接上手改你的文案。</div></div></div>
+    <div class="sq-card" onclick="startAgent('ip-builder','IP操盘教练')"><div class="sq-avatar"><img src="avatars/ip-builder.png" alt="IP操盘教练"></div><div class="sq-info"><div class="sq-name">IP操盘教练</div><div class="sq-line">从0到1做起个人品牌</div><div class="sq-desc">没定位聊定位，有流量没变现聊产品，只给路径。</div></div></div>
+    <div class="sq-card" onclick="startAgent('ai-advisor','AI赋能顾问')"><div class="sq-avatar"><img src="avatars/ai-advisor.png" alt="AI赋能顾问"></div><div class="sq-info"><div class="sq-name">AI赋能顾问</div><div class="sq-line">帮你把AI真正用起来</div><div class="sq-desc">不讲概念只聊落地，给你一套可执行的AI接入方案。</div></div></div>
+    <div class="sq-card" onclick="startAgent('prompt-engineer','提示词工程师')"><div class="sq-avatar"><img src="avatars/prompt-engineer.png" alt="提示词工程师"></div><div class="sq-info"><div class="sq-name">提示词工程师</div><div class="sq-line">写出真正好用的提示词</div><div class="sq-desc">直接帮你写、帮你调，让AI变成工具而不是玩具。</div></div></div>
+    <div class="sq-card" onclick="startAgent('knowledge-distiller','知识萃取师')"><div class="sq-avatar"><img src="avatars/knowledge-distiller.png" alt="知识萃取师"></div><div class="sq-info"><div class="sq-name">知识萃取师</div><div class="sq-line">经验变成可传承的系统</div><div class="sq-desc">把脑子里的经验变成别人能学、AI能用的方法论。</div></div></div>
+    <div class="sq-card" onclick="startAgent('think-room','思想聊天室')"><div class="sq-avatar"><img src="avatars/think-room.png" alt="思想聊天室"></div><div class="sq-info"><div class="sq-name">思想聊天室</div><div class="sq-line">和大师一起思考</div><div class="sq-desc">维特根斯坦、塔勒布、阿德勒，多视角交叉碰撞。</div></div></div>
+    <div class="sq-card" onclick="startAgent('deep-analyst','深度分析师')"><div class="sq-avatar"><img src="avatars/deep-analyst.png" alt="深度分析师"></div><div class="sq-info"><div class="sq-name">深度分析师</div><div class="sq-line">看透一个人、一家公司</div><div class="sq-desc">九维推理框架，不做道德判断，只照出事实。</div></div></div>
+    <div class="sq-card" onclick="startAgent('concept-breaker','概念拆解师')"><div class="sq-avatar"><img src="avatars/concept-breaker.png" alt="概念拆解师"></div><div class="sq-info"><div class="sq-name">概念拆解师</div><div class="sq-line">把模糊的词拆到你真正理解</div><div class="sq-desc">拆掉那些听起来正确但实际模糊的大词。</div></div></div>
+    <div class="sq-card" onclick="startAgent('austrian-room','奥派经济聊天室')"><div class="sq-avatar"><img src="avatars/austrian-room.png" alt="奥派经济聊天室"></div><div class="sq-info"><div class="sq-name">奥派经济聊天室</div><div class="sq-line">奥派视角拆解商业和社会</div><div class="sq-desc">哈耶克×米塞斯×明一，三人思想碰撞。</div></div></div>
+    <div class="sq-card" onclick="startAgent('action-coach','执行力教练')"><div class="sq-avatar"><img src="avatars/action-coach.png" alt="执行力教练"></div><div class="sq-info"><div class="sq-name">执行力教练</div><div class="sq-line">诊断你「做不动」的真正原因</div><div class="sq-desc">找到阻力，给你今天就能迈出的最小一步。</div></div></div>
+    <div class="sq-card" onclick="startAgent('lacan-analyst','拉康分析师')"><div class="sq-avatar"><img src="avatars/lacan-analyst.png" alt="拉康分析师"></div><div class="sq-info"><div class="sq-name">拉康分析师</div><div class="sq-line">不给建议，帮你发现答案</div><div class="sq-desc">指出你话语中没注意到的矛盾，等你走向答案。</div></div></div>
   </div>
 </div>
 </div>
