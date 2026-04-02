@@ -131,3 +131,99 @@ PC: 默认（max-width > 1024px）
 
 做改动前先读这个文件，特别是Anti-Patterns和Pre-Delivery Checklist两节。
 
+## 十一、智能体广场（Agent Square）
+
+### 功能说明
+- 全屏overlay展示14个智能体卡片，用户点击直接开始对话
+- 入口：导航栏"智能体广场"、右卡"智能体广场"按钮、CTA区"智能体广场"、聊天浮窗内"探索全部14个智能体→"
+- 每张卡片有独立头像（avatars/目录）、名字、一句话定位、描述、开始对话按钮
+
+### 14个智能体ID
+main / biz-doctor / startup-coach / content-ops / ip-builder / ai-advisor / prompt-engineer / knowledge-distiller / think-room / deep-analyst / concept-breaker / austrian-room / action-coach / lacan-analyst
+
+### 技术实现
+- `openSquare()` / `closeSquare()` 控制overlay显隐
+- `startAgent(agentId, agentName)` 关闭广场→打开聊天→展开大窗口→调用selectAgent
+- 卡片头像存在 `avatars/` 目录，文件名与agentId对应（main→mingyi.png）
+
+## 十二、WebSocket聊天系统
+
+### 架构
+- `MINGYI_CHAT` 全局变量存储后端地址（Cloudflare Tunnel / 正式域名）
+- `selectAgent(agentId, agentName)` 构建聊天UI + 插入欢迎消息 + 调用connectWS
+- `connectWS(agentId, vid)` 建立WebSocket连接，处理协议握手、历史消息、流式回复
+- `sendMsg()` 发送用户消息 + 显示typing提示
+- 每个访客有唯一ID（`daoxu_vid` in localStorage），session隔离
+
+### 消息渲染
+- `mdToHtml()` 处理聊天消息的markdown（粗体/斜体/列表）
+- 流式回复用streamText变量累积，防止重复
+- 时间戳在气泡内部右下角
+- 气泡支持`white-space:pre-line`换行
+
+### 关键约束
+- **不要修改WebSocket协议逻辑**（connect.challenge→connect→hello-ok→chat.history→chat.send）
+- **不要修改MINGYI_CHAT变量的拼接规则**
+- **聊天浮窗有展开/收起模式**（toggleExpand函数）
+
+## 十三、明一今日思考（Thought / Daily Insight）
+
+### 数据流
+- 后端"龙虾"每天自动生成thought.json并push到GitHub
+- 前端`loadThought()`在页面加载时fetch thought.json（带时间戳防缓存）
+- 卡片显示：date + title + summary
+- 展开面板显示：summary导语 + sections（每个有heading + content）
+
+### thought.json固定格式
+```json
+{
+  "date": "2026-04-01",
+  "title": "标题",
+  "summary": "摘要（不超过100字，两句话之间用\\n分行）",
+  "sections": [
+    {"heading": "板块标题", "content": "正文。### 子标题用于折叠。**粗体**和`代码`前端自动渲染。"}
+  ]
+}
+```
+
+### 折叠逻辑
+- "今天的世界"和"明一的思考"：首段展示 + "展开全文"按钮
+- 其他板块（AI前沿等）：每个`### `子标题独立折叠，右侧"展开▾"按钮
+
+### 关键约束
+- **前端不commit thought.json**，这个文件由龙虾管理
+- 龙虾推送后通过Vercel Deploy Hook触发部署
+
+## 十四、文件结构
+
+```
+index.html          — 主页（唯一HTML文件，含CSS+JS）
+thought.json        — 每日洞察数据（龙虾推送，前端不碰）
+logo.png            — 品牌logo（透明底PNG）
+bgm.m4a             — 背景音乐
+avatars/             — 14个智能体头像
+  mingyi.png
+  biz-doctor.png
+  startup-coach.png
+  content-ops.png
+  ip-builder.png
+  ai-advisor.png
+  prompt-engineer.png
+  knowledge-distiller.png
+  think-room.png
+  deep-analyst.png
+  concept-breaker.png
+  austrian-room.png
+  action-coach.png
+  lacan-analyst.png
+robots.txt
+sitemap.xml
+```
+
+## 十五、已知技术债
+
+1. 大量inline style（历史原因），需要用class+!important覆盖
+2. 单HTML文件已超1000行，未来可考虑拆分CSS/JS
+3. WebSocket无自动重连机制
+4. 智能体广场卡片数据硬编码在HTML里，未来可改为JSON配置
+

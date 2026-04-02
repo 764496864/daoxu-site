@@ -91,6 +91,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--ss);overflow-x:hidde
 
 ::selection{background:rgba(196,162,101,.2)}
 a{color:inherit;text-decoration:none}
+:focus-visible{outline:1px solid rgba(196,162,101,.4);outline-offset:2px}
 img{display:block}
 
 /* ─── ANIMATIONS ─── */
@@ -148,7 +149,7 @@ img{display:block}
 .bo{border:1px solid rgba(196,162,101,.4);color:var(--gd)}.bo:hover{background:var(--gd);color:var(--bg);letter-spacing:7px}
 .inv .bo{animation:btnpulse 3s ease-in-out infinite}
 .bs{background:linear-gradient(180deg,#C4A265,#A8884E);color:var(--bg);border:1px solid var(--gd)}.bs:hover{background:linear-gradient(180deg,#D4B275,#B8985E);letter-spacing:7px}
-.bg{border:1px solid var(--tx5);color:var(--tx3)}.bg:hover{border-color:var(--gd);color:var(--gd)}
+.bg{border:1px solid var(--tx5);color:var(--tx3)}.bg:hover{border-color:var(--gd);color:var(--gd);background:rgba(196,162,101,.03)}
 
 /* ─── NAV ─── */
 nav{position:fixed;top:0;left:0;right:0;z-index:99;padding:28px 52px;display:flex;justify-content:space-between;align-items:center;transition:all .8s var(--e2)}
@@ -181,7 +182,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 /* ─── PRODUCTS ─── */
 .pg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:52px}
 .pc{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;position:relative;overflow:hidden;transition:all 1.2s var(--e2);border-radius:4px}
-.pc::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,0),transparent);transition:all 1.2s}
+.pc::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.1),transparent);transition:all 1.2s}
 .pc:hover{border-color:rgba(196,162,101,.15)}.pc:hover::before{background:linear-gradient(90deg,transparent,rgba(196,162,101,.12),transparent);left:10%;right:10%}
 .pc.fw{grid-column:1/-1}
 .pn{font-family:var(--sf);font-size:96px;font-weight:900;color:var(--gd);opacity:.015;position:absolute;right:28px;top:-6px;line-height:1;pointer-events:none;transition:opacity 1.2s}.pc:hover .pn{opacity:.04}
@@ -266,7 +267,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .chat-fab svg{transition:transform .4s var(--e2)}
 .chat-panel{position:fixed;bottom:90px;right:28px;width:400px;height:600px;max-height:75vh;max-width:calc(100vw - 32px);z-index:998;border:1px solid rgba(196,162,101,.1);border-radius:12px;overflow:hidden;background:var(--bg);box-shadow:0 20px 80px rgba(0,0,0,.6);transform:translateY(20px) scale(.95);opacity:0;pointer-events:none;transition:all .5s var(--e2)}
 .chat-panel.show{transform:none;opacity:1;pointer-events:auto}
-.chat-panel.expanded{width:720px;height:80vh;max-height:85vh;bottom:50%;right:50%;transform:translate(50%,50%);border-radius:16px;box-shadow:0 0 120px rgba(0,0,0,.8)}
+.chat-panel.expanded{width:720px;height:80vh;max-height:85vh;bottom:50%;right:50%;transform:translate(50%,50%);border-radius:16px;box-shadow:0 0 120px rgba(0,0,0,.8);transform-origin:bottom right}
 .chat-panel.expanded .chat-header{padding:16px 24px}
 .chat-panel.expanded #chatInput{padding:16px 24px}
 .chat-panel.expanded #chatInput textarea{height:44px;font-size:14px}
@@ -322,8 +323,8 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 #agentList::-webkit-scrollbar-thumb{background:rgba(196,162,101,.15);border-radius:2px}
 @media(max-width:480px){
   .chat-panel{background:var(--bg);bottom:0;right:0;width:100%;height:85vh;max-width:100%;border-radius:12px 12px 0 0}
-  .chat-fab{bottom:20px;right:64px}
-  #mp{bottom:20px !important;right:12px !important}
+  .chat-fab{bottom:20px;right:68px}
+  #mp{bottom:20px !important;right:16px !important}
 }
 /* ─── THOUGHT CARD ─── */
 .thought-card{cursor:pointer;border:1px solid rgba(196,162,101,.08);padding:44px 36px;transition:all .5s var(--e2);position:relative;background:var(--bg);min-height:100%;display:flex;flex-direction:column}
@@ -575,7 +576,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 </footer>
 
 <!-- 明一聊天浮窗 (chat FAB + panel, opened by toggleChat()) -->
-<div class="chat-fab" onclick="toggleChat()" title="和明一对话">
+<div class="chat-fab" onclick="toggleChat()" title="和明一对话" role="button" aria-label="打开聊天窗口">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
   </svg>
@@ -599,7 +600,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 </div>
 
 <!-- 背景音乐播放器 -->
-<div id="mp" onclick="toggleMusic()" style="position:fixed;bottom:28px;right:28px;z-index:999;width:48px;height:48px;border-radius:50%;border:1px solid rgba(196,162,101,.25);background:rgba(7,7,10,.9);backdrop-filter:blur(12px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .6s var(--e2);opacity:.6" onmouseenter="this.style.opacity='1';this.style.borderColor='rgba(196,162,101,.5)'" onmouseleave="this.style.opacity='.6';this.style.borderColor='rgba(196,162,101,.2)'">
+<div id="mp" onclick="toggleMusic()" role="button" aria-label="背景音乐开关" style="position:fixed;bottom:28px;right:28px;z-index:999;width:48px;height:48px;border-radius:50%;border:1px solid rgba(196,162,101,.25);background:rgba(7,7,10,.9);backdrop-filter:blur(12px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .6s var(--e2);opacity:.6" onmouseenter="this.style.opacity='1';this.style.borderColor='rgba(196,162,101,.5)'" onmouseleave="this.style.opacity='.6';this.style.borderColor='rgba(196,162,101,.2)'">
   <svg id="mp-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round">
     <path d="M9 18V5l12-2v13"/>
     <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
@@ -666,6 +667,7 @@ function selectAgent(agentId,agentName){
   var avatarFile=agentId==='main'?'mingyi':agentId;
   var intros={'main':'道序体系孕育的AI信使','ai-advisor':'帮你把AI真正用起来','ip-builder':'帮你从0到1做起个人品牌','biz-doctor':'帮你看清生意的真相','content-ops':'让你的内容真正有效','think-room':'和大师一起思考','action-coach':'诊断你「做不动」的真正原因','concept-breaker':'把模糊的词拆到你真正理解','prompt-engineer':'帮你写出真正好用的提示词','deep-analyst':'帮你看透一个人、一家公司、一个决策','startup-coach':'从想法到可执行方案的全流程陪跑','austrian-room':'用奥派经济学视角拆解商业和社会','lacan-analyst':'不给建议，帮你自己发现答案','knowledge-distiller':'把你脑子里的经验变成可传承的系统'};
   var intro=intros[agentId]||'有什么可以帮你的？';
+  if(!document.getElementById('chatContent').getAttribute('data-original'))document.getElementById('chatContent').setAttribute('data-original',document.getElementById('chatContent').innerHTML);
   document.getElementById('chatContent').innerHTML='<div id="chatMessages"><div class="msg-welcome"><img class="welcome-icon" src="avatars/'+avatarFile+'.png" alt="'+agentName+'" style="border-radius:50%;object-fit:cover"><div class="welcome-name">'+agentName+'</div><p>'+intro+'</p></div></div><div id="chatInput"><textarea placeholder="输入消息..." onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea><button onclick="sendMsg()">发送</button></div>';
   document.querySelector('.chat-body').style.padding='0';document.querySelector('.chat-body').style.position='relative';document.querySelector('.chat-body').style.display='block';
   document.querySelector('.chat-body').style.height='calc(100% - 52px)';
@@ -686,7 +688,7 @@ function connectWS(agentId,vid){
   ws=new WebSocket(url);
   ws.onopen=function(){};
   ws.onmessage=function(e){
-    var d=JSON.parse(e.data);
+    var d;try{d=JSON.parse(e.data)}catch(err){console.log("WS parse error:",err);return}
     // Handle connect challenge: respond with protocol handshake
     if(d.type==='event'&&d.event==='connect.challenge'){
       ws.send(JSON.stringify({type:'req',id:'c1',method:'connect',params:{minProtocol:3,maxProtocol:3,client:{id:'openclaw-control-ui',version:'control-ui',platform:'web',mode:'webchat'},role:'operator',scopes:['operator.admin','operator.read','operator.write','operator.approvals','operator.pairing'],caps:['tool-events'],auth:{},userAgent:navigator.userAgent,locale:'zh-CN'}}));
@@ -842,6 +844,7 @@ function openThought(){
   }
   document.getElementById('panelBody').innerHTML=html;
   document.getElementById('thoughtOverlay').classList.add('open');
+  document.getElementById('thoughtOverlay').scrollTop=0;
   document.body.style.overflow='hidden';
 }
 function toggleFold(section){
