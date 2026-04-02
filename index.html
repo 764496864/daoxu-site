@@ -681,7 +681,8 @@ function selectAgent(agentId,agentName){
   var vid=localStorage.getItem('daoxu_vid');
   if(!vid){vid='v'+Date.now()+Math.random().toString(36).substr(2,6);localStorage.setItem('daoxu_vid',vid)}
   
-  document.getElementById('chatContent').innerHTML='<div id="chatMessages"><div class="msg-welcome"><svg class="welcome-icon" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="2"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2" fill="none" stroke-linecap="round"/></svg><div class="welcome-name">'+agentName+'</div><p>我在，你说</p></div></div><div id="chatInput"><textarea placeholder="输入消息..." onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea><button onclick="sendMsg()">发送</button></div>';
+  var avatarFile=agentId==='main'?'mingyi':agentId;
+  document.getElementById('chatContent').innerHTML='<div id="chatMessages"><div class="msg-welcome"><img class="welcome-icon" src="avatars/'+avatarFile+'.png" alt="'+agentName+'" style="border-radius:50%;object-fit:cover"><div class="welcome-name">'+agentName+'</div><p>我在，你说</p></div></div><div id="chatInput"><textarea placeholder="输入消息..." onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea><button onclick="sendMsg()">发送</button></div>';
   document.querySelector('.chat-body').style.padding='0';document.querySelector('.chat-body').style.position='relative';document.querySelector('.chat-body').style.display='block';
   document.querySelector('.chat-body').style.height='calc(100% - 52px)';
   
