@@ -299,7 +299,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 #chatInput textarea:focus{border-color:rgba(196,162,101,.2)}
 #chatInput button{background:var(--gd);color:var(--bg);border:none;padding:0 18px;font-size:11px;letter-spacing:3px;cursor:pointer;border-radius:8px;font-family:var(--ss);font-weight:400;transition:all .3s}
 #chatInput button:hover{background:var(--gd2);letter-spacing:4px}
-.msg-time{font-size:10px;color:var(--tx5);margin-top:4px;padding:0 4px}
+.msg-time{font-size:9px;color:var(--tx5);text-align:right;margin-top:6px;opacity:.6}
 .msg-welcome{text-align:center;padding:24px 16px}
 .msg-welcome .welcome-icon{width:48px;height:48px;margin:0 auto 12px;opacity:.4}
 .msg-welcome p{font-size:12px;color:var(--tx4);line-height:2;font-weight:200}
@@ -739,10 +739,10 @@ function connectWS(agentId,vid){
         document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
       }
       if(p.state==='final'){var th2=document.getElementById('typingHint');if(th2)th2.remove();
-        if(streamingDiv){streamingDiv.classList.remove('streaming');var t=document.createElement('div');t.className='msg-time';t.textContent=fmtTime();document.getElementById('chatMessages').appendChild(t);streamingDiv=null;streamText=''}
+        if(streamingDiv){streamingDiv.classList.remove('streaming');streamingDiv.innerHTML+='<div class="msg-time">'+fmtTime()+'</div>';streamingDiv=null;streamText=''}
         else if(text){var row=document.createElement('div');row.className='msg-row bot';
-        var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=mdToHtml(text);
-        row.appendChild(bubble);document.getElementById('chatMessages').appendChild(row);var t2=document.createElement('div');t2.className='msg-time';t2.textContent=fmtTime();document.getElementById('chatMessages').appendChild(t2)}
+        var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=mdToHtml(text)+'<div class="msg-time">'+fmtTime()+'</div>';
+        row.appendChild(bubble);document.getElementById('chatMessages').appendChild(row)}
         document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
       }
     }
@@ -757,12 +757,9 @@ function sendMsg(){
   if(!text||!ws||ws.readyState!==1)return;
   ta.value='';
   var wrap=document.createElement('div');wrap.className='msg-row user';
-  var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=mdToHtml(text);
-  var time=document.createElement('div');time.className='msg-time';time.textContent=fmtTime();
+  var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=mdToHtml(text)+'<div class="msg-time">'+fmtTime()+'</div>';
   wrap.appendChild(bubble);
   document.getElementById('chatMessages').appendChild(wrap);
-  document.getElementById('chatMessages').appendChild(time);
-  time.style.textAlign='right';
   document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
   streamingDiv=null;streamText='';
   var typing=document.createElement('div');typing.className='msg-row bot';typing.id='typingHint';typing.innerHTML='<div class="msg-bubble" style="opacity:.5;font-size:12px"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
