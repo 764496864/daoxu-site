@@ -279,7 +279,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .chat-body p{font-size:14px;color:var(--tx3);line-height:2.2}
 .chat-body a{color:var(--gd);border-bottom:1px solid rgba(196,162,101,.2)}
 /* Chat message list */
-#chatMessages{display:flex;flex-direction:column;gap:8px;overflow-y:auto;position:absolute;top:0;left:0;right:0;bottom:56px;padding:20px 16px;scrollbar-width:thin;scrollbar-color:rgba(196,162,101,.12) transparent}
+#chatMessages{display:flex;flex-direction:column;gap:8px;overflow-y:auto;position:absolute;top:0;left:0;right:0;bottom:68px;padding:20px 16px;scrollbar-width:thin;scrollbar-color:rgba(196,162,101,.12) transparent}
 #chatMessages::-webkit-scrollbar{width:3px}
 #chatMessages::-webkit-scrollbar-thumb{background:rgba(196,162,101,.12);border-radius:2px}
 .msg-row{display:flex;max-width:78%;align-items:flex-start}
@@ -372,15 +372,15 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .tp-inline-btn:hover{border-color:rgba(196,162,101,.3);background:rgba(196,162,101,.03);letter-spacing:4px}
 .thought-panel-footer{display:flex;align-items:center;justify-content:space-between;margin-top:36px;padding-top:24px;border-top:1px solid rgba(196,162,101,.06)}
 .thought-panel-footer .tpf-left{display:flex;align-items:center;gap:12px}
-.thought-panel-footer .tpf-left span{font-size:12px;color:var(--tx4);letter-spacing:3px}
-.thought-panel-footer .tpf-right{font-size:13px;color:var(--gd);letter-spacing:3px;cursor:pointer;opacity:.6;transition:opacity .3s}
+.thought-panel-footer .tpf-left span{font-size:13px;color:var(--tx3);letter-spacing:3px}
+.thought-panel-footer .tpf-right{font-size:14px;color:var(--gd);letter-spacing:3px;cursor:pointer;opacity:.7;transition:opacity .3s}
 .thought-panel-footer .tpf-right:hover{opacity:1}
 /* ─── AGENT SQUARE ─── */
 .sq-overlay{position:fixed;inset:0;background:rgba(7,7,10,.97);z-index:200;display:none;overflow-y:auto}
 .sq-overlay.open{display:block}
 .sq-wrap{max-width:1100px;margin:0 auto;padding:48px 32px 60px}
 .sq-header{text-align:center;margin-bottom:36px}
-.sq-close{position:fixed;top:20px;right:28px;cursor:pointer;color:var(--tx4);font-size:13px;padding:6px 12px;border:1px solid rgba(255,255,255,.06);border-radius:4px;z-index:201;transition:all .3s}
+.sq-close{position:fixed;top:20px;right:28px;cursor:pointer;color:var(--tx3);font-size:14px;padding:8px 16px;border:1px solid rgba(255,255,255,.08);border-radius:4px;z-index:201;transition:all .3s}
 .sq-close:hover{color:var(--tx);border-color:rgba(255,255,255,.12)}
 .sq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .sq-card{padding:28px 24px;border:1px solid rgba(196,162,101,.08);cursor:pointer;transition:all .4s var(--e2);position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
@@ -426,15 +426,6 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
   <div class="hscr"><span>SCROLL</span></div>
 </section>
 
-<!-- ═══ THE QUIET COURTYARD ═══ -->
-<div class="orn-dots"><span></span><span></span><span></span></div>
-<section class="S Sn" style="text-align:center">
-  <div class="glow-wrap"><span class="glow-a"></span><span class="glow-b"></span></div>
-  <div class="rv"><p style="color:var(--tx);font-size:clamp(16px,1.8vw,19px);line-height:3;font-weight:300">你已经靠自己走出了一条路<br>你比大多数人看得清、想得深、走得远</p></div>
-  <div class="rv d2" style="margin-top:44px"><p style="color:var(--tx3);font-size:clamp(15px,1.6vw,17px);line-height:3;font-weight:200">但你也知道——<br>一个人的认知，终有边界<br>一个人的精力，终有尽头</p></div>
-  <div class="rv d4" style="margin-top:52px"><p style="font-family:var(--sf);font-size:clamp(18px,2.4vw,26px);font-weight:400;line-height:2.6;color:var(--tx)">用对了工具，一个人可以抵得上一支军队<br>找对了同伴，一群人可以看见更大的世界</p></div>
-</section>
-
 <!-- ═══ THE INTRODUCTION HALL ═══ -->
 <div class="orn"><svg class="orn-seal" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="2"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
 <section class="S">
@@ -462,6 +453,15 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
       </div>
     </div>
   </div>
+</section>
+
+<!-- ═══ THE QUIET COURTYARD ═══ -->
+<div class="orn-dots"><span></span><span></span><span></span></div>
+<section class="S Sn" style="text-align:center">
+  <div class="glow-wrap"><span class="glow-a"></span><span class="glow-b"></span></div>
+  <div class="rv"><p style="color:var(--tx);font-size:clamp(16px,1.8vw,19px);line-height:3;font-weight:300">你已经靠自己走出了一条路<br>你比大多数人看得清、想得深、走得远</p></div>
+  <div class="rv d2" style="margin-top:44px"><p style="color:var(--tx3);font-size:clamp(15px,1.6vw,17px);line-height:3;font-weight:200">但你也知道——<br>一个人的认知，终有边界<br>一个人的精力，终有尽头</p></div>
+  <div class="rv d4" style="margin-top:52px"><p style="font-family:var(--sf);font-size:clamp(18px,2.4vw,26px);font-weight:400;line-height:2.6;color:var(--tx)">用对了工具，一个人可以抵得上一支军队<br>找对了同伴，一群人可以看见更大的世界</p></div>
 </section>
 
 <!-- ═══ THE TWIN SCROLLS ═══ -->
@@ -537,10 +537,10 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
   <div class="glow-wrap"><span class="glow-a"></span><span class="glow-c"></span></div>
   <div class="rv" style="text-align:center"><span class="lb">SERVICES</span><h2 style="font-family:var(--sf);font-size:30px;letter-spacing:8px;margin-top:20px;font-weight:600">五步，从进入到同行</h2></div>
   <div class="pg">
-    <div class="pc rv"><div class="pn">01</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">启 门</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">QIMEN</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">¥99<span style="font-size:11px;color:var(--tx4);font-weight:200"> /年</span></div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">进入道序的第一步</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">社群、直播、AI工具体验。进来看看，感受氛围。</p></div>
-    <div class="pc rv d1"><div class="pn">02</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">问 道</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">WENDAO</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">¥199<span style="font-size:11px;color:var(--tx4);font-weight:200"> /次</span></div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">带着你的问题来</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">60分钟，子枫1v1帮你拆解。AI、新媒体、商业、人生，什么都可以聊。</p></div>
-    <div class="pc rv"><div class="pn">03</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">构 想 ™</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">GOUXIANG</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">¥2,980</div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">用AI武装你自己</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">个人知识库搭建、专属智能体。子枫亲自服务，一个月陪跑。</p></div>
-    <div class="pc rv d1"><div class="pn">04</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">道 承 ™</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">DAOCHENG</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">¥9,800</div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">把你的经验变成作品</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">提炼你的方法论，铸造你的专属智能体。让你的思想可复制、可传承。</p></div>
+    <div class="pc rv"><div class="pn">01</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">启 门</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">QIMEN</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">待定</div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">进入道序的第一步</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">社群、直播、AI工具体验。进来看看，感受氛围。</p></div>
+    <div class="pc rv d1"><div class="pn">02</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">问 道</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">WENDAO</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">待定</div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">带着你的问题来</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">60分钟，子枫1v1帮你拆解。AI、新媒体、商业、人生，什么都可以聊。</p></div>
+    <div class="pc rv"><div class="pn">03</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">构 想 ™</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">GOUXIANG</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">待定</div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">用AI武装你自己</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">个人知识库搭建、专属智能体。子枫亲自服务，一个月陪跑。</p></div>
+    <div class="pc rv d1"><div class="pn">04</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">道 承 ™</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">DAOCHENG</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">待定</div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">把你的经验变成作品</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">提炼你的方法论，铸造你的专属智能体。让你的思想可复制、可传承。</p></div>
     <div class="pc fw rv"><div class="pn" style="font-size:140px;opacity:.012;right:40px">∞</div><h3 style="font-family:var(--sf);font-size:22px;letter-spacing:6px;margin-bottom:8px;font-weight:700">同 道 会</h3><span style="font-size:10px;color:var(--tx5);letter-spacing:3px;display:block;margin-bottom:18px">TONGDAO</span><div style="font-family:var(--sf);font-size:22px;color:var(--gd);margin-bottom:18px;font-weight:700">邀请制</div><p style="font-family:var(--sf);font-size:15px;color:var(--tx2);margin-bottom:12px;font-weight:400">和最顶尖的人一起走</p><p style="font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300">月度私董会、年度峰会、终身同行。你不需要申请。当你准备好的时候，我们会找到你。</p></div>
   </div>
 </section>
@@ -553,7 +553,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
     <p style="font-family:var(--sf);font-size:22px;color:var(--tx);margin-top:8px;font-weight:500">走多远，取决于你自己</p>
     <div style="width:32px;height:1px;background:rgba(196,162,101,.15);margin:36px auto"></div>
     <p style="font-family:var(--sf);font-size:clamp(18px,2.5vw,24px);color:var(--tx3);line-height:2.6;font-weight:300">如果你心里也有那个声音<br><span style="color:var(--tx)">那么，你来对地方了</span></p>
-    <div style="margin-top:44px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap"><a class="btn bs" href="#cnt">加入启门 ¥99</a><a class="btn bg" href="#" onclick="openSquare();return false">智能体广场</a></div>
+    <div style="margin-top:44px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap"><a class="btn bs" href="#cnt" style="font-size:13px;letter-spacing:5px">加入启门</a><a class="btn bg" href="#" onclick="openSquare();return false">智能体广场</a></div>
   </div>
 </section>
 
@@ -575,7 +575,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 </footer>
 
 <!-- 明一聊天浮窗 (chat FAB + panel, opened by toggleChat()) -->
-<div class="chat-fab" onclick="toggleChat()">
+<div class="chat-fab" onclick="toggleChat()" title="和明一对话">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
   </svg>
