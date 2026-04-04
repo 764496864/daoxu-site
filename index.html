@@ -714,6 +714,12 @@ function connectWS(agentId,vid){
         row.appendChild(bubble);box.appendChild(row)}
       });
       box.scrollTop=box.scrollHeight;
+      // Send any queued message from before WS was ready
+      if(pendingMsg){
+        var vid=localStorage.getItem('daoxu_vid');
+        ws.send(JSON.stringify({type:'req',id:'s'+Date.now(),method:'chat.send',params:{sessionKey:'agent:'+agentId+':'+vid,message:pendingMsg,deliver:false,idempotencyKey:'r'+Date.now()+Math.random().toString(36).substr(2,4)}}));
+        pendingMsg=null;
+      }
     }
     // Handle streaming chat events (delta = partial text, final = complete)
     if(d.type==='event'&&d.event==='chat'&&d.payload){
@@ -741,22 +747,30 @@ function connectWS(agentId,vid){
   ws.onclose=function(){};
 }
 // Send user message via WebSocket and show typing indicator
+var pendingMsg=null;
 function sendMsg(){
   var ta=document.querySelector('#chatInput textarea');
   var text=ta.value.trim();
-  if(!text||!ws||ws.readyState!==1)return;
+  if(!text)return;
   ta.value='';
+  // Show user message immediately
   var wrap=document.createElement('div');wrap.className='msg-row user';
   var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=mdToHtml(text)+'<div class="msg-time">'+fmtTime()+'</div>';
   wrap.appendChild(bubble);
   document.getElementById('chatMessages').appendChild(wrap);
   document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
   streamingDiv=null;streamText='';
+  // Show typing indicator
   var typing=document.createElement('div');typing.className='msg-row bot';typing.id='typingHint';typing.innerHTML='<div class="msg-bubble" style="opacity:.5;font-size:12px"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
   document.getElementById('chatMessages').appendChild(typing);
   document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
-  var vid=localStorage.getItem('daoxu_vid');
-  ws.send(JSON.stringify({type:'req',id:'s'+Date.now(),method:'chat.send',params:{sessionKey:'agent:'+currentAgent+':'+vid,message:text,deliver:false,idempotencyKey:'r'+Date.now()+Math.random().toString(36).substr(2,4)}}));
+  // Send or queue
+  if(ws&&ws.readyState===1){
+    var vid=localStorage.getItem('daoxu_vid');
+    ws.send(JSON.stringify({type:'req',id:'s'+Date.now(),method:'chat.send',params:{sessionKey:'agent:'+currentAgent+':'+vid,message:text,deliver:false,idempotencyKey:'r'+Date.now()+Math.random().toString(36).substr(2,4)}}));
+  }else{
+    pendingMsg=text;
+  }
 }
 // Toggle chat panel between normal and expanded mode
 var chatExpanded=false;
