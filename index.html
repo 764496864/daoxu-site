@@ -686,9 +686,12 @@ function selectAgent(agentId,agentName){
   connectWS(agentId,vid);
 }
 // Establish WebSocket connection to OpenClaw backend
+// OpenClaw 2026.4+ 要求 path=/chat，query=session=agent:<agentId>:main
 function connectWS(agentId,vid){
   if(ws)ws.close();
-  var url=MINGYI_CHAT.replace('https://','wss://').replace('http://','ws://');
+  var base=MINGYI_CHAT.replace('https://','wss://').replace('http://','ws://');
+  var url=base+'/chat?session=agent:'+encodeURIComponent(agentId)+':main';
+  console.log('[connectWS] '+url);
   ws=new WebSocket(url);
   ws.onopen=function(){};
   ws.onmessage=function(e){
