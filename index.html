@@ -270,6 +270,8 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .chat-fab svg{transition:transform .4s var(--e2)}
 .chat-panel{position:fixed;bottom:90px;right:28px;width:400px;height:600px;max-height:75vh;max-width:calc(100vw - 32px);z-index:998;border:1px solid rgba(196,162,101,.1);border-radius:12px;overflow:hidden;background:var(--bg);box-shadow:0 20px 80px rgba(0,0,0,.6);transform:translateY(20px) scale(.95);opacity:0;pointer-events:none;transition:all .5s var(--e2)}
 .chat-panel.show{transform:none;opacity:1;pointer-events:auto}
+/* 聊天面板打开时隐藏音乐按钮，避免遮挡发送键 */
+.chat-panel.show ~ #mp{opacity:0 !important;pointer-events:none;transform:translateY(16px)}
 .chat-panel.expanded{width:720px;height:80vh;max-height:85vh;bottom:50%;right:50%;transform:translate(50%,50%);border-radius:16px;box-shadow:0 0 120px rgba(0,0,0,.8);transform-origin:bottom right}
 .chat-panel.expanded .chat-header{padding:16px 24px}
 .chat-panel.expanded #chatInput{padding:16px 24px}
