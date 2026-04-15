@@ -151,7 +151,7 @@ img{display:block}
 .btn{display:inline-block;padding:18px 56px;font-size:12px;letter-spacing:5px;font-family:var(--ss);font-weight:400;cursor:pointer;transition:all .8s var(--e2)}
 .bo{border:1px solid rgba(196,162,101,.4);color:var(--gd)}.bo:hover{background:var(--gd);color:var(--bg);letter-spacing:7px}
 .inv .bo{animation:btnpulse 3s ease-in-out infinite}
-.bs{background:linear-gradient(180deg,#C4A265,#A8884E);color:var(--bg);border:1px solid var(--gd)}.bs:hover{background:linear-gradient(180deg,#D4B275,#B8985E);letter-spacing:7px}
+.bs{background:linear-gradient(180deg,#C4A265,#A8884E);color:var(--bg);border:1px solid var(--gd)}.bs:hover{background:linear-gradient(180deg,#D4B275,#B8985E);letter-spacing:7px;box-shadow:0 0 28px rgba(196,162,101,.28),0 0 60px rgba(196,162,101,.12)}
 .bg{border:1px solid var(--tx5);color:var(--tx3)}.bg:hover{border-color:var(--gd);color:var(--gd);background:rgba(196,162,101,.03)}
 
 /* ─── NAV ─── */
@@ -177,14 +177,14 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .hscr span{font-size:7px;color:var(--tx5);letter-spacing:6px}
 
 /* ─── CARDS ─── */
-.crd{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;transition:border-color 1.2s var(--e2);border-radius:4px;position:relative;overflow:hidden}
+.crd{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;transition:border-color 1.2s var(--e2);border-radius:4px;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
 .crd::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.1),transparent);transition:all 1.2s}
 .crd:hover::before{left:10%;right:10%;background:linear-gradient(90deg,transparent,rgba(196,162,101,.2),transparent)}
 .crd:hover{border-color:rgba(196,162,101,.15)}
 
 /* ─── PRODUCTS ─── */
 .pg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:52px}
-.pc{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;position:relative;overflow:hidden;transition:all 1.2s var(--e2);border-radius:4px}
+.pc{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;position:relative;overflow:hidden;transition:all 1.2s var(--e2);border-radius:4px;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
 .pc::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.1),transparent);transition:all 1.2s}
 .pc:hover{border-color:rgba(196,162,101,.15)}.pc:hover::before{background:linear-gradient(90deg,transparent,rgba(196,162,101,.12),transparent);left:10%;right:10%}
 .pc.fw{grid-column:1/-1}
@@ -343,7 +343,8 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 /* ─── THOUGHT PANEL ─── */
 .thought-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(7,7,10,.95);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:60px 20px;overflow-y:auto;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .thought-overlay.open{display:flex}
-.thought-panel{max-width:700px;width:100%;padding:52px 48px 44px;border:1px solid rgba(196,162,101,.1);background:var(--bg);position:relative;margin:auto;box-shadow:inset 0 0 80px rgba(196,162,101,.015)}
+.thought-panel{max-width:700px;width:100%;padding:52px 48px 44px;border:1px solid rgba(196,162,101,.1);background:var(--bg);position:relative;margin:auto;box-shadow:inset 0 0 100px rgba(196,162,101,.03),inset 0 1px 0 rgba(196,162,101,.06)}
+.thought-panel::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(196,162,101,.04),transparent);pointer-events:none}
 .thought-panel::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.4}
 .thought-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .thought-panel-date{font-size:11px;color:var(--tx5);letter-spacing:3px}
