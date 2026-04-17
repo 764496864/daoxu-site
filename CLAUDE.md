@@ -1,12 +1,40 @@
 # 道序科技官网 — Claude Code 项目指南
 
+> ## 🛑 任何新 Claude 接手前，第一步：读 `INFRASTRUCTURE.md`
+>
+> 这个文件（CLAUDE.md）只讲**设计规范和代码约束**。
+> **基础设施 / 部署 / DNS / Tunnel / GitHub 推送 / 故障排查**全部写在同目录的 `INFRASTRUCTURE.md`。
+>
+> 不读 INFRASTRUCTURE.md 就动手 = 重复 2026-04-15 那次大故障的弯路（3 个 Claude 误判一整天，根因只有 5 行代码）。
+>
+> **正确顺序：**
+> 1. 读 `INFRASTRUCTURE.md`（架构、链路、推送流程、故障排查、不要做的事）
+> 2. 读这个 `CLAUDE.md`（设计规范、代码约束）
+> 3. 改完 push 之前再扫一眼 `INFRASTRUCTURE.md` 第九节"不要做的事"
+
+---
+
+## 〇、快速识别（最常用 5 件事）
+
+| 问题 | 答案 |
+|------|------|
+| 仓库在哪？ | `github.com/764496864/daoxu-site`（main 分支） |
+| 怎么推送？ | `git add` → `git commit` → `git push origin main` → Vercel 自动部署（30~60 秒） |
+| 改完要不要重启服务？ | **不要**。Vercel 自动部署，零运维。 |
+| 腾讯云 `111.231.4.219` 干嘛的？ | 早期残留，**官网和聊天都不经过它**，现在只跑 baobao 子站。**不要往里塞东西**。 |
+| 聊天框（明一）后端在哪？ | 用户本地 WSL 跑 OpenClaw Gateway，通过 Cloudflare Tunnel 暴露为 `chat.daoxu.com.cn`。详见 `INFRASTRUCTURE.md` 第五节。 |
+
+---
+
 ## 一、项目概况
 
-道序科技（DaoXu Technology）官网，单HTML文件静态站，部署在Vercel。
+道序科技（DaoXu Technology）官网，单 HTML 文件静态站，部署在 Vercel。
 - 仓库：https://github.com/764496864/daoxu-site
-- 线上地址：https://daoxu-site.vercel.app
-- 文件结构：index.html + robots.txt + sitemap.xml
-- 技术栈：纯HTML/CSS/JS，无框架，单文件
+- 线上地址：https://daoxu.com.cn（正式）+ https://daoxu-site.vercel.app（并行）
+- 文件结构：`index.html` + `thought.json` + `robots.txt` + `sitemap.xml` + `CLAUDE.md` + `INFRASTRUCTURE.md` + `avatars/` + `bgm.m4a` + `logo.png`
+- 技术栈：纯 HTML/CSS/JS，无框架，单文件
+- DNS：Cloudflare（NS：`anton.ns.cloudflare.com` / `cruz.ns.cloudflare.com`）
+- 聊天后端：本地 WSL OpenClaw Gateway → Cloudflare Named Tunnel → `chat.daoxu.com.cn`
 
 ## 二、品牌设计规范（必须严格遵守）
 
