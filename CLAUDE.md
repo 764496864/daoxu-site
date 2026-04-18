@@ -14,6 +14,48 @@
 
 ---
 
+> ## 🔒 沙盒优先铁律（最重要的操作规则）
+>
+> **用户说下列任意关键词 → 立刻用沙盒，不要碰生产 `code/`：**
+> 测试、试试、优化、改改看、看看效果、预览、实验、沙盒、尝试、玩一下、试一版
+>
+> **沙盒固定路径**：`C:\Users\76449\Desktop\code-sandbox2\`
+> （路径是 `code-sandbox2`，不是 `code-sandbox`。`code-sandbox` 是之前别的 Claude 搞乱了的旧沙盒，**不要动**。）
+>
+> ### 触发后的执行步骤
+>
+> **Step 1**：检查沙盒是否存在、是否与生产同步
+> ```bash
+> diff -q /c/Users/76449/Desktop/code/index.html /c/Users/76449/Desktop/code-sandbox2/index.html
+> # 没输出 = 同步；有输出或报错 = 需要重建
+> ```
+>
+> **Step 2**（只有过时或不存在时才做）：重建沙盒
+> ```bash
+> rm -rf /c/Users/76449/Desktop/code-sandbox2
+> cp -r /c/Users/76449/Desktop/code /c/Users/76449/Desktop/code-sandbox2
+> rm -rf /c/Users/76449/Desktop/code-sandbox2/.git
+> ```
+> 删 `.git` 是关键——沙盒就不再是 git 仓库，物理上不可能 `git push`。
+>
+> **Step 3**：所有改动**只改** `code-sandbox2/` 里的文件。告诉用户双击 `C:\Users\76449\Desktop\code-sandbox2\index.html` 预览效果。
+>
+> ### 禁止行为
+>
+> - ❌ 沙盒工作期间同时动 `code/`
+> - ❌ 碰 `code-sandbox/`（旧的乱沙盒）——**只认 `code-sandbox2`**
+> - ❌ 用户没明确说下列任一词之前，**禁止 `git push`**：
+>   - "推线上" / "发布" / "上线" / "推 github" / "push" / "同步到线上" / "部署"
+>
+> ### 推线上流程（只有用户明确要求才做）
+>
+> 1. 列出沙盒里改过的文件（`diff -r code code-sandbox2` 找差异）
+> 2. `cp` 把改动的文件从沙盒同步到 `code/`
+> 3. `cd /c/Users/76449/Desktop/code` → `git add <files>` → `git commit` → `git pull --rebase origin main` → `git push origin main`
+> 4. `git log -1` 确认 push 成功，把 commit hash 报给用户
+
+---
+
 ## 〇、快速识别（最常用 5 件事）
 
 | 问题 | 答案 |
@@ -99,10 +141,11 @@ Footer
 ## 四、明一聊天入口（重要）
 
 所有"体验明一""和明一对话"按钮统一调用 `toggleChat()` 打开右下角浮窗。
-- 浮窗HTML/CSS/JS已在文件中（.chat-fab + .chat-panel + toggleChat函数）
-- 龙虾（OpenClaw）未接入时显示"明一正在部署中"占位
-- 龙虾接入后改 `MINGYI_CHAT` 变量即可自动切换为iframe
-- **禁止用alert弹窗**，**禁止新标签页跳转**
+- 浮窗 HTML/CSS/JS 已在文件中（.chat-fab + .chat-panel + toggleChat 函数 + selectAgent + connectWS + sendMsg）
+- `MINGYI_CHAT = 'https://chat.daoxu.com.cn'`（定义在 script 顶部）
+- 连接方式是**原生 WebSocket**（不是 iframe），`connectWS()` 函数负责建连，URL 必须带路径 `/chat?session=agent:<agentId>:main`（OpenClaw 2026.4+ 协议要求，少了就连不上）
+- **禁止用 alert 弹窗**，**禁止新标签页跳转**
+- 详细协议和后端链路见 `INFRASTRUCTURE.md` 第五节
 
 ## 五、响应式断点
 
@@ -143,11 +186,13 @@ PC: 默认（max-width > 1024px）
 
 ## 九、操作规则
 
+- **默认走沙盒**：用户说"测试/优化/试试/看看效果"等词 → 进 `code-sandbox2/`，不碰 `code/`（详见顶部"🔒 沙盒优先铁律"）
 - 改文件前先完整读一遍目标文件
 - 不要为了改几行就重写整个文件
-- 每次改完用浏览器验证效果
-- commit message用中文，简洁说明改了什么
-- 改完如果需要push，先问用户确认
+- 每次改完用浏览器验证效果（沙盒里双击本地 `index.html` 看）
+- commit message 用中文，简洁说明改了什么
+- **严禁擅自 push**：用户没明确说"推线上/发布/上线/push"绝不碰 `git push`
+- push 之前先 `git pull --rebase origin main`，避免跟龙虾 thought.json 冲突
 
 ## 十、设计参考文件
 
@@ -225,11 +270,18 @@ main / biz-doctor / startup-coach / content-ops / ip-builder / ai-advisor / prom
 ## 十四、文件结构
 
 ```
-index.html          — 主页（唯一HTML文件，含CSS+JS）
-thought.json        — 每日洞察数据（龙虾推送，前端不碰）
-logo.png            — 品牌logo（透明底PNG）
-bgm.m4a             — 背景音乐
-avatars/             — 14个智能体头像
+index.html                — 主页（唯一 HTML 文件，含 CSS+JS）
+thought.json              — 每日洞察数据（龙虾推送，前端不 commit）
+logo.png                  — 品牌 logo（透明底 PNG）
+bgm.m4a                   — 背景音乐
+share.jpg / share.png     — 社交分享缩略图
+push_thought.sh           — 龙虾推送 thought.json 的脚本（龙虾管，前端不碰）
+
+CLAUDE.md                 — 本文件（Claude Code 自动加载，设计 + 代码规范）
+INFRASTRUCTURE.md         — 架构/部署/故障排查（新 Claude 第一步读）
+ELITE-FRONTEND-UX.md      — 前端 UI/UX 设计规范参考
+
+avatars/                  — 14 个智能体头像
   mingyi.png
   biz-doctor.png
   startup-coach.png
@@ -244,6 +296,7 @@ avatars/             — 14个智能体头像
   austrian-room.png
   action-coach.png
   lacan-analyst.png
+
 robots.txt
 sitemap.xml
 ```
