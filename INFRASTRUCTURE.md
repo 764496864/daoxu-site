@@ -129,7 +129,11 @@ git push origin main
 只用 `main` 分支。**不要建其他分支推送**——Vercel 默认只部署 main。
 
 **应急方案（webhook 假死时）：**
-v9 文档第 5.2 节有 Vercel Deploy Hook URL，存在 `Obsidian/明一/06-每日情报/系统关键配置.md`。`curl -X POST <URL>` 强制触发部署。
+Vercel Deploy Hook URL 存在用户本地 Obsidian：
+- 绝对路径：`C:\Users\Administrator\Documents\Obsidian Vault\明一\06-每日情报\系统关键配置.md`
+- **不在本项目仓库内**——Claude 看不到，需要让子枫自己查那个文件并提供 URL
+- 找到 URL 后：`curl -X POST <URL>` 强制触发一次部署
+- URL 格式示例：`https://api.vercel.com/v1/integrations/deploy/prj_xxxxx`（出于安全不存仓库）
 
 ---
 
@@ -251,6 +255,12 @@ bash ~/start-daoxu.sh
 - ❌ 不要直接 `cloudflared tunnel run`（少了 `--protocol http2` 参数会被公司网络挡）
 - ✅ 永远用 `bash ~/start-daoxu.sh`
 
+**幂等性说明（重要）**：
+- `start-daoxu.sh` **可以重复跑**，脚本内部会检测已运行的 gateway 并跳过重复启动
+- 如果第一遍跑完链路还没通，**不需要先 kill 进程再跑第二遍**，直接再跑一次即可
+- 除非日志明确显示某个进程 `failed to start` 或端口冲突，否则不要手动 `pkill cloudflared` / `pkill openclaw`——那会打断脚本的状态管理
+- 特例：如果连跑 3 次都没通，再看 `ps aux | grep -E 'cloudflared|openclaw'` 手动排查僵尸进程
+
 **日志位置**：
 - Named Tunnel：`/tmp/daoxu-named-tunnel.log`
 - Quick Tunnel：`/tmp/daoxu-quick-tunnel.log`
@@ -280,13 +290,16 @@ dig +short -t NS daoxu.com.cn @1.1.1.1
 # 期望：anton.ns.cloudflare.com. cruz.ns.cloudflare.com.
 # 如果是 dnspod：去腾讯云域名管理改回来（见第八节）
 
-# 4. 前端 WebSocket URL 路径对吗？
+# 4. 前端 WebSocket URL 路径对吗？（仅在"最近改过 index.html"时跑）
+# 如果你就是来修 bug 的，且刚刚没动前端代码，跳过这一步，直接看 1/2/3
 grep 'chat?session' ~/daoxu-site/index.html
 # 期望：能找到 '/chat?session=agent:'
 # 如果找不到：bug 是 connectWS 路径丢了，按第五节模板修
 ```
 
 如果以上 4 步全过，再考虑别的（极少发生）。
+
+**顺序优先级**：没动代码就从 1/2/3 找问题；刚推过代码就先跑 4。
 
 ### 症状 2：官网打不开 / 旧版本
 
