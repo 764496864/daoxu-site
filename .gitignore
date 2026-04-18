@@ -1,0 +1,11 @@
+# 沙盒和备份目录：本地专用，不推到 GitHub
+sandbox/
+backups/
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/

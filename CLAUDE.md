@@ -21,13 +21,13 @@
 > | 路径 | 角色 | 谁能动 |
 > |------|------|--------|
 > | `C:\Users\76449\Desktop\code\` | **线上确认版**（跟 GitHub / Vercel 同步） | 只有"推线上"和"回档"时 Claude 会动 |
-> | `C:\Users\76449\Desktop\code-sandbox2\` | **试验场**（所有实验在这里做） | 随便改，改坏了重建就是 |
-> | `C:\Users\76449\Desktop\code-backups\latest\` | **上一版快捷入口**（回档上一版用，push 时自动更新） | 只在"推线上"前被更新 |
-> | `C:\Users\76449\Desktop\code-backups\<日期-时间-hash>\` | **历史归档**（每次 push 产生一个，永久保留） | 只追加，不覆盖，不删除 |
-> | ~~`C:\Users\76449\Desktop\code-sandbox\`~~ | ~~历史残留，已废弃~~ | **绝对不动** |
+> | `C:\Users\76449\Desktop\code\sandbox\` | **试验场**（所有实验在这里做） | 随便改，改坏了重建就是 |
+> | `C:\Users\76449\Desktop\code\backups\latest\` | **上一版快捷入口**（回档上一版用，push 时自动更新） | 只在"推线上"前被更新 |
+> | `C:\Users\76449\Desktop\code\backups\<日期-时间-hash>\` | **历史归档**（每次 push 产生一个，永久保留） | 只追加，不覆盖，不删除 |
+> | ~~`C:\Users\76449\Desktop\code-sandbox\`~~ | ~~历史残留~~ | **已删除（2026-04-19）** |
 >
-> **备份命名规则**：`code-backups/YYYYMMDD-HHMM-<commit-hash前7位>/`
-> 例如：`code-backups/20260419-0016-95458e7/` 表示"2026-04-19 凌晨 00:16 时 commit 95458e7 的版本"
+> **备份命名规则**：`code/backups/YYYYMMDD-HHMM-<commit-hash前7位>/`
+> 例如：`code/backups/20260419-0016-95458e7/` 表示"2026-04-19 凌晨 00:16 时 commit 95458e7 的版本"
 > 这个命名能让用户/Claude 一眼看出每个归档对应哪次 push。
 >
 > ---
@@ -38,15 +38,16 @@
 >
 > ### 进沙盒的执行步骤
 >
-> **Step 1**：检查沙盒状态（3 种情况）
+> **Step 1**：检查沙盒状态
 > ```bash
 > # 沙盒不存在？
-> [ ! -d /c/Users/76449/Desktop/code-sandbox2 ] && echo "NOT_EXIST"
+> [ ! -d /c/Users/76449/Desktop/code/sandbox ] && echo "NOT_EXIST"
 >
-> # 沙盒与生产是否一致？
-> diff -rq --no-dereference /c/Users/76449/Desktop/code /c/Users/76449/Desktop/code-sandbox2 2>/dev/null \
->   | grep -v '\.git' | head -5
-> # 无输出 = 同步干净；有输出 = 沙盒有未推送改动
+> # 沙盒关键文件（index.html + thought.json）跟生产是否一致？
+> # 注意：不能直接 diff -rq 整个 code 和 code/sandbox，会混入 sandbox/backups 自身当噪声
+> diff -q /c/Users/76449/Desktop/code/index.html /c/Users/76449/Desktop/code/sandbox/index.html 2>/dev/null
+> diff -q /c/Users/76449/Desktop/code/thought.json /c/Users/76449/Desktop/code/sandbox/thought.json 2>/dev/null
+> # 两条都无输出 = 同步；任一有输出 = 沙盒有未推送改动
 > ```
 >
 > **Step 2**：根据结果行动
@@ -59,17 +60,21 @@
 >   > B. 丢掉重新开始（重建沙盒，上次改动丢失）
 >   > C. 先帮我看看上次改了什么（我 diff 给你看）"
 >
-> **Step 3**：重建沙盒的标准命令（5 行，按顺序）
+> **Step 3**：重建沙盒的标准命令（务必用 `find` 过滤，不能裸 `cp -r`——否则会把 sandbox/backups 自己复制进去无限递归）
 > ```bash
 > cd /c/Users/76449/Desktop/code
 > git pull --rebase origin main                              # 先拉最新（避免落后龙虾的 thought.json）
-> rm -rf /c/Users/76449/Desktop/code-sandbox2
-> cp -r /c/Users/76449/Desktop/code /c/Users/76449/Desktop/code-sandbox2
-> rm -rf /c/Users/76449/Desktop/code-sandbox2/.git            # 删 .git，物理上不可能 git push
+> rm -rf /c/Users/76449/Desktop/code/sandbox
+> mkdir -p /c/Users/76449/Desktop/code/sandbox
+> # 只复制业务文件，排除 .git / sandbox / backups（避免递归）
+> find /c/Users/76449/Desktop/code -mindepth 1 -maxdepth 1 \
+>   ! -name '.git' ! -name 'sandbox' ! -name 'backups' \
+>   -exec cp -r {} /c/Users/76449/Desktop/code/sandbox/ \;
+> # 注意：沙盒本来就不应该有 .git（因为 find 没复制 .git），物理上不可能 git push
 > ```
 >
-> **Step 4**：所有改动**只改** `code-sandbox2/`。改完告诉用户：
-> > "改完了。双击 `C:\Users\76449\Desktop\code-sandbox2\index.html` 本地预览。觉得好就说'推线上'，不满意就说'重新改'或'回退沙盒'。"
+> **Step 4**：所有改动**只改** `code/sandbox/`。改完告诉用户：
+> > "改完了。双击 `C:\Users\76449\Desktop\code\sandbox\index.html` 本地预览。觉得好就说'推线上'，不满意就说'重新改'或'回退沙盒'。"
 >
 > ---
 >
@@ -88,22 +93,24 @@
 > CURRENT_HASH=$(git log -1 --pretty=format:'%h')
 > TIMESTAMP=$(date +%Y%m%d-%H%M)
 > BACKUP_NAME="${TIMESTAMP}-${CURRENT_HASH}"
-> BACKUP_DIR="/c/Users/76449/Desktop/code-backups/${BACKUP_NAME}"
+> BACKUP_DIR="/c/Users/76449/Desktop/code/backups/${BACKUP_NAME}"
 >
-> mkdir -p /c/Users/76449/Desktop/code-backups
-> cp -r /c/Users/76449/Desktop/code "$BACKUP_DIR"
-> rm -rf "$BACKUP_DIR/.git"
+> mkdir -p "$BACKUP_DIR"
+> # 只复制业务文件，排除 .git / sandbox / backups（避免递归）
+> find /c/Users/76449/Desktop/code -mindepth 1 -maxdepth 1 \
+>   ! -name '.git' ! -name 'sandbox' ! -name 'backups' \
+>   -exec cp -r {} "$BACKUP_DIR/" \;
 >
 > # 同时把 latest 快捷入口指到刚建的这份归档（方便回档"上一版"）
-> rm -rf /c/Users/76449/Desktop/code-backups/latest
-> cp -r "$BACKUP_DIR" /c/Users/76449/Desktop/code-backups/latest
+> rm -rf /c/Users/76449/Desktop/code/backups/latest
+> cp -r "$BACKUP_DIR" /c/Users/76449/Desktop/code/backups/latest
 >
-> # ③ 看沙盒改了哪些文件（过滤 .git）
-> diff -rq --no-dereference /c/Users/76449/Desktop/code /c/Users/76449/Desktop/code-sandbox2 \
->   | grep -v '\.git'
+> # ③ 看沙盒改了哪些文件（过滤 .git/sandbox/backups 自身的噪声）
+> diff -rq --no-dereference /c/Users/76449/Desktop/code /c/Users/76449/Desktop/code/sandbox 2>/dev/null \
+>   | grep -vE '\.git|Only in .*/code: (sandbox|backups)'
 >
 > # ④ 按 diff 结果逐个 cp 改动的文件（不要无脑 cp -r 整目录）
-> cp /c/Users/76449/Desktop/code-sandbox2/<改动的文件> /c/Users/76449/Desktop/code/<改动的文件>
+> cp /c/Users/76449/Desktop/code/sandbox/<改动的文件> /c/Users/76449/Desktop/code/<改动的文件>
 > # 每个改动的文件都 cp 一次
 >
 > # ⑤ 提交 + 推送
@@ -114,13 +121,13 @@
 >
 > # ⑥ 确认 + 报告
 > git log -1
-> ls /c/Users/76449/Desktop/code-backups/
+> ls /c/Users/76449/Desktop/code/backups/
 > ```
 >
 > push 完对用户说：
-> > "已推送，新 commit 是 `<hash>`。上一版已归档到 `code-backups/<BACKUP_NAME>/` 和 `code-backups/latest/`。后续想回档随时说。"
+> > "已推送，新 commit 是 `<hash>`。上一版已归档到 `code/backups/<BACKUP_NAME>/` 和 `code/backups/latest/`。后续想回档随时说。"
 >
-> **铁律**：归档目录 `code-backups/YYYYMMDD-HHMM-<hash>/` **只追加，不覆盖，不删除**。磁盘满了由用户自己决定删哪些。
+> **铁律**：归档目录 `code/backups/YYYYMMDD-HHMM-<hash>/` **只追加，不覆盖，不删除**。磁盘满了由用户自己决定删哪些。
 >
 > ---
 >
@@ -134,7 +141,7 @@
 >
 > 先列出所有可用备份：
 > ```bash
-> ls -lt /c/Users/76449/Desktop/code-backups/ | grep -v 'latest'
+> ls -lt /c/Users/76449/Desktop/code/backups/ | grep -v 'latest'
 > ```
 >
 > 然后对用户说：
@@ -152,14 +159,14 @@
 > **Step 2**：用户选定后执行
 >
 > ```bash
-> # 假设用户选了 code-backups/20260419-0016-95458e7
-> TARGET_BACKUP="/c/Users/76449/Desktop/code-backups/20260419-0016-95458e7"
+> # 假设用户选了 code/backups/20260419-0016-95458e7
+> TARGET_BACKUP="/c/Users/76449/Desktop/code/backups/20260419-0016-95458e7"
 >
 > # ① 安全起见，先把当前 code 也备份一份（防止回档后发现选错了还能恢复）
 > SAFETY_HASH=$(cd /c/Users/76449/Desktop/code && git log -1 --pretty=format:'%h')
 > SAFETY_TIMESTAMP=$(date +%Y%m%d-%H%M)
-> cp -r /c/Users/76449/Desktop/code "/c/Users/76449/Desktop/code-backups/${SAFETY_TIMESTAMP}-${SAFETY_HASH}-pre-rollback"
-> rm -rf "/c/Users/76449/Desktop/code-backups/${SAFETY_TIMESTAMP}-${SAFETY_HASH}-pre-rollback/.git"
+> cp -r /c/Users/76449/Desktop/code "/c/Users/76449/Desktop/code/backups/${SAFETY_TIMESTAMP}-${SAFETY_HASH}-pre-rollback"
+> rm -rf "/c/Users/76449/Desktop/code/backups/${SAFETY_TIMESTAMP}-${SAFETY_HASH}-pre-rollback/.git"
 >
 > # ② 清空 code 里除 .git 外的所有文件（保留 git 历史）
 > find /c/Users/76449/Desktop/code -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
@@ -183,11 +190,11 @@
 >
 > - ❌ 用户没说上面任一关键词之前，**擅自 `git push`**
 > - ❌ 在沙盒工作期间同时动 `code/`
-> - ❌ 碰 `code-sandbox/`（旧的乱沙盒，已废弃）
+> - ❌ 在 `code/` 根目录直接改文件（除"推线上"和"回档"外）——所有改动都去 `code/sandbox/`
 > - ❌ 推线上前不备份（推了就找不回来）
-> - ❌ 用 `cp -r code-sandbox2/ code/` 整个覆盖（会把沙盒里可能有的废文件也带进来；正确做法是按 `diff -rq` 结果逐个 cp）
-> - ❌ 回档时 `cp -r code-backups/xxx code`（会把 code 的 .git 干掉）；正确做法是保留 code/.git，只覆盖业务文件（用 `find ... -exec rm` 清空再 `cp -r xxx/. code/`）
-> - ❌ 删除 `code-backups/` 里任何历史归档（用户说"太占空间"也要先问清楚到底删哪个，不要擅自删）
+> - ❌ 用 `cp -r code/sandbox/ code/` 整个覆盖（会把沙盒里可能有的废文件也带进来；正确做法是按 `diff -rq` 结果逐个 cp）
+> - ❌ 回档时 `cp -r code/backups/xxx code`（会把 code 的 .git 干掉）；正确做法是保留 code/.git，只覆盖业务文件（用 `find ... -exec rm` 清空再 `cp -r xxx/. code/`）
+> - ❌ 删除 `code/backups/` 里任何历史归档（用户说"太占空间"也要先问清楚到底删哪个，不要擅自删）
 
 ---
 
@@ -321,7 +328,7 @@ PC: 默认（max-width > 1024px）
 
 ## 九、操作规则
 
-- **默认走沙盒**：用户说"测试/优化/试试/看看效果"等词 → 进 `code-sandbox2/`，不碰 `code/`（详见顶部"🔒 沙盒优先铁律"）
+- **默认走沙盒**：用户说"测试/优化/试试/看看效果"等词 → 进 `code/sandbox/`，不碰 `code/`（详见顶部"🔒 沙盒优先铁律"）
 - 改文件前先完整读一遍目标文件
 - 不要为了改几行就重写整个文件
 - 每次改完用浏览器验证效果（沙盒里双击本地 `index.html` 看）
