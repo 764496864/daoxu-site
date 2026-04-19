@@ -1058,15 +1058,9 @@ function selectAgent(agentId,agentName){
   connectWS(agentId,vid);
 }
 
-// v2.6.4：历史按钮改为打开"历史会话抽屉"（不再直接塞到主对话区）
-// 行为：抽屉显示按 runId 分组的对话列表，点某行加载那轮对话到主聊天区
-var historyCache = [];   // 最近一次从后端拉到的原始 messages（按 id 升序）
+// v2.6.8：历史按钮拉"会话列表"（一个 agent 一条，点进去看那个 agent 的完整对话）
+// 后端走 daoxu.chat.sessions.list，按 sessionKey GROUP BY，返回每个 agent 的消息数+最后时间+首条 snippet
 async function reloadChatHistory(){
-  // welcome 状态先选中明一 + 建 WS（用户感觉不到，下次打开即可看到历史）
-  if(!currentAgent){
-    if(typeof selectAgent === 'function') selectAgent('main','明 一');
-    return;
-  }
   if(!window.DaoxuAuth || !DaoxuAuth.isLoggedIn()){
     showHistoryDrawer();
     document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-empty">登录后才能查看跨设备历史对话</div>';
@@ -1074,16 +1068,14 @@ async function reloadChatHistory(){
   }
   showHistoryDrawer();
   document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-loading">加 载 中…</div>';
-  var vid = getChatPeerId();
-  var sessionKey = 'agent:' + currentAgent + ':webchat:direct:' + vid;
   try{
-    var r = await DaoxuAuth.getChatHistoryV2({ sessionKey: sessionKey, offset: 0, limit: 200 });
+    var r = await DaoxuAuth.getChatSessionsList({ offset: 0, limit: 50 });
     if(!r.ok){
       document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-empty">加载失败：'+(r.error && r.error.code || 'UNKNOWN')+'</div>';
       return;
     }
-    historyCache = (r.data && r.data.messages) || [];
-    renderHistoryDrawer(historyCache);
+    var sessions = (r.data && r.data.sessions) || [];
+    renderSessionsDrawer(sessions);
   }catch(e){
     document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-empty">加载失败</div>';
   }
@@ -1092,40 +1084,38 @@ async function reloadChatHistory(){
 function showHistoryDrawer(){ document.getElementById('historyDrawer').classList.add('show') }
 function closeHistoryDrawer(){ document.getElementById('historyDrawer').classList.remove('show') }
 
-// 把扁平 messages 按 runId 聚成"一轮对话"，按时间倒序渲染
-function renderHistoryDrawer(messages){
+// 14 个智能体的中文显示名
+var AGENT_NAMES = {
+  'main':'明 一','biz-doctor':'商业诊断师','startup-coach':'创业教练','content-ops':'内容操盘手',
+  'ip-builder':'IP 操盘教练','ai-advisor':'AI 赋能顾问','prompt-engineer':'提示词工程师',
+  'knowledge-distiller':'知识萃取师','think-room':'思想聊天室','deep-analyst':'深度分析师',
+  'concept-breaker':'概念拆解师','austrian-room':'奥派经济聊天室','action-coach':'执行力教练',
+  'lacan-analyst':'拉康分析师'
+};
+function getAgentDisplayName(aid){ return AGENT_NAMES[aid] || aid || '明 一' }
+
+// 渲染会话列表（每个 agent 一条）
+function renderSessionsDrawer(sessions){
   var body = document.getElementById('historyDrawerBody');
-  if(!messages || !messages.length){
-    body.innerHTML = '<div class="history-drawer-empty">还没有历史对话<br><span style="font-size:10px;color:var(--tx5);letter-spacing:2px">发几条消息后会出现在这里</span></div>';
+  if(!sessions || !sessions.length){
+    body.innerHTML = '<div class="history-drawer-empty">还没有历史对话<br><span style="font-size:10px;color:var(--tx5);letter-spacing:2px">跟任一智能体聊几句后会出现在这里</span></div>';
     return;
   }
-  // 按 runId 分组（无 runId 的 fallback 按 createdAt 分钟切分）
-  var groups = {};
-  var order = [];
-  messages.forEach(function(m){
-    var key = m.runId || ('_t_'+String(m.createdAt||'').slice(0,16));
-    if(!groups[key]){ groups[key] = { runId:m.runId, agentId:m.agentId, firstAt:m.createdAt, lastAt:m.createdAt, userText:'', assistantText:'', messages:[] }; order.push(key); }
-    var g = groups[key];
-    g.messages.push(m);
-    if(m.createdAt < g.firstAt) g.firstAt = m.createdAt;
-    if(m.createdAt > g.lastAt) g.lastAt = m.createdAt;
-    var txt = stripUserContext(typeof m.content === 'string' ? m.content : '');
-    if(m.role === 'user' && !g.userText) g.userText = txt;
-    if(m.role === 'assistant' && !g.assistantText) g.assistantText = txt;
-  });
-  // 按 lastAt 倒序（最新在上）
-  var sorted = order.map(function(k){return groups[k]}).sort(function(a,b){ return (a.lastAt < b.lastAt ? 1 : -1) });
-  // 按日期分组显示
   var html = '';
   var lastDay = '';
-  sorted.forEach(function(g){
-    var day = formatHistoryDay(g.lastAt);
+  sessions.forEach(function(s){
+    var day = formatHistoryDay(s.lastMessageAt);
     if(day && day !== lastDay){ html += '<div class="history-drawer-day">'+day+'</div>'; lastDay = day; }
-    var title = (g.userText || g.assistantText || '（空对话）').slice(0,80);
-    var time = fmtHistoryTime(g.lastAt);
-    html += '<div class="history-session-item" onclick="loadHistoryRun(\''+escapeAttr(g.runId||'')+'\')">'+
-      '<div class="hs-title">'+escapeHtml(title)+'</div>'+
-      '<div class="hs-meta"><span class="hs-time">'+time+'</span><span class="hs-agent">'+escapeHtml((g.agentId||'main').toUpperCase())+'</span></div>'+
+    var snippet = stripUserContext(s.firstMessageSnippet || '').slice(0, 80) || '（空）';
+    var time = fmtHistoryTime(s.lastMessageAt);
+    var count = s.messageCount || 0;
+    var agentName = getAgentDisplayName(s.agentId);
+    html += '<div class="history-session-item" onclick="loadSessionHistory(\''+escapeAttr(s.sessionKey||'')+'\',\''+escapeAttr(s.agentId||'main')+'\')">'+
+      '<div class="hs-title">'+escapeHtml(snippet)+'</div>'+
+      '<div class="hs-meta">'+
+        '<span class="hs-time">'+time+' · '+count+' 条</span>'+
+        '<span class="hs-agent">'+escapeHtml(agentName)+'</span>'+
+      '</div>'+
     '</div>';
   });
   body.innerHTML = html;
@@ -1139,41 +1129,53 @@ function fmtHistoryTime(iso){
   catch(e){ return '' }
 }
 
-// 点击某轮历史 → 关闭抽屉 + 主聊天区加载该轮消息
-function loadHistoryRun(runId){
-  if(!runId){ closeHistoryDrawer(); return }
-  var msgs = historyCache.filter(function(m){ return m.runId === runId });
-  if(!msgs.length){ closeHistoryDrawer(); return }
-  msgs.sort(function(a,b){ return (a.createdAt < b.createdAt ? -1 : 1) });
-  // 清主聊天区
-  var box = document.getElementById('chatMessages');
-  if(box){
-    box.querySelectorAll('.msg-row, .history-divider, .history-date').forEach(function(r){r.remove()});
-  }
-  // 顶部提示条
-  var top = document.createElement('div');
-  top.className = 'history-divider';
-  top.textContent = '— 这是过往对话 —';
-  box.appendChild(top);
-  msgs.forEach(function(m){
-    var text = stripUserContext(typeof m.content === 'string' ? m.content : '');
-    if(!text) return;
-    var row = document.createElement('div');
-    row.className = 'msg-row history ' + (m.role === 'user' ? 'user' : 'bot');
-    var bubble = document.createElement('div');
-    bubble.className = 'msg-bubble';
-    bubble.innerHTML = mdToHtml(text);
-    row.appendChild(bubble);
-    box.appendChild(row);
-  });
-  var bot = document.createElement('div');
-  bot.className = 'history-divider';
-  bot.textContent = '· 本 轮 已 结 束 · 点"+ 新 对 话"重新开始 ·';
-  box.appendChild(bot);
-  box.scrollTop = box.scrollHeight;
+// 点击某个会话 → 切到对应 agent + 拉该 session 全部消息显示到主对话区
+async function loadSessionHistory(sessionKey, agentId){
+  if(!sessionKey){ closeHistoryDrawer(); return }
   closeHistoryDrawer();
-  // 这一刻 currentRun 不能有残留（否则下次 sendMsg 会错配）
-  currentRun = null;
+  // 如果当前 agent 跟目标不同，切换 agent（selectAgent 会重建 WS，不自动拉 history）
+  if(agentId && agentId !== currentAgent && typeof selectAgent === 'function'){
+    selectAgent(agentId, getAgentDisplayName(agentId));
+  }
+  // 给一点时间让 selectAgent 构建好 DOM；如果没换 agent 就立即执行
+  setTimeout(async function(){
+    var box = document.getElementById('chatMessages');
+    if(box){
+      box.querySelectorAll('.msg-row, .history-divider, .history-date').forEach(function(r){r.remove()});
+    }
+    var top = document.createElement('div');
+    top.className = 'history-divider';
+    top.textContent = '— 这是过往对话 —';
+    if(box) box.appendChild(top);
+    try{
+      var r = await DaoxuAuth.getChatHistoryV2({ sessionKey: sessionKey, offset: 0, limit: 200 });
+      if(!r.ok || !r.data || !r.data.messages){ return }
+      var msgs = r.data.messages.slice().sort(function(a,b){ return (a.createdAt < b.createdAt ? -1 : 1) });
+      var lastDay = '';
+      msgs.forEach(function(m){
+        var text = stripUserContext(typeof m.content === 'string' ? m.content : '');
+        if(!text || text.charAt(0)==='{') return;
+        var day = formatHistoryDay(m.createdAt);
+        if(day && day !== lastDay){
+          var dl = document.createElement('div');dl.className='history-date';dl.textContent=day;
+          if(box) box.appendChild(dl); lastDay = day;
+        }
+        var row = document.createElement('div');
+        row.className = 'msg-row history ' + (m.role === 'user' ? 'user' : 'bot');
+        var bubble = document.createElement('div');
+        bubble.className = 'msg-bubble';
+        bubble.innerHTML = mdToHtml(text);
+        row.appendChild(bubble);
+        if(box) box.appendChild(row);
+      });
+      var bot = document.createElement('div');
+      bot.className = 'history-divider';
+      bot.textContent = '· 本 对 话 已 结 束 · 点"+ 新 对 话"重新开始 ·';
+      if(box) box.appendChild(bot);
+      if(box) box.scrollTop = box.scrollHeight;
+    }catch(e){ console.warn('[loadSession] failed:', e) }
+    currentRun = null;  // 别残留旧 run
+  }, agentId && agentId !== currentAgent ? 300 : 0);
 }
 
 // 从消息文本里剥离 [user_context]...[/user_context] 块（这是给 AI 读的，不应该显示给用户 / 不应该存到 chat_messages）

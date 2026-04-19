@@ -303,6 +303,7 @@ var Mock = {
     return ok({ ok:true });
   },
   async chat_history_v2(p){ return ok({ sessionKey:p.sessionKey, total:0, offset:0, limit:p.limit||50, hasMore:false, messages:[] }) },
+  async chat_sessions_list(p){ return ok({ total:0, offset:0, limit:p.limit||20, hasMore:false, sessions:[] }) },
   // Admin RPC 在 Mock 模式下不可用（admin/users.html 有自己的 mock 数据池，不会走到这里）
   async admin_users_list(p){ return err('NOT_SUPPORTED','Mock 模式无 admin RPC，请切 Real') },
   async admin_user_get(p){ return err('NOT_SUPPORTED','Mock 模式无 admin RPC') },
@@ -670,6 +671,11 @@ var Real = {
     return Real._call('daoxu.chat.history_v2', p);
   },
 
+  // 列出当前用户的所有会话（按 sessionKey 分组，每个 agent 一条）
+  async chat_sessions_list(p){
+    return Real._call('daoxu.chat.sessions.list', p);
+  },
+
   // ─── Admin RPC（只有 role=admin 的 session 才能调）───
   async admin_users_list(p){
     return Real._call('daoxu.admin.users.list', p);
@@ -791,6 +797,13 @@ var Auth = {
     var token = Auth.getToken();
     var payload = Object.assign({ sessionToken: token }, params);
     return Backend.chat_history_v2(payload);
+  },
+
+  // 列出当前用户的所有会话（每个 agent 一条，点进去看那个 agent 的完整对话记录）
+  async getChatSessionsList(params){
+    if(!Auth.isLoggedIn()) return { ok:false, error:{code:'UNAUTHORIZED'} };
+    var token = Auth.getToken();
+    return Backend.chat_sessions_list(Object.assign({sessionToken:token}, params||{}));
   },
 
   // ─── Admin 公开 API（需 role=admin，后端校验）───
