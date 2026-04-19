@@ -153,7 +153,8 @@ footer .ft-meta a:hover{color:var(--gd)}
   nav{padding:14px 20px}
   .nr{position:fixed;top:0;right:-100%;width:70%;max-width:300px;height:100dvh;background:rgba(7,7,10,.98);backdrop-filter:blur(40px);flex-direction:column;justify-content:center;align-items:center;gap:32px;transition:right .5s var(--e2);z-index:999;border-left:1px solid rgba(196,162,101,.06)}
   .nr.open{right:0}
-  .nr a{font-size:13px;letter-spacing:4px}
+  .nr a{font-size:13px;letter-spacing:4px;color:var(--tx2)}
+  .nr a:hover,.nr a.active{color:var(--gd)}
   .nr .np{border:0;padding:0;font-size:13px;letter-spacing:4px}
   .nr .np.set{padding:0}
   .nr .np-dot,.nr .np.set .np-dot{width:7px;height:7px}
@@ -251,7 +252,7 @@ function toggleMenu(){
   document.querySelector('.overlay').classList.toggle('show');
 }
 document.querySelectorAll('.nr a').forEach(a => a.addEventListener('click', () => {
-  if(document.querySelector('.nr').classList.contains('open')) toggleMenu();
+  if(document.querySelector('.nr').classList.contains('open')) setTimeout(toggleMenu, 160);
 }));
 
 // ─── Markdown 渲染（和首页 fmtContent 一致，带 HTML 转义防 XSS）───
