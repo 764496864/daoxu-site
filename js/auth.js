@@ -298,6 +298,11 @@ var Mock = {
     });
   },
 
+  async chat_flush(p){
+    // Mock：空壳（前端独立开发期不对接后端）。返回 ok，不做任何落盘。
+    return ok({ ok:true });
+  },
+
   async memory_set(p){
     var sessions = loadJSON(STORAGE.SESSIONS, {});
     var s = sessions[p.sessionToken];
@@ -633,6 +638,12 @@ var Real = {
       tokensTotal: r.data.tokensTotal || 0,
       lastSessionAt: r.data.lastSessionAt || null
     });
+  },
+
+  // A2 路线：前端在每一轮对话结束时调用，把 user + assistant 两条消息一起 flush 给后端
+  // 后端写入 chat_messages / 更新 user_stats / 追加 jsonl
+  async chat_flush(p){
+    return Real._call('daoxu.chat.flush', p);
   }
 };
 
@@ -722,6 +733,16 @@ var Auth = {
     var token = Auth.getToken();
     if(!token) return { ok:false, error:{code:'UNAUTHORIZED'} };
     return Backend.stats_me({ sessionToken: token });
+  },
+
+  // A2：把一轮完整对话（user + assistant 两条）推给后端落盘 + 累计 stats
+  // 未登录直接跳过（匿名用户不走持久化）。登录用户只需在 chat final 时调一次。
+  async chatFlush(batch){
+    if(!Auth.isLoggedIn()) return { ok:false, error:{code:'NOT_LOGGED_IN'} };
+    var token = Auth.getToken();
+    // 附带 sessionToken 让后端校验调用方（必填）
+    var payload = Object.assign({ sessionToken: token }, batch);
+    return Backend.chat_flush(payload);
   },
 
   // 给 chat connect 用：返回要塞进 connect.params 的字段

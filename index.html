@@ -950,6 +950,9 @@ function renderContent(content,foldable){
 // Format current time as HH:MM for chat timestamps
 function fmtTime(){var d=new Date();return d.getHours().toString().padStart(2,"0")+":"+d.getMinutes().toString().padStart(2,"0")}
 var ws=null,wsReady=false,currentAgent='',streamingDiv=null,streamText='';
+// A2 路线：追踪当前一轮对话的 user/assistant 消息对，在 chat final 时一起 flush 到龙虾后端
+// 未登录用户不创建 run（不走持久化），聊天体验不受影响
+var currentRun=null;
 // Select an agent, build chat UI, and initiate WebSocket connection
 function selectAgent(agentId,agentName){
   currentAgent=agentId;
@@ -996,6 +999,45 @@ function reloadChatHistory(){
     box.querySelectorAll('.msg-row, .history-divider, .history-date').forEach(function(r){r.remove()});
   }
   ws.send(JSON.stringify({type:'req',id:'h-reload-'+Date.now(),method:'chat.history',params:{sessionKey:'agent:'+currentAgent+':webchat:direct:'+vid,limit:50}}));
+}
+
+// A2：开始新一轮对话的记录（未登录跳过；每一轮 sendMsg 调一次）
+function startNewRun(userText){
+  if(!(window.DaoxuAuth && DaoxuAuth.isLoggedIn())) return;
+  var vid = getChatPeerId();
+  currentRun = {
+    runId: 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+    sessionKey: 'agent:' + currentAgent + ':webchat:direct:' + vid,
+    userId: vid,  // 登录状态下 getChatPeerId 返回 user_id（auth.js.getChatAuthFields 约定）
+    agentId: currentAgent,
+    userText: userText,
+    userTs: new Date().toISOString(),
+    assistantText: '',
+    assistantTs: null
+  };
+}
+
+// A2：本轮对话结束时 flush 两条消息到龙虾后端（chat_messages / user_stats / jsonl）
+function finalizeRunAndFlush(assistantText){
+  if(!currentRun) return;
+  var r = currentRun; currentRun = null;
+  r.assistantText = assistantText || '';
+  r.assistantTs = new Date().toISOString();
+  if(!window.DaoxuAuth || typeof DaoxuAuth.chatFlush !== 'function') return;
+  try{
+    DaoxuAuth.chatFlush({
+      sessionKey: r.sessionKey,
+      userId: r.userId,
+      messages: [
+        {sessionKey:r.sessionKey,userId:r.userId,agentId:r.agentId,role:'user',messageKind:'text',content:r.userText,runId:r.runId,tokensIn:null,tokensOut:null,createdAt:r.userTs},
+        {sessionKey:r.sessionKey,userId:r.userId,agentId:r.agentId,role:'assistant',messageKind:'text',content:r.assistantText,runId:r.runId,tokensIn:null,tokensOut:null,createdAt:r.assistantTs}
+      ],
+      conversationIncrement: true,
+      tokensTotal: 0,  // 前端不精确知道 tokens；后端自行估算或忽略
+      lastSessionAt: r.assistantTs,
+      rawJsonlPath: null
+    }).catch(function(e){ console.warn('[chat.flush] failed:',e) });
+  }catch(e){ console.warn('[chat.flush] threw:',e) }
 }
 
 // 把消息时间戳格式化为 "今 天" / "昨 天" / "2026-04-19"（用于历史分组）
@@ -1093,11 +1135,15 @@ function connectWS(agentId,vid){
         document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
       }
       if(p.state==='final'){var th2=document.getElementById('typingHint');if(th2)th2.remove();
+        // A2：先保存最终 assistant 文本（streamText 下面可能被重置为空）
+        var finalAssistantText = streamText || text || '';
         if(streamingDiv){streamingDiv.classList.remove('streaming');streamingDiv.innerHTML+='<div class="msg-time">'+fmtTime()+'</div>';streamingDiv=null;streamText=''}
         else if(text){var row=document.createElement('div');row.className='msg-row bot';
         var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=mdToHtml(text)+'<div class="msg-time">'+fmtTime()+'</div>';
         row.appendChild(bubble);document.getElementById('chatMessages').appendChild(row)}
         document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
+        // A2：本轮完成，flush user+assistant 两条到龙虾后端（登录用户才触发）
+        finalizeRunAndFlush(finalAssistantText);
       }
     }
   };
@@ -1111,6 +1157,8 @@ function sendMsg(){
   var text=ta.value.trim();
   if(!text)return;
   ta.value='';
+  // A2：记录本轮 user message，待 chat final 时整轮 flush（未登录会自动跳过）
+  startNewRun(text);
   // Show user message immediately
   var wrap=document.createElement('div');wrap.className='msg-row user';
   var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=mdToHtml(text)+'<div class="msg-time">'+fmtTime()+'</div>';
