@@ -1,0 +1,30 @@
+{
+  "_comment": "全站共用字段：品牌、联系方式、导航、footer",
+  "brand": {
+    "name": "道 序 科 技",
+    "nameEn": "DAOXU TECHNOLOGY",
+    "slogan": "不止于此"
+  },
+  "contact": {
+    "wechat": "CL13889506035",
+    "email": "764496864@qq.com",
+    "contactCta": "想和子枫聊聊？加微信是最快的路径",
+    "contactSubtitle": "道序不卖 AI 咨询套餐。先和明一聊明白，再加微信找子枫，精准匹配你的需求。"
+  },
+  "nav": {
+    "about": "关于",
+    "services": "服务",
+    "agents": "智能体",
+    "cases": "案例",
+    "thoughts": "明一日报",
+    "faq": "常见问题",
+    "contact": "联系"
+  },
+  "footer": {
+    "copyright": "© 2026 道序科技. 为不止于此的人而来."
+  },
+  "chat": {
+    "fabLabel": "和明一对话",
+    "openingMessage": "你好，我是明一。把你现在的卡点告诉我——AI、新媒体、商业，什么都可以聊。"
+  }
+}

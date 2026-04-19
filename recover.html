@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>找回密码 | 道序</title>
+<meta name="description" content="答对两道安全题，重置道序账户密码。">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://daoxu.com.cn/recover.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><rect x='6' y='6' width='48' height='48' rx='2' stroke='%23C4A265' stroke-width='3' fill='none'/><path d='M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30' stroke='%23C4A265' stroke-width='2.8' fill='none' stroke-linecap='round'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200;300;400;500&family=Noto+Serif+SC:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#07070A;--bg2:#0D0D10;--bg3:#131316;--tx:#F2EDE4;--tx2:#C8C0B4;--tx3:#8A8480;--tx4:#5A5652;--tx5:#3A3836;--gd:#C4A265;--gd2:#A8884E;--sf:'Noto Serif SC',serif;--ss:'Noto Sans SC',sans-serif;--e2:cubic-bezier(.33,.9,.4,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--tx);font-family:var(--ss);overflow-x:hidden;font-weight:300;min-height:100vh}
+::selection{background:rgba(196,162,101,.2)}
+a{color:inherit;text-decoration:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:99;padding:20px 52px;display:flex;justify-content:space-between;align-items:center;background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-bottom:1px solid rgba(255,255,255,.02)}
+.nl{display:flex;align-items:center;gap:16px}
+.nb{font-family:var(--sf);color:var(--gd);font-size:12px;letter-spacing:4px;font-weight:400}
+.nr{display:flex;gap:36px;align-items:center}
+.nr a{font-size:10px;color:var(--tx4);letter-spacing:3px;transition:color .6s}
+.nr a:hover{color:var(--tx)}
+.nr .nc{color:var(--gd);padding:7px 18px;border:1px solid rgba(196,162,101,.2);letter-spacing:3px;transition:all .6s}
+.nr .nc:hover{background:var(--gd);color:var(--bg)}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
+.ham span{width:22px;height:1px;background:var(--gd);transition:all .3s}
+.overlay{position:fixed;inset:0;background:rgba(7,7,10,.7);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:998}
+.overlay.show{opacity:1;pointer-events:auto}
+
+.auth-shell{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:120px 24px 60px}
+.auth-card{width:100%;max-width:480px;background:var(--bg);border:1px solid rgba(196,162,101,.12);padding:52px 44px;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
+.auth-card::before{content:'';position:absolute;top:0;left:18%;right:18%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.4),transparent)}
+.auth-card .lb{font-size:10px;color:var(--gd);letter-spacing:6px;display:block;text-align:center;margin-bottom:18px;opacity:.85}
+.auth-card h1{font-family:var(--sf);font-size:26px;color:var(--tx);font-weight:700;letter-spacing:5px;text-align:center;margin-bottom:12px}
+.auth-card .step{font-size:11px;color:var(--gd);letter-spacing:3px;text-align:center;margin-bottom:30px;opacity:.7}
+.auth-card .tagline{font-size:13px;color:var(--tx3);letter-spacing:1px;line-height:1.9;text-align:center;margin-bottom:30px;font-weight:300}
+
+.field{margin-bottom:20px}
+.field label{display:block;font-size:11px;color:var(--gd);letter-spacing:3px;margin-bottom:8px;font-weight:400;opacity:.85}
+.field .qtext{font-size:13px;color:var(--tx2);letter-spacing:.5px;margin-bottom:10px;padding:10px 14px;background:rgba(196,162,101,.04);border-left:2px solid rgba(196,162,101,.4);font-weight:400;line-height:1.6}
+.field input{width:100%;background:rgba(196,162,101,.03);border:1px solid rgba(196,162,101,.12);color:var(--tx);font-family:var(--ss);font-size:14px;padding:13px 16px;letter-spacing:.5px;line-height:1.6;font-weight:300;outline:none;transition:border-color .6s,background .6s;border-radius:0}
+.field input:focus{border-color:rgba(196,162,101,.45);background:rgba(196,162,101,.05)}
+.field input::placeholder{color:var(--tx5);font-weight:300}
+
+.errbox{background:rgba(180,80,80,.08);border:1px solid rgba(180,80,80,.25);color:#c98686;font-size:12px;letter-spacing:1px;padding:10px 14px;margin-bottom:18px;line-height:1.7;display:none}
+.errbox.show{display:block}
+.okbox{background:rgba(196,162,101,.08);border:1px solid rgba(196,162,101,.25);color:var(--gd);font-size:12px;letter-spacing:1px;padding:10px 14px;margin-bottom:18px;line-height:1.7;display:none}
+.okbox.show{display:block}
+
+.btn-primary{width:100%;padding:15px 24px;font-size:12px;letter-spacing:6px;font-family:var(--ss);font-weight:400;cursor:pointer;transition:all .6s var(--e2);border:1px solid rgba(196,162,101,.4);color:var(--gd);background:transparent;margin-top:14px}
+.btn-primary:hover:not(:disabled){background:var(--gd);color:var(--bg);letter-spacing:8px}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+
+.aux-links{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:1px solid rgba(196,162,101,.08);font-size:11px;letter-spacing:1.5px;color:var(--tx4)}
+.aux-links a{color:var(--tx3);transition:color .5s}
+.aux-links a:hover{color:var(--gd)}
+
+.mode-banner{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(196,162,101,.1);border:1px solid rgba(196,162,101,.25);color:var(--gd);font-size:10px;letter-spacing:3px;padding:6px 16px;z-index:50;backdrop-filter:blur(10px)}
+
+footer{padding:32px 64px;text-align:center;border-top:1px solid rgba(255,255,255,.03);background:var(--bg)}
+footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1.9}
+
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .nr{position:fixed;top:0;right:-100%;width:70%;max-width:300px;height:100dvh;background:rgba(7,7,10,.98);backdrop-filter:blur(40px);flex-direction:column;justify-content:center;align-items:center;gap:32px;transition:right .5s var(--e2);z-index:999;border-left:1px solid rgba(196,162,101,.06)}
+  .nr.open{right:0}
+  .nr a{font-size:13px;letter-spacing:4px}
+  .ham{display:flex !important}
+  .auth-shell{padding:96px 16px 40px}
+  .auth-card{padding:36px 22px}
+  .auth-card h1{font-size:20px;letter-spacing:4px}
+  footer{padding:24px 16px}
+}
+</style>
+</head>
+<body>
+
+<nav id="nv">
+  <a href="/" class="nl">
+    <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 46C24 38 30 32 36 30" stroke="#C4A265" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".45"/></svg>
+    <span class="nb">道 序 科 技</span>
+  </a>
+  <div class="nr">
+    <a href="/about.html">关于</a>
+    <a href="/services.html">服务</a>
+    <a href="/agents.html">智能体</a>
+    <a href="/cases.html">案例</a>
+    <a href="/thoughts.html">明一日报</a>
+    <a href="/faq.html">常见问题</a>
+    <a href="/#cnt">联系</a>
+  </div>
+  <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="overlay" onclick="toggleMenu()"></div>
+
+<div class="mode-banner" id="modeBanner" style="display:none">BETA · 体验预览</div>
+
+<section class="auth-shell">
+  <div class="auth-card">
+    <span class="lb">RECOVER · 找 回 密 码</span>
+    <h1 id="title">忘 了 密 码 ？</h1>
+    <div class="step" id="stepLabel">第 一 步 / 共 二 步</div>
+    <p class="tagline" id="tagline">输入你的用户名，我们调出你当年留的两道安全题。</p>
+
+    <div class="errbox" id="errbox"></div>
+    <div class="okbox" id="okbox"></div>
+
+    <!-- ─── Step 1: 用户名 ─── -->
+    <form id="step1Form" autocomplete="on">
+      <div class="field">
+        <label>用户名</label>
+        <input type="text" id="username" name="username" autocomplete="username" placeholder="注册时填的用户名" required>
+      </div>
+      <button type="submit" class="btn-primary" id="step1Btn">下 一 步</button>
+    </form>
+
+    <!-- ─── Step 2: 答题 + 新密码 ─── -->
+    <form id="step2Form" autocomplete="off" style="display:none">
+      <div class="field">
+        <label>第一道题</label>
+        <div class="qtext" id="q1text">—</div>
+        <input type="text" id="a1" autocomplete="off" placeholder="你的答案（去空格、转小写后比对）" required maxlength="120">
+      </div>
+      <div class="field">
+        <label>第二道题</label>
+        <div class="qtext" id="q2text">—</div>
+        <input type="text" id="a2" autocomplete="off" placeholder="你的答案" required maxlength="120">
+      </div>
+      <div class="field">
+        <label>新密码</label>
+        <input type="password" id="newPassword" autocomplete="new-password" placeholder="至少 8 位" required>
+      </div>
+      <div class="field">
+        <label>确认新密码</label>
+        <input type="password" id="newPassword2" autocomplete="new-password" placeholder="再输一次" required>
+      </div>
+      <button type="submit" class="btn-primary" id="step2Btn">重 置 密 码</button>
+    </form>
+
+    <div class="aux-links">
+      <a href="/login.html">← 回登录</a>
+      <a href="/register.html">没账号？注册</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-meta">
+    道序科技 · DaoXu Technology<br>
+    © 2026 道序科技. 为不止于此的人而来.
+  </div>
+</footer>
+
+<script src="/js/auth.js"></script>
+<script>
+function toggleMenu(){
+  document.querySelector('.nr').classList.toggle('open');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+document.querySelectorAll('.nr a').forEach(a => a.addEventListener('click', () => {
+  if(document.querySelector('.nr').classList.contains('open')) toggleMenu();
+}));
+
+if(DaoxuAuth.mode === 'mock'){
+  document.getElementById('modeBanner').style.display = 'block';
+}
+
+var ERR_MSG = {
+  USER_NOT_FOUND: '没找到这个用户名',
+  WRONG_SECURITY_ANSWERS: '安全问题答案错误，再想想',
+  WEAK_PASSWORD: '新密码至少 8 位',
+  INVALID_REQUEST: '输入有误',
+  STORAGE_ERROR: '保存失败，请稍后再试',
+  NETWORK_ERROR: '网络异常，请稍后再试',
+  TIMEOUT: '请求超时，请重试'
+};
+
+function showError(msg){
+  document.getElementById('okbox').classList.remove('show');
+  var box = document.getElementById('errbox');
+  box.textContent = msg;
+  box.classList.add('show');
+}
+function showOk(msg){
+  document.getElementById('errbox').classList.remove('show');
+  var box = document.getElementById('okbox');
+  box.textContent = msg;
+  box.classList.add('show');
+}
+function clearMsg(){
+  document.getElementById('errbox').classList.remove('show');
+  document.getElementById('okbox').classList.remove('show');
+}
+
+var pendingUsername = '';
+var pendingQuestions = ['', ''];
+
+document.getElementById('step1Form').addEventListener('submit', async function(e){
+  e.preventDefault();
+  clearMsg();
+  var username = document.getElementById('username').value.trim();
+  if(!username){ showError('请填写用户名'); return }
+
+  var btn = document.getElementById('step1Btn');
+  btn.disabled = true; btn.textContent = '查 询 中 ...';
+  var r = await DaoxuAuth.getRecoverQuestions(username);
+  btn.disabled = false; btn.textContent = '下 一 步';
+
+  if(r.ok){
+    pendingUsername = username;
+    pendingQuestions = r.data.questions || ['', ''];
+    document.getElementById('q1text').textContent = pendingQuestions[0] || '—';
+    document.getElementById('q2text').textContent = pendingQuestions[1] || '—';
+    document.getElementById('step1Form').style.display = 'none';
+    document.getElementById('step2Form').style.display = 'block';
+    document.getElementById('stepLabel').textContent = '第 二 步 / 共 二 步';
+    document.getElementById('tagline').textContent = '答对这两道，就能改密。答案会去空格 + 转小写后比对。';
+  }else{
+    showError(ERR_MSG[r.error.code] || r.error.message || '查询失败');
+  }
+});
+
+document.getElementById('step2Form').addEventListener('submit', async function(e){
+  e.preventDefault();
+  clearMsg();
+  var a1 = document.getElementById('a1').value.trim();
+  var a2 = document.getElementById('a2').value.trim();
+  var newPassword = document.getElementById('newPassword').value;
+  var newPassword2 = document.getElementById('newPassword2').value;
+
+  if(!a1 || !a2){ showError('两道题都要答'); return }
+  if(newPassword.length < 8){ showError('新密码至少 8 位'); return }
+  if(newPassword !== newPassword2){ showError('两次新密码不一致'); return }
+
+  var btn = document.getElementById('step2Btn');
+  btn.disabled = true; btn.textContent = '重 置 中 ...';
+
+  var r = await DaoxuAuth.recover({
+    username: pendingUsername,
+    securityAnswers: [
+      { question: pendingQuestions[0], answer: a1 },
+      { question: pendingQuestions[1], answer: a2 }
+    ],
+    newPassword: newPassword
+  });
+
+  btn.disabled = false; btn.textContent = '重 置 密 码';
+
+  if(r.ok){
+    showOk('密码已重置 · 2 秒后跳转登录');
+    setTimeout(function(){ location.replace('/login.html') }, 2000);
+  }else{
+    showError(ERR_MSG[r.error.code] || r.error.message || '重置失败');
+  }
+});
+</script>
+
+</body>
+</html>

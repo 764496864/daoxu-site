@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>个人中心 | 道序</title>
+<meta name="description" content="管理你的道序账户、个人资料和全局记忆 —— 让明一在所有设备都认识你。">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://daoxu.com.cn/profile.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><rect x='6' y='6' width='48' height='48' rx='2' stroke='%23C4A265' stroke-width='3' fill='none'/><path d='M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30' stroke='%23C4A265' stroke-width='2.8' fill='none' stroke-linecap='round'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200;300;400;500&family=Noto+Serif+SC:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#07070A;--bg2:#0D0D10;--bg3:#131316;--tx:#F2EDE4;--tx2:#C8C0B4;--tx3:#8A8480;--tx4:#5A5652;--tx5:#3A3836;--gd:#C4A265;--gd2:#A8884E;--sf:'Noto Serif SC',serif;--ss:'Noto Sans SC',sans-serif;--e2:cubic-bezier(.33,.9,.4,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--tx);font-family:var(--ss);overflow-x:hidden;font-weight:300;min-height:100vh}
+::selection{background:rgba(196,162,101,.2)}
+a{color:inherit;text-decoration:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:99;padding:20px 52px;display:flex;justify-content:space-between;align-items:center;background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-bottom:1px solid rgba(255,255,255,.02)}
+.nl{display:flex;align-items:center;gap:16px}
+.nb{font-family:var(--sf);color:var(--gd);font-size:12px;letter-spacing:4px;font-weight:400}
+.nr{display:flex;gap:36px;align-items:center}
+.nr a{font-size:10px;color:var(--tx4);letter-spacing:3px;transition:color .6s}
+.nr a:hover{color:var(--tx)}
+.nr a.active{color:var(--gd)}
+.nr .np{display:inline-flex;align-items:center;gap:7px;letter-spacing:3px;transition:all .6s;font-size:10px;padding:7px 18px;border:1px solid rgba(196,162,101,.3);color:var(--gd)}
+.nr .np:hover{background:var(--gd);color:var(--bg)}
+.nr .np-dot{display:none}
+.nr .np.set{padding:0 0 0 14px;border:0;border-left:1px solid rgba(196,162,101,.2);color:var(--gd)}
+.nr .np.set:hover{background:transparent;color:var(--tx)}
+.nr .np.set .np-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gd);box-shadow:0 0 6px rgba(196,162,101,.5)}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
+.ham span{width:22px;height:1px;background:var(--gd);transition:all .3s}
+.overlay{position:fixed;inset:0;background:rgba(7,7,10,.7);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:998}
+.overlay.show{opacity:1;pointer-events:auto}
+
+.sub-hero{padding:120px 24px 24px;text-align:center;max-width:760px;margin:0 auto}
+.sub-hero .lb{font-size:11px;color:var(--gd);letter-spacing:6px;display:block;margin-bottom:14px;opacity:.85}
+.sub-hero h1{font-family:var(--sf);font-size:clamp(24px,3.4vw,32px);font-weight:700;letter-spacing:clamp(3px,.7vw,6px);color:var(--tx);line-height:1.4;margin-bottom:12px}
+.sub-hero .tagline{font-size:13px;color:var(--tx3);letter-spacing:1px;line-height:2;font-weight:300;max-width:600px;margin:0 auto}
+
+.shell{max-width:720px;margin:0 auto;padding:8px 24px 60px}
+
+.account-strip{display:flex;justify-content:space-between;align-items:center;background:rgba(196,162,101,.04);border:1px solid rgba(196,162,101,.15);padding:18px 24px;margin-bottom:24px;flex-wrap:wrap;gap:16px}
+.account-strip .left{display:flex;align-items:center;gap:14px}
+.account-strip .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gd),var(--gd2));display:flex;align-items:center;justify-content:center;font-family:var(--sf);font-size:16px;color:var(--bg);font-weight:700;letter-spacing:0}
+.account-strip .who-name{font-family:var(--sf);font-size:15px;color:var(--tx);letter-spacing:2px;font-weight:600}
+.account-strip .who-meta{font-size:10px;color:var(--tx4);letter-spacing:2px;margin-top:2px}
+.account-strip .right{display:flex;gap:10px}
+.account-strip .right button{font-size:10px;letter-spacing:3px;padding:8px 16px;border:1px solid rgba(255,255,255,.08);color:var(--tx3);background:transparent;cursor:pointer;font-family:var(--ss);transition:all .5s}
+.account-strip .right button:hover{color:var(--gd);border-color:rgba(196,162,101,.3)}
+.account-strip .right button.danger:hover{color:#c98686;border-color:rgba(180,80,80,.4)}
+
+.card{background:var(--bg);border:1px solid rgba(196,162,101,.1);padding:36px 36px;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(196,162,101,.04);margin-bottom:22px}
+.card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.28),transparent)}
+.card-tag{font-size:10px;letter-spacing:5px;padding:6px 16px;border-top:1px solid rgba(196,162,101,.28);color:var(--tx2);display:inline-block;margin-bottom:26px;background:linear-gradient(180deg,rgba(196,162,101,.08),rgba(196,162,101,.01));margin-left:-6px}
+
+.field{margin-bottom:22px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:11px;color:var(--gd);letter-spacing:3px;margin-bottom:8px;font-weight:400}
+.field label .req{color:#c98686;margin-left:4px}
+.field .hint{font-size:11px;color:var(--tx4);letter-spacing:1px;margin-bottom:10px;line-height:1.8;font-weight:300}
+.field .counter{float:right;font-size:10px;color:var(--tx5);letter-spacing:1px}
+.field input,.field textarea{width:100%;background:rgba(196,162,101,.03);border:1px solid rgba(196,162,101,.12);color:var(--tx);font-family:var(--ss);font-size:14px;padding:12px 14px;letter-spacing:.5px;line-height:1.7;font-weight:300;outline:none;transition:border-color .6s,background .6s;border-radius:0}
+.field input:focus,.field textarea:focus{border-color:rgba(196,162,101,.4);background:rgba(196,162,101,.05)}
+.field input::placeholder,.field textarea::placeholder{color:var(--tx5);font-weight:300}
+.field textarea{resize:vertical;min-height:90px;line-height:1.9}
+.field textarea.tall{min-height:130px}
+.field input:disabled,.field input[readonly]{opacity:.5;cursor:not-allowed;background:rgba(255,255,255,.015);color:var(--tx3)}
+.field .chip{display:inline-block;font-size:9px;color:var(--tx5);letter-spacing:2px;padding:3px 8px;border:1px solid rgba(255,255,255,.08);margin-left:8px;vertical-align:middle;background:rgba(255,255,255,.01)}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.actions{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-block;padding:13px 32px;font-size:11px;letter-spacing:5px;font-family:var(--ss);font-weight:400;cursor:pointer;transition:all .6s var(--e2);border:1px solid rgba(196,162,101,.4);color:var(--gd);background:transparent}
+.btn:hover:not(:disabled){background:var(--gd);color:var(--bg);letter-spacing:6px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.saved-tip{font-size:11px;color:var(--gd);letter-spacing:3px;opacity:0;transition:opacity .6s}
+.saved-tip.show{opacity:1}
+
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+.stats-cell{background:rgba(196,162,101,.04);border:1px solid rgba(196,162,101,.12);padding:22px 20px;text-align:left;position:relative;min-height:96px}
+.stats-cell .st-label{font-size:10px;color:var(--tx4);letter-spacing:3px;margin-bottom:10px}
+.stats-cell .st-value{font-family:var(--sf);font-size:26px;color:var(--gd);font-weight:700;letter-spacing:1px;line-height:1.2}
+.stats-cell .st-unit{font-size:10px;color:var(--tx4);letter-spacing:2px;margin-left:6px}
+.stats-cell .st-hint{font-size:10px;color:var(--tx5);letter-spacing:1px;margin-top:8px}
+.stats-cell.pending .st-value{color:var(--tx4)}
+
+.ver-chip{display:inline-block;font-size:9px;letter-spacing:3px;padding:3px 9px;border:1px solid rgba(196,162,101,.25);color:var(--gd);margin-left:8px;opacity:.8;vertical-align:middle;background:rgba(196,162,101,.05)}
+
+.toast{position:fixed;top:90px;left:50%;transform:translateX(-50%);background:rgba(7,7,10,.95);border:1px solid rgba(196,162,101,.3);color:var(--gd);padding:12px 28px;font-size:12px;letter-spacing:3px;z-index:9999;opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;backdrop-filter:blur(20px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(8px)}
+.toast.err{border-color:rgba(180,80,80,.4);color:#c98686}
+
+.loading-mask{position:fixed;inset:0;background:rgba(7,7,10,.92);z-index:9998;display:flex;align-items:center;justify-content:center;color:var(--gd);font-size:13px;letter-spacing:4px;font-family:var(--sf);backdrop-filter:blur(10px)}
+
+.mode-banner{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(196,162,101,.1);border:1px solid rgba(196,162,101,.25);color:var(--gd);font-size:10px;letter-spacing:3px;padding:6px 16px;z-index:50;backdrop-filter:blur(10px)}
+
+/* ─── welcome 引导浮层 ─── */
+.welcome-back{position:fixed;inset:0;background:rgba(7,7,10,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:9997;display:none;align-items:center;justify-content:center;padding:20px}
+.welcome-back.show{display:flex}
+.welcome-modal{max-width:560px;width:100%;background:var(--bg);border:1px solid rgba(196,162,101,.3);padding:44px 40px 32px;position:relative;box-shadow:0 40px 120px rgba(0,0,0,.6),inset 0 1px 0 rgba(196,162,101,.08);max-height:90vh;overflow-y:auto}
+.welcome-modal::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.5),transparent)}
+.welcome-modal .wm-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border:1px solid rgba(255,255,255,.08);background:transparent;color:var(--tx4);cursor:pointer;font-size:18px;line-height:1;transition:all .4s;font-family:var(--ss)}
+.welcome-modal .wm-close:hover{color:var(--gd);border-color:rgba(196,162,101,.3)}
+.welcome-modal .wm-lb{font-size:10px;color:var(--gd);letter-spacing:6px;display:block;margin-bottom:14px;opacity:.9}
+.welcome-modal h2{font-family:var(--sf);font-size:22px;color:var(--tx);letter-spacing:4px;font-weight:700;margin-bottom:12px;line-height:1.5}
+.welcome-modal .wm-desc{font-size:13px;color:var(--tx3);letter-spacing:.5px;line-height:2;margin-bottom:24px;font-weight:300}
+.welcome-modal .wm-desc em{color:var(--gd);font-style:normal}
+.welcome-modal .field{margin-bottom:18px}
+.welcome-modal .wm-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.welcome-modal .btn-ghost{padding:12px 22px;font-size:11px;letter-spacing:4px;border:1px solid rgba(255,255,255,.08);color:var(--tx4);background:transparent;cursor:pointer;font-family:var(--ss);transition:all .5s}
+.welcome-modal .btn-ghost:hover{color:var(--gd);border-color:rgba(196,162,101,.3)}
+
+.orn{text-align:center;padding:30px 0}
+.orn-dots{display:flex;gap:10px;justify-content:center;align-items:center}
+.orn-dots span{width:4px;height:4px;border-radius:50%;background:var(--gd);opacity:.25}
+.orn-dots span:nth-child(2){width:6px;height:6px;opacity:.5}
+
+footer{padding:36px 64px;text-align:center;border-top:1px solid rgba(255,255,255,.03);background:var(--bg)}
+footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1.9}
+
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .nr{position:fixed;top:0;right:-100%;width:70%;max-width:300px;height:100dvh;background:rgba(7,7,10,.98);backdrop-filter:blur(40px);flex-direction:column;justify-content:center;align-items:center;gap:32px;transition:right .5s var(--e2);z-index:999;border-left:1px solid rgba(196,162,101,.06)}
+  .nr.open{right:0}
+  .nr a{font-size:13px;letter-spacing:4px}
+  .nr .np{border:0;padding:0;font-size:13px;letter-spacing:4px}
+  .nr .np.set{padding:0}
+  .nr .np-dot,.nr .np.set .np-dot{width:7px;height:7px}
+  .ham{display:flex !important}
+  .sub-hero{padding:96px 20px 16px}
+  .shell{padding:8px 16px 50px}
+  .card{padding:26px 20px}
+  .account-strip{padding:14px 16px}
+  .account-strip .right button{padding:7px 12px}
+  .row2{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr}
+  .welcome-modal{padding:32px 22px 24px}
+  .welcome-modal h2{font-size:18px;letter-spacing:3px}
+  footer{padding:24px 16px}
+}
+</style>
+</head>
+<body>
+
+<nav id="nv">
+  <a href="/" class="nl">
+    <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 46C24 38 30 32 36 30" stroke="#C4A265" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".45"/></svg>
+    <span class="nb">道 序 科 技</span>
+  </a>
+  <div class="nr">
+    <a href="/about.html">关于</a>
+    <a href="/services.html">服务</a>
+    <a href="/agents.html">智能体</a>
+    <a href="/cases.html">案例</a>
+    <a href="/thoughts.html">明一日报</a>
+    <a href="/faq.html">常见问题</a>
+    <a href="/#cnt">联系</a>
+    <a href="/profile.html" class="np set" id="profileBtn"><span class="np-dot"></span><span class="np-name">个人中心</span></a>
+  </div>
+  <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="overlay" onclick="toggleMenu()"></div>
+
+<div class="loading-mask" id="loadingMask">载 入 中 ...</div>
+<div class="toast" id="toast"></div>
+<div class="mode-banner" id="modeBanner" style="display:none">BETA · 体验预览</div>
+
+<!-- ─── 欢迎引导浮层（注册后 ?welcome=1 弹出） ─── -->
+<div class="welcome-back" id="welcomeBack">
+  <div class="welcome-modal">
+    <button class="wm-close" onclick="dismissWelcome()" aria-label="关闭">×</button>
+    <span class="wm-lb">WELCOME · 欢 迎</span>
+    <h2>用 30 秒 · 告 诉 明 一 你 是 谁</h2>
+    <p class="wm-desc">
+      填得越具体，明一回应越像 <em>"专门为你"</em>。<br>
+      现在不填也行 —— 右上角 <em>×</em> 关掉，以后随时在个人中心改。
+    </p>
+
+    <div class="field">
+      <label>昵称</label>
+      <input type="text" id="wm-nickname" maxlength="60" placeholder="明一应该怎么称呼你？">
+    </div>
+
+    <div class="field">
+      <label>身份 / 职业</label>
+      <input type="text" id="wm-occupation" maxlength="120" placeholder="比如：AI 产品经理 / 道序创始人">
+    </div>
+
+    <div class="field">
+      <label>详情（业务 / 关注 / 价值观）</label>
+      <textarea id="wm-detail" maxlength="2000" placeholder="99 年生，做 AI 商业化落地。关注新媒体、AI、商业。不喜欢套话。"></textarea>
+    </div>
+
+    <div class="field">
+      <label>偏好（明一怎么回你）</label>
+      <textarea id="wm-preferences" maxlength="2000" placeholder="结论先行，敢怼敢夸。少问多答。"></textarea>
+    </div>
+
+    <div class="wm-actions">
+      <button class="btn" id="wmSaveBtn" onclick="saveWelcome()">保 存</button>
+      <button class="btn-ghost" onclick="dismissWelcome()">以后再说</button>
+    </div>
+  </div>
+</div>
+
+<section class="sub-hero">
+  <span class="lb">PROFILE · 个人中心</span>
+  <h1>你 的 设 定</h1>
+  <p class="tagline">所有改动云端同步 —— 14 个智能体都看得到。</p>
+</section>
+
+<div class="shell">
+
+  <div class="account-strip">
+    <div class="left">
+      <div class="avatar" id="avatar">·</div>
+      <div>
+        <div class="who-name" id="whoName">—</div>
+        <div class="who-meta" id="whoMeta">—</div>
+      </div>
+    </div>
+    <div class="right">
+      <button onclick="reloadFromServer()">刷 新</button>
+      <button class="danger" onclick="logout()">登 出</button>
+    </div>
+  </div>
+
+  <!-- ─── 账户信息 ─── -->
+  <div class="card">
+    <span class="card-tag">ACCOUNT · 账 户 信 息</span>
+
+    <div class="row2">
+      <div class="field">
+        <label>用户名</label>
+        <div class="hint">登录账号，不可修改</div>
+        <input type="text" id="f-username" readonly>
+      </div>
+      <div class="field">
+        <label>昵称</label>
+        <div class="hint">明一怎么称呼你</div>
+        <input type="text" id="f-nickname" maxlength="60" placeholder="比如：子枫">
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>手机号 <span class="ver-chip">V1.1 即将开放</span></label>
+        <div class="hint">绑定后可用于找回密码 / 重要通知</div>
+        <input type="tel" id="f-phone" disabled placeholder="暂未开放">
+      </div>
+      <div class="field">
+        <label>邮箱 <span class="ver-chip">V1.1 即将开放</span></label>
+        <div class="hint">绑定后可接收重要通知</div>
+        <input type="email" id="f-email" disabled placeholder="暂未开放">
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 告诉明一你是谁 ─── -->
+  <div class="card">
+    <span class="card-tag">IDENTITY · 告 诉 明 一 你 是 谁</span>
+
+    <div class="field">
+      <label>身份 / 职业</label>
+      <div class="hint">你在做什么工作？让明一知道你的身份背景。</div>
+      <input type="text" id="f-occupation" maxlength="120" placeholder="比如：AI 产品经理 / 道序科技创始人">
+    </div>
+
+    <div class="field">
+      <label>详情 <span class="counter" id="ctDetail">0 / 2000</span></label>
+      <div class="hint">你的业务、关注、价值观、不喜欢什么 —— 越具体越好。</div>
+      <textarea id="f-detail" class="tall" maxlength="2000" placeholder="比如：99 年生，做 AI 商业化落地。关注新媒体、AI、商业三块。不喜欢套话和冒充专家。"></textarea>
+    </div>
+
+    <div class="field">
+      <label>偏好 <span class="counter" id="ctPref">0 / 2000</span></label>
+      <div class="hint">你希望明一用什么风格回你？</div>
+      <textarea id="f-preferences" maxlength="2000" placeholder="比如：结论先行，敢怼敢夸。少问多答。不要&quot;我建议您...&quot;"></textarea>
+    </div>
+  </div>
+
+  <!-- ─── 全局记忆 ─── -->
+  <div class="card">
+    <span class="card-tag">MEMORY · 全 局 记 忆</span>
+
+    <div class="field">
+      <label>明一应该永远记住的事 <span class="counter" id="ctMem">0 / 50 条</span></label>
+      <div class="hint">每行一条，最多 50 条 × 每条 500 字。所有智能体共享这份记忆。</div>
+      <textarea id="f-memories" class="tall" placeholder="2026-04: 在做道序官网 v2.5&#10;2026-04: 克隆思维 AI 被博美并表"></textarea>
+    </div>
+  </div>
+
+  <!-- 保存操作 -->
+  <div class="actions">
+    <button class="btn" id="saveBtn" onclick="saveAll()">保 存 全 部</button>
+    <span class="saved-tip" id="savedTip">✓ 已云端同步</span>
+  </div>
+
+  <!-- ─── 基础看板 ─── -->
+  <div class="card" style="margin-top:32px">
+    <span class="card-tag">STATS · 基 础 看 板</span>
+
+    <div class="stats-grid">
+      <div class="stats-cell pending" id="stats-conv">
+        <div class="st-label">对话轮数</div>
+        <div class="st-value" id="st-conversations">—</div>
+        <div class="st-hint">跟 14 个智能体的累计对话次数</div>
+      </div>
+      <div class="stats-cell pending" id="stats-tok">
+        <div class="st-label">TOKEN 消耗</div>
+        <div class="st-value" id="st-tokens">—<span class="st-unit"></span></div>
+        <div class="st-hint">模型调用累计 TOKEN（参考值）</div>
+      </div>
+    </div>
+    <div id="stats-lastseen" style="font-size:10px;color:var(--tx5);letter-spacing:2px;margin-top:16px;text-align:right"></div>
+  </div>
+
+</div>
+
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+
+<footer>
+  <div class="ft-meta">
+    道序科技 · DaoXu Technology<br>
+    © 2026 道序科技. 为不止于此的人而来.
+  </div>
+</footer>
+
+<script src="/js/auth.js"></script>
+<script>
+function toggleMenu(){
+  document.querySelector('.nr').classList.toggle('open');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+document.querySelectorAll('.nr a').forEach(a => a.addEventListener('click', () => {
+  if(document.querySelector('.nr').classList.contains('open')) toggleMenu();
+}));
+
+if(DaoxuAuth.mode === 'mock'){
+  document.getElementById('modeBanner').style.display = 'block';
+}
+
+// 未登录 → 跳 login
+if(!DaoxuAuth.isLoggedIn()){
+  location.replace('/login.html?next=/profile.html');
+}
+
+// ─── toast ───
+function showToast(msg, isErr){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  clearTimeout(window.__toastT);
+  window.__toastT = setTimeout(function(){ t.classList.remove('show') }, 2600);
+}
+
+// ─── fillForm / counters ───
+function fillForm(data){
+  if(!data) return;
+  var p = data.profile || {};
+  document.getElementById('f-username').value = data.username || '';
+  document.getElementById('f-nickname').value = p.nickname || '';
+  document.getElementById('f-occupation').value = p.occupation || '';
+  document.getElementById('f-detail').value = p.detail || '';
+  document.getElementById('f-preferences').value = p.preferences || '';
+  var mems = (p.globalMemories || data.globalMemories || []);
+  document.getElementById('f-memories').value = mems.join('\n');
+
+  var name = p.nickname || data.username || '—';
+  document.getElementById('whoName').textContent = name;
+  document.getElementById('whoMeta').textContent = '@' + (data.username || '') + ' · userId: ' + String(data.userId || '').slice(0,12) + '...';
+  document.getElementById('avatar').textContent = (name.charAt(0) || '·');
+
+  updateCounters();
+}
+
+function updateCounters(){
+  document.getElementById('ctDetail').textContent = (document.getElementById('f-detail').value.length) + ' / 2000';
+  document.getElementById('ctPref').textContent = (document.getElementById('f-preferences').value.length) + ' / 2000';
+  var mems = document.getElementById('f-memories').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  document.getElementById('ctMem').textContent = mems.length + ' / 50 条';
+}
+
+['f-detail','f-preferences','f-memories'].forEach(function(id){
+  document.getElementById(id).addEventListener('input', updateCounters);
+});
+
+// nickname 变动即时同步到头部显示（不需等保存）
+document.getElementById('f-nickname').addEventListener('input', function(){
+  var name = this.value.trim() || document.getElementById('f-username').value || '—';
+  document.getElementById('whoName').textContent = name;
+  document.getElementById('avatar').textContent = (name.charAt(0) || '·');
+});
+
+async function loadInitial(){
+  var mask = document.getElementById('loadingMask');
+  var cached = DaoxuAuth.getCachedUser();
+  if(cached) fillForm(cached);
+  var r = await DaoxuAuth.refreshMe();
+  if(r.ok){
+    fillForm(r.data);
+    mask.style.display = 'none';
+    // 初次加载后看是不是 welcome=1（必须在 fillForm 之后，这样欢迎浮层能用最新数据）
+    maybeShowWelcome();
+    // 基础看板数据（异步，不阻塞主流程）
+    loadStats();
+  }else if(r.error && (r.error.code === 'TOKEN_EXPIRED' || r.error.code === 'UNAUTHORIZED')){
+    location.replace('/login.html?next=/profile.html');
+  }else{
+    mask.style.display = 'none';
+    showToast('加载资料失败：' + (r.error && r.error.message || ''), true);
+    maybeShowWelcome();
+  }
+}
+
+async function loadStats(){
+  var r = await DaoxuAuth.getStats();
+  if(!r.ok){
+    // 静默失败（看板不是关键路径）
+    return;
+  }
+  var d = r.data;
+  document.getElementById('st-conversations').textContent = (d.conversationsTotal || 0).toLocaleString();
+  document.getElementById('st-tokens').textContent = (d.tokensTotal || 0).toLocaleString();
+  // 去掉 pending 灰色状态（亮起数据）
+  document.getElementById('stats-conv').classList.remove('pending');
+  document.getElementById('stats-tok').classList.remove('pending');
+  // 上次活跃时间
+  if(d.lastSessionAt){
+    var dt = new Date(d.lastSessionAt);
+    var fmt = dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0')+' '+String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0');
+    document.getElementById('stats-lastseen').textContent = '上次活跃 · ' + fmt;
+  }
+}
+
+async function reloadFromServer(){
+  showToast('刷新中...');
+  var r = await DaoxuAuth.refreshMe();
+  if(r.ok){ fillForm(r.data); showToast('已从云端拉取最新') }
+  else showToast('刷新失败', true);
+}
+
+async function saveAll(){
+  var btn = document.getElementById('saveBtn');
+  var tip = document.getElementById('savedTip');
+  tip.classList.remove('show');
+  btn.disabled = true; btn.textContent = '保 存 中 ...';
+
+  var memText = document.getElementById('f-memories').value;
+  var memories = memText.split('\n').map(s=>s.trim()).filter(Boolean);
+
+  if(memories.length > 50){
+    btn.disabled = false; btn.textContent = '保 存 全 部';
+    showToast('全局记忆最多 50 条，当前 ' + memories.length + ' 条', true);
+    return;
+  }
+  for(var i=0;i<memories.length;i++){
+    if(memories[i].length > 500){
+      btn.disabled = false; btn.textContent = '保 存 全 部';
+      showToast('记忆每行不超过 500 字（第 ' + (i+1) + ' 行超了）', true);
+      return;
+    }
+  }
+
+  var profile = {
+    nickname: document.getElementById('f-nickname').value.trim(),
+    occupation: document.getElementById('f-occupation').value.trim(),
+    detail: document.getElementById('f-detail').value.trim(),
+    preferences: document.getElementById('f-preferences').value.trim(),
+    globalMemories: memories
+  };
+
+  if(!profile.nickname){
+    btn.disabled = false; btn.textContent = '保 存 全 部';
+    showToast('昵称不能为空（会影响明一怎么称呼你）', true);
+    return;
+  }
+
+  var r1 = await DaoxuAuth.updateProfile(profile);
+  btn.disabled = false; btn.textContent = '保 存 全 部';
+
+  if(r1.ok){
+    tip.classList.add('show');
+    setTimeout(function(){ tip.classList.remove('show') }, 2400);
+    showToast('已云端同步 · 14 个智能体都会看到');
+    document.getElementById('whoName').textContent = profile.nickname;
+    document.getElementById('avatar').textContent = (profile.nickname.charAt(0) || '·');
+  }else if(r1.error && (r1.error.code === 'TOKEN_EXPIRED' || r1.error.code === 'UNAUTHORIZED')){
+    location.replace('/login.html?next=/profile.html');
+  }else{
+    showToast('保存失败：' + (r1.error && r1.error.message || ''), true);
+  }
+}
+
+async function logout(){
+  if(!confirm('确认登出？')) return;
+  await DaoxuAuth.logout();
+  location.replace('/');
+}
+
+// ─── Welcome 引导浮层 ───
+function maybeShowWelcome(){
+  var hasWelcome = new URLSearchParams(location.search).get('welcome') === '1';
+  if(!hasWelcome) return;
+  // 把当前已保存的 profile 填进浮层的 input 作为初始值（一般是空的，刚注册）
+  var cached = DaoxuAuth.getCachedUser();
+  var p = (cached && cached.profile) || {};
+  document.getElementById('wm-nickname').value = (p.nickname && p.nickname !== cached.username) ? p.nickname : '';
+  document.getElementById('wm-occupation').value = p.occupation || '';
+  document.getElementById('wm-detail').value = p.detail || '';
+  document.getElementById('wm-preferences').value = p.preferences || '';
+  document.getElementById('welcomeBack').classList.add('show');
+}
+
+function dismissWelcome(){
+  document.getElementById('welcomeBack').classList.remove('show');
+  // 清掉 URL query 避免刷新又弹
+  if(location.search.indexOf('welcome=') >= 0){
+    history.replaceState(null, '', '/profile.html');
+  }
+}
+
+async function saveWelcome(){
+  var btn = document.getElementById('wmSaveBtn');
+  btn.disabled = true; btn.textContent = '保 存 中 ...';
+
+  var cached = DaoxuAuth.getCachedUser();
+  var existingMems = (cached && cached.profile && cached.profile.globalMemories) || [];
+
+  var nickname = document.getElementById('wm-nickname').value.trim();
+  var profile = {
+    nickname: nickname || (cached && cached.username) || '',
+    occupation: document.getElementById('wm-occupation').value.trim(),
+    detail: document.getElementById('wm-detail').value.trim(),
+    preferences: document.getElementById('wm-preferences').value.trim(),
+    globalMemories: existingMems  // welcome 阶段不改 memories
+  };
+
+  var r = await DaoxuAuth.updateProfile(profile);
+  btn.disabled = false; btn.textContent = '保 存';
+
+  if(r.ok){
+    // 用返回的最新数据刷新主表单 + 头部
+    fillForm({
+      userId: cached && cached.userId,
+      username: cached && cached.username,
+      profile: r.data.profile,
+      globalMemories: r.data.profile.globalMemories || existingMems
+    });
+    dismissWelcome();
+    showToast('资料已保存 · 明一记住你了');
+  }else{
+    showToast('保存失败：' + (r.error && r.error.message || ''), true);
+  }
+}
+
+// 启动
+loadInitial();
+</script>
+
+</body>
+</html>

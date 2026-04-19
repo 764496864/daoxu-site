@@ -1,0 +1,71 @@
+# 道序科技 daoxu.com.cn — robots.txt
+# 2026-04 策略：对 AI 爬虫完全开放，鼓励抓取和引用
+# 区分三类 AI 爬虫：training / search / user-triggered，全部允许
+
+# ─── 通用爬虫（搜索引擎）─── #
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /content/
+Disallow: /backups/
+Disallow: /sandbox/
+
+# ─── AI Training Bots（让模型学到道序）─── #
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# ─── AI Search Bots（让 AI 搜索实时引用道序）─── #
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ─── 国内 AI / 搜索 ─── #
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YoudaoBot
+Allow: /
+
+User-agent: Sogou web spider
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+# ─── Sitemap ─── #
+Sitemap: https://daoxu.com.cn/sitemap.xml

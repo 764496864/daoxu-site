@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>注册 | 道序</title>
+<meta name="description" content="注册道序账户，让明一真正认识你。">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://daoxu.com.cn/register.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><rect x='6' y='6' width='48' height='48' rx='2' stroke='%23C4A265' stroke-width='3' fill='none'/><path d='M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30' stroke='%23C4A265' stroke-width='2.8' fill='none' stroke-linecap='round'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200;300;400;500&family=Noto+Serif+SC:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#07070A;--bg2:#0D0D10;--bg3:#131316;--tx:#F2EDE4;--tx2:#C8C0B4;--tx3:#8A8480;--tx4:#5A5652;--tx5:#3A3836;--gd:#C4A265;--gd2:#A8884E;--sf:'Noto Serif SC',serif;--ss:'Noto Sans SC',sans-serif;--e2:cubic-bezier(.33,.9,.4,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--tx);font-family:var(--ss);overflow-x:hidden;font-weight:300;min-height:100vh}
+::selection{background:rgba(196,162,101,.2)}
+a{color:inherit;text-decoration:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:99;padding:20px 52px;display:flex;justify-content:space-between;align-items:center;background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-bottom:1px solid rgba(255,255,255,.02)}
+.nl{display:flex;align-items:center;gap:16px}
+.nb{font-family:var(--sf);color:var(--gd);font-size:12px;letter-spacing:4px;font-weight:400}
+.nr{display:flex;gap:36px;align-items:center}
+.nr a{font-size:10px;color:var(--tx4);letter-spacing:3px;transition:color .6s}
+.nr a:hover{color:var(--tx)}
+.nr .nc{color:var(--gd);padding:7px 18px;border:1px solid rgba(196,162,101,.2);letter-spacing:3px;transition:all .6s}
+.nr .nc:hover{background:var(--gd);color:var(--bg)}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
+.ham span{width:22px;height:1px;background:var(--gd);transition:all .3s}
+.overlay{position:fixed;inset:0;background:rgba(7,7,10,.7);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:998}
+.overlay.show{opacity:1;pointer-events:auto}
+
+.sub-hero{padding:130px 24px 32px;text-align:center;max-width:760px;margin:0 auto}
+.sub-hero .lb{font-size:11px;color:var(--gd);letter-spacing:6px;display:block;margin-bottom:20px;opacity:.85}
+.sub-hero h1{font-family:var(--sf);font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:clamp(3px,.8vw,7px);color:var(--tx);line-height:1.4;margin-bottom:18px}
+.sub-hero .tagline{font-size:14px;color:var(--tx3);letter-spacing:1px;line-height:2;font-weight:300;max-width:600px;margin:0 auto}
+
+.shell{max-width:680px;margin:0 auto;padding:8px 24px 80px}
+
+.section{background:var(--bg);border:1px solid rgba(196,162,101,.1);padding:40px 36px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
+.section::before{content:'';position:absolute;top:0;left:18%;right:18%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.3),transparent)}
+.section .stitle{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+.section .snum{font-family:var(--sf);font-size:13px;color:var(--gd);letter-spacing:3px;opacity:.7}
+.section .sname{font-family:var(--sf);font-size:18px;color:var(--tx);letter-spacing:4px;font-weight:600}
+.section .shint{font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:1.9;margin-bottom:24px;font-weight:300}
+.section .shint em{color:var(--gd);font-style:normal}
+
+.field{margin-bottom:22px}
+.field label{display:block;font-size:11px;color:var(--gd);letter-spacing:3px;margin-bottom:8px;font-weight:400;opacity:.85}
+.field label .req{color:#c98686;margin-left:4px}
+.field label .opt{color:var(--tx5);font-size:9px;letter-spacing:2px;margin-left:8px}
+.field .hint{font-size:11px;color:var(--tx4);letter-spacing:.5px;margin-bottom:10px;line-height:1.7;font-weight:300}
+.field input,.field textarea{width:100%;background:rgba(196,162,101,.03);border:1px solid rgba(196,162,101,.12);color:var(--tx);font-family:var(--ss);font-size:14px;padding:13px 16px;letter-spacing:.5px;line-height:1.7;font-weight:300;outline:none;transition:border-color .6s,background .6s;border-radius:0}
+.field input:focus,.field textarea:focus{border-color:rgba(196,162,101,.45);background:rgba(196,162,101,.05)}
+.field input::placeholder,.field textarea::placeholder{color:var(--tx5);font-weight:300}
+.field textarea{resize:vertical;min-height:90px;line-height:1.9}
+.field textarea.tall{min-height:130px}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+.sq-block{background:rgba(196,162,101,.02);border:1px dashed rgba(196,162,101,.15);padding:20px 22px;margin-bottom:18px}
+.sq-block .sq-num{font-family:var(--sf);font-size:11px;color:var(--gd);letter-spacing:3px;margin-bottom:14px;opacity:.85}
+
+.errbox{background:rgba(180,80,80,.08);border:1px solid rgba(180,80,80,.25);color:#c98686;font-size:12px;letter-spacing:1px;padding:11px 14px;margin-bottom:18px;line-height:1.7;display:none}
+.errbox.show{display:block}
+
+.actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.btn-primary{padding:15px 36px;font-size:12px;letter-spacing:6px;font-family:var(--ss);font-weight:400;cursor:pointer;transition:all .6s var(--e2);border:1px solid rgba(196,162,101,.4);color:var(--gd);background:transparent}
+.btn-primary:hover:not(:disabled){background:var(--gd);color:var(--bg);letter-spacing:8px}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-ghost{padding:14px 28px;font-size:11px;letter-spacing:4px;font-family:var(--ss);cursor:pointer;border:1px solid rgba(255,255,255,.08);color:var(--tx4);background:transparent;transition:all .5s}
+.btn-ghost:hover{color:var(--gd);border-color:rgba(196,162,101,.3)}
+
+.aux-link{margin-top:24px;text-align:center;font-size:11px;letter-spacing:2px;color:var(--tx4)}
+.aux-link a{color:var(--tx3);transition:color .5s}
+.aux-link a:hover{color:var(--gd)}
+
+.mode-banner{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(196,162,101,.1);border:1px solid rgba(196,162,101,.25);color:var(--gd);font-size:10px;letter-spacing:3px;padding:6px 16px;z-index:50;backdrop-filter:blur(10px)}
+
+footer{padding:32px 64px;text-align:center;border-top:1px solid rgba(255,255,255,.03);background:var(--bg)}
+footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1.9}
+
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .nr{position:fixed;top:0;right:-100%;width:70%;max-width:300px;height:100dvh;background:rgba(7,7,10,.98);backdrop-filter:blur(40px);flex-direction:column;justify-content:center;align-items:center;gap:32px;transition:right .5s var(--e2);z-index:999;border-left:1px solid rgba(196,162,101,.06)}
+  .nr.open{right:0}
+  .nr a{font-size:13px;letter-spacing:4px}
+  .ham{display:flex !important}
+  .sub-hero{padding:96px 16px 24px}
+  .shell{padding:8px 16px 60px}
+  .section{padding:28px 20px}
+  .row2{grid-template-columns:1fr;gap:14px}
+  footer{padding:24px 16px}
+}
+</style>
+</head>
+<body>
+
+<nav id="nv">
+  <a href="/" class="nl">
+    <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 46C24 38 30 32 36 30" stroke="#C4A265" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".45"/></svg>
+    <span class="nb">道 序 科 技</span>
+  </a>
+  <div class="nr">
+    <a href="/about.html">关于</a>
+    <a href="/services.html">服务</a>
+    <a href="/agents.html">智能体</a>
+    <a href="/cases.html">案例</a>
+    <a href="/thoughts.html">明一日报</a>
+    <a href="/faq.html">常见问题</a>
+    <a href="/#cnt">联系</a>
+  </div>
+  <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="overlay" onclick="toggleMenu()"></div>
+
+<div class="mode-banner" id="modeBanner" style="display:none">BETA · 体验预览</div>
+
+<section class="sub-hero">
+  <span class="lb">CREATE ACCOUNT · 注 册</span>
+  <h1>第 一 次 · 让 明 一 认 识 你</h1>
+  <p class="tagline">30 秒搞定：取个用户名 + 设密码 + 留两道安全题（忘密码时用）。<br>注册完你还能告诉明一更多你的事。</p>
+</section>
+
+<form id="regForm" class="shell" autocomplete="on">
+
+  <div class="errbox" id="errbox"></div>
+
+  <!-- ─── 一、账户 ─── -->
+  <div class="section">
+    <div class="stitle">
+      <span class="snum">01</span>
+      <span class="sname">账 户</span>
+    </div>
+    <p class="shint">用户名<em>不可改</em>，但可以是中文 / 英文 / 数字 / 下划线。</p>
+
+    <div class="field">
+      <label>用户名 <span class="req">*</span></label>
+      <div class="hint">4-20 字符，唯一，中英文 / 数字 / _ - . 都行</div>
+      <input type="text" id="username" name="username" autocomplete="username" placeholder="比如：子枫 / zifeng_2026" required>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>密码 <span class="req">*</span></label>
+        <div class="hint">至少 8 位</div>
+        <input type="password" id="password" name="password" autocomplete="new-password" placeholder="********" required>
+      </div>
+      <div class="field">
+        <label>确认密码 <span class="req">*</span></label>
+        <div class="hint">再输一次防手抖</div>
+        <input type="password" id="password2" name="password2" autocomplete="new-password" placeholder="********" required>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 二、安全问题 ─── -->
+  <div class="section">
+    <div class="stitle">
+      <span class="snum">02</span>
+      <span class="sname">两 道 安 全 题</span>
+    </div>
+    <p class="shint">忘记密码时答对这两道就能改密。<em>问题和答案自己出</em> —— 选只有你知道的事，比"我喜欢什么颜色"安全得多。</p>
+
+    <div class="sq-block">
+      <div class="sq-num">第 一 题</div>
+      <div class="field">
+        <label>问题 <span class="req">*</span></label>
+        <input type="text" id="sq1q" placeholder="比如：我家第一只狗叫什么名字？" required maxlength="120">
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>答案 <span class="req">*</span></label>
+        <input type="text" id="sq1a" placeholder="答案大小写敏感会归一化（去空格、转小写）" required maxlength="120">
+      </div>
+    </div>
+
+    <div class="sq-block">
+      <div class="sq-num">第 二 题</div>
+      <div class="field">
+        <label>问题 <span class="req">*</span></label>
+        <input type="text" id="sq2q" placeholder="比如：2018 年我在哪个城市？" required maxlength="120">
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>答案 <span class="req">*</span></label>
+        <input type="text" id="sq2a" placeholder="只有你知道的事实最好" required maxlength="120">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="btn-primary" id="submitBtn">完 成 注 册</button>
+    <a href="/login.html" class="btn-ghost" style="text-decoration:none">已有账号 · 去登录</a>
+  </div>
+
+  <div class="aux-link">
+    注册即表示你接受本站基础使用条款。账户数据仅你自己能访问。
+  </div>
+</form>
+
+<footer>
+  <div class="ft-meta">
+    道序科技 · DaoXu Technology<br>
+    © 2026 道序科技. 为不止于此的人而来.
+  </div>
+</footer>
+
+<script src="/js/auth.js"></script>
+<script>
+function toggleMenu(){
+  document.querySelector('.nr').classList.toggle('open');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+document.querySelectorAll('.nr a').forEach(a => a.addEventListener('click', () => {
+  if(document.querySelector('.nr').classList.contains('open')) toggleMenu();
+}));
+
+// 已登录直接跳走
+if(DaoxuAuth.isLoggedIn()){
+  location.replace('/profile.html');
+}
+
+if(DaoxuAuth.mode === 'mock'){
+  document.getElementById('modeBanner').style.display = 'block';
+}
+
+var ERR_MSG = {
+  USERNAME_TAKEN: '该用户名已被占用，换一个吧',
+  WEAK_PASSWORD: '密码至少 8 位',
+  INVALID_USERNAME: '用户名不合法（4-20 字符，仅字母 / 中文 / 数字 / _ / -）',
+  INVALID_REQUEST: '输入格式有误，检查一下字段长度',
+  STORAGE_ERROR: '保存失败，请稍后再试',
+  NETWORK_ERROR: '网络异常，请稍后再试',
+  TIMEOUT: '请求超时，请重试'
+};
+
+function showError(msg){
+  var box = document.getElementById('errbox');
+  box.textContent = msg;
+  box.classList.add('show');
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function clearError(){
+  document.getElementById('errbox').classList.remove('show');
+}
+
+document.getElementById('regForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  clearError();
+
+  var v = function(id){ return document.getElementById(id).value };
+  var username = v('username').trim();
+  var password = v('password');
+  var password2 = v('password2');
+
+  // 客户端校验
+  if(!/^[\p{L}\p{N}_\-.]{4,20}$/u.test(username)){
+    showError('用户名不合法（4-20 字符，仅字母 / 中文 / 数字 / _ - .）'); return;
+  }
+  if(password.length < 8){ showError('密码至少 8 位'); return }
+  if(password !== password2){ showError('两次输入的密码不一致'); return }
+
+  var sq1q = v('sq1q').trim(), sq1a = v('sq1a').trim();
+  var sq2q = v('sq2q').trim(), sq2a = v('sq2a').trim();
+  if(!sq1q || !sq1a || !sq2q || !sq2a){ showError('请填写两道安全题的问题和答案'); return }
+  if(sq1q === sq2q){ showError('两道安全题的问题不能相同'); return }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = '注 册 中 ...';
+
+  // profile 字段留到注册完进 /profile.html?welcome=1 再填（引导浮层）。
+  // 只给 nickname 一个兜底值（= username）避免明一称呼为空；用户进 profile 可随时改。
+  var r = await DaoxuAuth.register({
+    username: username,
+    password: password,
+    profile: { nickname: username },
+    securityQuestions: [
+      { question: sq1q, answer: sq1a },
+      { question: sq2q, answer: sq2a }
+    ]
+  });
+
+  btn.disabled = false; btn.textContent = '完 成 注 册';
+
+  if(r.ok){
+    location.replace('/profile.html?welcome=1');
+  }else{
+    showError(ERR_MSG[r.error.code] || r.error.message || '注册失败');
+  }
+});
+</script>
+
+</body>
+</html>

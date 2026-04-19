@@ -1,0 +1,89 @@
+{
+  "_comment": "首页内容。字符串字段支持 Markdown: **bold** *italic* `code` [text](url) \\n 换行",
+  "hero": {
+    "tagline1": "你心里一直有个声音",
+    "tagline2": "告诉你，不止于此",
+    "subtitle": "我们为听见这个声音的人而来",
+    "ctaLabel": "了 解 道 序"
+  },
+  "resonance": {
+    "line1": "道序 = **品牌** × **生态**",
+    "line2": "在这里有两个主角：让你**相信**的子枫，让你**记住**的明一。"
+  },
+  "whatWeDo": {
+    "label": "WHAT WE DO",
+    "title": "道序科技",
+    "desc1": "用 AI 帮你**突破天花板**",
+    "desc2": "用认知帮你**看清下一步**",
+    "desc3": "用生态帮你**找到同路人**",
+    "motto": "AI · 认知 · 影响力"
+  },
+  "threePillars": {
+    "label": "CAPABILITIES · 三 板 斧",
+    "title": "新 媒 体 × AI × 商 业",
+    "subtitle": "道序聚焦三件事——让你被看见、让你放大自己、让你变得可持续。",
+    "moreLink": "看 看 怎 么 和 道 序 合 作 →",
+    "moreUrl": "/services.html",
+    "pillars": [
+      {
+        "name": "新 媒 体",
+        "en": "MEDIA",
+        "badge": "新",
+        "tagline": "让你被看见",
+        "desc": "IP 孵化 / 爆款内容方法论 / 账号代运营 / 短视频全流程（选题→脚本→拍摄→剪辑→投放）。"
+      },
+      {
+        "name": "A I",
+        "en": "ARTIFICIAL INTELLIGENCE",
+        "badge": "AI",
+        "tagline": "让你放大自己",
+        "desc": "克隆思维 AI / 专属智能体定制 / 企业 AI 中台搭建 / 员工 AI 认知培训 / AI 落地咨询。"
+      },
+      {
+        "name": "商 业",
+        "en": "BUSINESS",
+        "badge": "商",
+        "tagline": "让你可持续",
+        "desc": "商业模式诊断 / IP 定位与内容策略 / 1v1 商业咨询 / 从内容到变现的完整设计。"
+      }
+    ]
+  },
+  "casesPreview": {
+    "label": "EVIDENCE · 案 例",
+    "title": "AI 商 业 化 的 真 实 可 行 性",
+    "subtitle": "道序与多位千万级 IP 共研过的落地样本。全部脱敏，突出思路可行性。",
+    "moreLink": "看 完 整 的 12 个 案 例 →",
+    "moreUrl": "/cases.html",
+    "cards": [
+      {
+        "tags": ["新媒体", "AI"],
+        "title": "日式拉面连锁",
+        "scale": "170+ 门店 / 年营收 3-4 亿",
+        "description": "AI 数字人全网招商矩阵替代真人直播，24 小时不间断获取加盟线索。",
+        "result": "累计加盟费 1700 万\n每月稳定 100 万"
+      },
+      {
+        "tags": ["AI", "商业"],
+        "title": "资深律师 · 大V",
+        "scale": "原年收 300-500 万 · 手停口停",
+        "description": "把数百个案件经验训练成律师 AI 助手，在同行圈层发售，4 万元/套。",
+        "result": "12 天首次变现\n首轮 100 万"
+      },
+      {
+        "tags": ["新媒体", "AI"],
+        "title": "K12 学科规划",
+        "scale": "原主营录播课 · 教育机构",
+        "description": "AI 替代录播——训练「名师思维克隆体」可双向交互，售卖 AI 名师账号。",
+        "result": "单日销售 120 万\n月营收近 2000 万"
+      }
+    ]
+  },
+  "finalThreshold": {
+    "line1": "每一步都是你选择的",
+    "line2": "走多远，取决于你自己",
+    "quote1": "如果你心里也有那个声音",
+    "quote2": "那么，你来对地方了",
+    "ctaPrimary": "加入启门",
+    "ctaSecondary": "智能体广场"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "_comment": "智能体矩阵页。agents 数组可增删（改数量后 JSON-LD 需要同步更新）。字符串支持 Markdown。",
+  "hero": {
+    "label": "AGENT SQUARE · 智能体矩阵",
+    "title": "明 一 + 智 能 体 矩 阵",
+    "tagline": "明一是总入口，也是你常驻的 AI 伙伴。\n13 个专项智能体各有所长——商业、内容、创业、思考、执行、心理……\n选一个对味的直接开聊，或者先找明一，它会帮你路由到对的地方。"
+  },
+  "featured": {
+    "id": "main",
+    "name": "明 一",
+    "avatar": "avatars/mingyi.png",
+    "tagBadge": "FEATURED · AI MESSENGER",
+    "line": "道序体系孕育的 AI 信使",
+    "desc": "什么都可以聊。AI 赋能、认知提升、创业方向、新媒体策略、商业诊断——不确定找谁的时候，先找它。它会帮你判断要不要路由到更专项的智能体。",
+    "ctaLabel": "开 始 对 话"
+  },
+  "gridLabel": "SPECIALIZED · 13 位专项",
+  "agents": [
+    {"id": "biz-doctor", "name": "商业诊断师", "avatar": "avatars/biz-doctor.png", "line": "帮你看清生意的真相", "desc": "用消解漏斗把模糊困惑拆到你能看清、能行动的程度。"},
+    {"id": "startup-coach", "name": "创业教练", "avatar": "avatars/startup-coach.png", "line": "从想法到可执行方案", "desc": "六步逼问法，最后产出路线图，不是鸡血。"},
+    {"id": "content-ops", "name": "内容操盘手", "avatar": "avatars/content-ops.png", "line": "让你的内容真正有效", "desc": "诊断内容问题，优化开头，直接上手改你的文案。"},
+    {"id": "ip-builder", "name": "IP 操盘教练", "avatar": "avatars/ip-builder.png", "line": "从 0 到 1 做起个人品牌", "desc": "没定位聊定位，有流量没变现聊产品，只给路径。"},
+    {"id": "ai-advisor", "name": "AI 赋能顾问", "avatar": "avatars/ai-advisor.png", "line": "帮你把 AI 真正用起来", "desc": "不讲概念只聊落地，给你一套可执行的 AI 接入方案。"},
+    {"id": "prompt-engineer", "name": "提示词工程师", "avatar": "avatars/prompt-engineer.png", "line": "写出真正好用的提示词", "desc": "直接帮你写、帮你调，让 AI 变成工具而不是玩具。"},
+    {"id": "knowledge-distiller", "name": "知识萃取师", "avatar": "avatars/knowledge-distiller.png", "line": "经验变成可传承的系统", "desc": "把脑子里的经验变成别人能学、AI 能用的方法论。"},
+    {"id": "think-room", "name": "思想聊天室", "avatar": "avatars/think-room.png", "line": "和大师一起思考", "desc": "维特根斯坦、塔勒布、阿德勒，多视角交叉碰撞。"},
+    {"id": "deep-analyst", "name": "深度分析师", "avatar": "avatars/deep-analyst.png", "line": "看透一个人、一家公司", "desc": "九维推理框架，不做道德判断，只照出事实。"},
+    {"id": "concept-breaker", "name": "概念拆解师", "avatar": "avatars/concept-breaker.png", "line": "把模糊的词拆到真正理解", "desc": "拆掉那些听起来正确但实际模糊的大词。"},
+    {"id": "austrian-room", "name": "奥派经济聊天室", "avatar": "avatars/austrian-room.png", "line": "奥派视角拆解商业与社会", "desc": "哈耶克 × 米塞斯 × 明一，三人思想碰撞。"},
+    {"id": "action-coach", "name": "执行力教练", "avatar": "avatars/action-coach.png", "line": "诊断「做不动」的真正原因", "desc": "找到阻力，给你今天就能迈出的最小一步。"},
+    {"id": "lacan-analyst", "name": "拉康分析师", "avatar": "avatars/lacan-analyst.png", "line": "不给建议，帮你发现答案", "desc": "指出你话语中没注意到的矛盾，等你走向答案。"}
+  ],
+  "cta": {
+    "title": "不确定选哪个？",
+    "subtitle": "先找明一，它会根据你的问题，推荐最合适的专项智能体。",
+    "buttonLabel": "从 明 一 开 始"
+  }
+}
