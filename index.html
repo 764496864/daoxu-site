@@ -623,7 +623,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
         <span class="lb" style="text-align:left">AGENT SQUARE · 免 费 入 口</span>
         <h2 style="font-family:var(--sf);font-size:clamp(22px,2.8vw,28px);color:var(--gd);letter-spacing:4px;margin:16px 0 0;font-weight:600">智 能 体 广 场</h2>
         <div class="tc-divider"></div>
-        <p style="font-size:15px;color:var(--tx3);line-height:2.8;font-weight:300;margin-bottom:20px">在道序，<span style="color:var(--tx);font-weight:500">免费用</span>全世界顶尖 AI 模型。<br>14 个专业智能体各司其职，<span style="color:var(--tx);font-weight:500">云端同步</span>你的设定与记忆，<br>换设备也能继续用。</p>
+        <p style="font-size:15px;color:var(--tx2);line-height:2.2;font-weight:300;margin-bottom:20px">在道序，免费使用全世界顶尖 AI 模型。14 个专业智能体各司其职，云端同步你的设定与记忆，换设备也能继续用。</p>
         <p style="font-size:12px;letter-spacing:4px;color:var(--gd);font-weight:400;margin-bottom:24px;opacity:.85">免费 · 三端互通 · 14 智能体</p>
         <span class="tc-btn" style="color:var(--gd)">进 入 智 能 体 广 场 ▸</span>
       </div>
@@ -818,7 +818,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 </div>
 <div class="chat-panel" id="chatPanel">
   <div class="chat-header">
-    <span onclick="resetChat()" style="cursor:pointer;color:var(--tx4);font-size:14px;padding:4px 8px;transition:color .3s" title="返回智能体选择">←</span><h4>明 一</h4><span id="chatHistoryBtn" onclick="reloadChatHistory()" style="cursor:pointer;color:var(--gd);opacity:.55;font-size:10px;letter-spacing:3px;padding:5px 12px;margin-left:8px;transition:all .3s;border:1px solid rgba(196,162,101,.15);border-radius:2px;font-family:var(--sf);display:none;align-items:center;gap:6px" title="重新拉取云端历史"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>历 史</span>
+    <h4>明 一</h4><span id="chatHistoryBtn" onclick="reloadChatHistory()" style="cursor:pointer;color:var(--gd);opacity:.55;font-size:10px;letter-spacing:3px;padding:5px 12px;margin-left:12px;transition:all .3s;border:1px solid rgba(196,162,101,.15);border-radius:2px;font-family:var(--sf);display:none;align-items:center;gap:6px" title="重新拉取云端历史"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>历 史</span>
     <div style="display:flex;align-items:center;gap:12px"><span class="chat-expand" onclick="toggleExpand()" style="cursor:pointer;color:var(--tx4);font-size:12px;padding:6px;transition:color .3s;line-height:1;border:1px solid rgba(255,255,255,.08);border-radius:4px;display:flex;align-items:center;justify-content:center;width:28px;height:28px" title="放大"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg></span><span class="chat-close" onclick="toggleChat()">✕</span></div>
   </div>
   <div class="chat-body">
@@ -921,6 +921,13 @@ let chatOpen=false;
 function toggleChat(){
   chatOpen=!chatOpen;
   document.getElementById('chatPanel').classList.toggle('show',chatOpen);
+  // 登录用户在浮窗打开时就显示"历史"按钮（welcome / chat 两种状态都能看到）
+  if(chatOpen){
+    var historyBtn=document.getElementById('chatHistoryBtn');
+    if(historyBtn){
+      historyBtn.style.display=(window.DaoxuAuth&&DaoxuAuth.isLoggedIn())?'inline-flex':'none';
+    }
+  }
 }
 
 /* ─── AGENT SELECT & WEBSOCKET ─── */
@@ -972,8 +979,14 @@ function selectAgent(agentId,agentName){
 }
 
 // 用户点"历史"按钮 → 重新从后端拉最近 50 条 chat.history
+// welcome 状态（未 selectAgent）下点击：先自动选中明一 + 连 WS，由 hello-ok 之后首次 chat.history 接管拉取
 function reloadChatHistory(){
-  if(!ws||ws.readyState!==1||!currentAgent){return}
+  if(!currentAgent){
+    // 从 welcome 进入：selectAgent 会自动拉一次 chat.history，不用额外发请求
+    if(typeof selectAgent === 'function') selectAgent('main','明 一');
+    return;
+  }
+  if(!ws||ws.readyState!==1){return}
   var vid=getChatPeerId();
   // 清掉当前显示的消息泡 + 历史分隔符 + 日期标签（保留欢迎语）
   var box=document.getElementById('chatMessages');
@@ -1301,6 +1314,30 @@ function startAgent(agentId,agentName){
   if(!chatExpanded){chatExpanded=true;document.getElementById('chatPanel').classList.add('expanded');document.querySelector('.chat-expand').innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6m10-10h-6V4"/></svg>';document.querySelector('.chat-expand').title='缩小';}
   setTimeout(function(){selectAgent(agentId,agentName)},200);
 }
+
+// 从 agents.html / profile.html 跳回首页时 URL 带 ?agent=xxx → 自动打开聊天并选中智能体
+// （避免用户感觉"跳主页刷新了"）
+(function autoOpenAgentFromURL(){
+  try{
+    var urlAgent = new URLSearchParams(location.search).get('agent');
+    if(!urlAgent)return;
+    var sessionAgent = null;
+    try{ sessionAgent = JSON.parse(sessionStorage.getItem('openAgent')||'null') }catch(e){}
+    if(sessionAgent) sessionStorage.removeItem('openAgent');
+    var agentName = (sessionAgent && sessionAgent.id===urlAgent && sessionAgent.name) ? sessionAgent.name : '明 一';
+    // 清掉 URL 里的 ?agent= 参数，避免后续刷新又触发
+    if(history.replaceState){
+      var newUrl = location.pathname + (location.hash || '');
+      history.replaceState(null,'',newUrl);
+    }
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        if(!chatOpen)toggleChat();
+        setTimeout(function(){ startAgent(urlAgent, agentName) }, 250);
+      }, 300);
+    });
+  }catch(e){console.warn('[autoOpenAgent] failed:',e)}
+})();
 </script>
 </body>
 </html>
