@@ -818,7 +818,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 </div>
 <div class="chat-panel" id="chatPanel">
   <div class="chat-header">
-    <h4>明 一</h4><span id="chatHistoryBtn" onclick="reloadChatHistory()" style="cursor:pointer;color:var(--gd);opacity:.55;font-size:10px;letter-spacing:3px;padding:5px 12px;margin-left:12px;transition:all .3s;border:1px solid rgba(196,162,101,.15);border-radius:2px;font-family:var(--sf);display:none;align-items:center;gap:6px" title="重新拉取云端历史"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>历 史</span>
+    <h4>明 一</h4><span id="chatNewBtn" onclick="newConversation()" style="cursor:pointer;color:var(--gd);opacity:.55;font-size:10px;letter-spacing:3px;padding:5px 12px;margin-left:12px;transition:all .3s;border:1px solid rgba(196,162,101,.15);border-radius:2px;font-family:var(--sf);display:none;align-items:center;gap:6px" title="开始新对话（清空当前窗口）"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><path d="M12 5v14M5 12h14"/></svg>新 对 话</span><span id="chatHistoryBtn" onclick="reloadChatHistory()" style="cursor:pointer;color:var(--gd);opacity:.55;font-size:10px;letter-spacing:3px;padding:5px 12px;margin-left:8px;transition:all .3s;border:1px solid rgba(196,162,101,.15);border-radius:2px;font-family:var(--sf);display:none;align-items:center;gap:6px" title="查看过往历史对话"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>历 史</span>
     <div style="display:flex;align-items:center;gap:12px"><span class="chat-expand" onclick="toggleExpand()" style="cursor:pointer;color:var(--tx4);font-size:12px;padding:6px;transition:color .3s;line-height:1;border:1px solid rgba(255,255,255,.08);border-radius:4px;display:flex;align-items:center;justify-content:center;width:28px;height:28px" title="放大"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg></span><span class="chat-close" onclick="toggleChat()">✕</span></div>
   </div>
   <div class="chat-body">
@@ -921,13 +921,25 @@ let chatOpen=false;
 function toggleChat(){
   chatOpen=!chatOpen;
   document.getElementById('chatPanel').classList.toggle('show',chatOpen);
-  // 登录用户在浮窗打开时就显示"历史"按钮（welcome / chat 两种状态都能看到）
+  // 登录用户打开聊天时显示"新对话 / 历史"两个按钮（登录才能跨设备同步）
   if(chatOpen){
-    var historyBtn=document.getElementById('chatHistoryBtn');
-    if(historyBtn){
-      historyBtn.style.display=(window.DaoxuAuth&&DaoxuAuth.isLoggedIn())?'inline-flex':'none';
-    }
+    var loggedIn = !!(window.DaoxuAuth && DaoxuAuth.isLoggedIn());
+    var newBtn = document.getElementById('chatNewBtn');
+    var historyBtn = document.getElementById('chatHistoryBtn');
+    if(newBtn) newBtn.style.display = loggedIn ? 'inline-flex' : 'none';
+    if(historyBtn) historyBtn.style.display = loggedIn ? 'inline-flex' : 'none';
   }
+}
+
+// 新对话：清空当前聊天区（保留欢迎语），下一条消息会生成新 runId
+function newConversation(){
+  var box = document.getElementById('chatMessages');
+  if(box){
+    box.querySelectorAll('.msg-row, .history-divider, .history-date').forEach(function(r){r.remove()});
+  }
+  // 清掉未完的流 + run
+  streamingDiv = null; streamText = ''; currentRun = null;
+  var th = document.getElementById('typingHint'); if(th) th.remove();
 }
 
 /* ─── AGENT SELECT & WEBSOCKET ─── */
@@ -974,9 +986,12 @@ function selectAgent(agentId,agentName){
   var gBubble=document.createElement('div');gBubble.className='msg-bubble';gBubble.textContent=greeting;
   gRow.appendChild(gBubble);document.getElementById('chatMessages').appendChild(gRow);
 
-  // 登录用户进入聊天时才显示"历史"按钮（未登录没跨设备历史概念）
-  var historyBtn=document.getElementById('chatHistoryBtn');
-  if(historyBtn){historyBtn.style.display=(window.DaoxuAuth&&DaoxuAuth.isLoggedIn())?'inline-flex':'none'}
+  // 登录用户进入聊天时显示"新对话 + 历史"两个按钮
+  var loggedIn2 = !!(window.DaoxuAuth && DaoxuAuth.isLoggedIn());
+  var newBtn = document.getElementById('chatNewBtn');
+  var historyBtn = document.getElementById('chatHistoryBtn');
+  if(newBtn) newBtn.style.display = loggedIn2 ? 'inline-flex' : 'none';
+  if(historyBtn) historyBtn.style.display = loggedIn2 ? 'inline-flex' : 'none';
 
   connectWS(agentId,vid);
 }
@@ -998,7 +1013,15 @@ function reloadChatHistory(){
   if(box){
     box.querySelectorAll('.msg-row, .history-divider, .history-date').forEach(function(r){r.remove()});
   }
-  ws.send(JSON.stringify({type:'req',id:'h-reload-'+Date.now(),method:'chat.history',params:{sessionKey:'agent:'+currentAgent+':webchat:direct:'+vid,limit:50}}));
+  // v2.6.1：切 daoxu.chat.history_v2，从 chat_messages 读（能拿到 A2 flush 过的数据）
+  var sessionToken = (window.DaoxuAuth && DaoxuAuth.getToken()) || '';
+  ws.send(JSON.stringify({type:'req',id:'h-reload-'+Date.now(),method:'daoxu.chat.history_v2',params:{sessionToken:sessionToken,sessionKey:'agent:'+currentAgent+':webchat:direct:'+vid,offset:0,limit:50}}));
+}
+
+// 从消息文本里剥离 [user_context]...[/user_context] 块（这是给 AI 读的，不应该显示给用户 / 不应该存到 chat_messages）
+function stripUserContext(s){
+  if(!s || typeof s !== 'string') return s || '';
+  return s.replace(/\[user_context\][\s\S]*?\[\/user_context\]\s*/g, '').trim();
 }
 
 // A2：开始新一轮对话的记录（未登录跳过；每一轮 sendMsg 调一次）
@@ -1010,7 +1033,7 @@ function startNewRun(userText){
     sessionKey: 'agent:' + currentAgent + ':webchat:direct:' + vid,
     userId: vid,  // 登录状态下 getChatPeerId 返回 user_id（auth.js.getChatAuthFields 约定）
     agentId: currentAgent,
-    userText: userText,
+    userText: stripUserContext(userText),  // flush 前剥离内部 prompt 块
     userTs: new Date().toISOString(),
     assistantText: '',
     assistantTs: null
@@ -1074,20 +1097,28 @@ function connectWS(agentId,vid){
       //   2) profile 注入：chat.send.message 首条塞 [user_context] 块（见 sendMsg），SOUL.md 识别
       ws.send(JSON.stringify({type:'req',id:'c1',method:'connect',params:{minProtocol:3,maxProtocol:3,client:{id:'openclaw-control-ui',version:'control-ui',platform:'web',mode:'webchat'},role:'operator',scopes:['operator.admin','operator.read','operator.write','operator.approvals','operator.pairing'],caps:['tool-events'],auth:{},userAgent:navigator.userAgent,locale:'zh-CN'}}));
     }
-    // Handle hello-ok: connection established, request chat history
+    // Handle hello-ok: connection established (v2.6.2：默认不自动拉历史，保持"新对话窗口"体验)
+    // 用户想看过往对话 → 主动点"历史"按钮；想开新一轮 → 点"+ 新对话"按钮
     if(d.type==='res'&&d.ok&&d.payload&&d.payload.type==='hello-ok'){
-      wsReady=true;  // 握手完成，可以发业务 method（chat.history / chat.send 等）
-      // Keep welcome area + greeting, only remove loading indicators
+      wsReady=true;
       var loadingHint=document.getElementById('typingHint');if(loadingHint)loadingHint.remove();
-      ws.send(JSON.stringify({type:'req',id:'h1',method:'chat.history',params:{sessionKey:'agent:'+agentId+':webchat:direct:'+vid,limit:50}}));
     }
     // Handle chat history response: render past messages (优雅分组：顶部"历史"分隔 + 按日期分组 + 底部"本轮对话"分隔)
     if(d.type==='res'&&d.ok&&d.payload&&d.payload.messages){
       var msgs=d.payload.messages;
       var box=document.getElementById('chatMessages');
+      // content 兼容：history_v2 返回 string；老 chat.history 返回 [{type:'text',text:'...'}]
+      // 同时剥离早期版本可能存进 chat_messages 的 [user_context] 内部块（不给用户看）
+      function _getText(m){
+        var raw = '';
+        if(!m.content) raw = '';
+        else if(typeof m.content === 'string') raw = m.content;
+        else if(Array.isArray(m.content)) m.content.forEach(function(c){if(c.type==='text')raw+=c.text});
+        return stripUserContext(raw);
+      }
       // 过滤掉系统/JSON 消息，留下真实对话
       var visible=msgs.filter(function(m){
-        var t='';if(m.content)m.content.forEach(function(c){if(c.type==='text')t+=c.text});
+        var t=_getText(m);
         return t && t.charAt(0)!=='{';
       });
       if(visible.length){
@@ -1097,7 +1128,7 @@ function connectWS(agentId,vid){
         // 按日期分组
         var lastDay='';
         visible.forEach(function(m){
-          var text='';if(m.content)m.content.forEach(function(c){if(c.type==='text')text+=c.text});
+          var text=_getText(m);
           var ts=m.createdAt||m.timestamp||m.created_at||m.ts;
           var day=formatHistoryDay(ts);
           if(day&&day!==lastDay){

@@ -204,7 +204,7 @@ header{position:sticky;top:0;z-index:10;background:rgba(7,7,10,.96);backdrop-fil
 
   <div class="page-head">
     <div>
-      <h1>用 户 管 理 <span class="mode-badge" id="modeBadge">MOCK 数据</span></h1>
+      <h1>用 户 管 理 <span class="mode-badge live" id="modeBadge">LIVE · 云端同步</span></h1>
       <p class="hint" style="margin-top:8px">所有数据实时云端同步。密码用 scrypt 单向哈希，你也看不到原文；只能重置为临时密码。</p>
     </div>
     <button class="btn-secondary" onclick="refreshList()">⟳ 刷 新</button>
@@ -279,8 +279,9 @@ header{position:sticky;top:0;z-index:10;background:rgba(7,7,10,.96);backdrop-fil
 <script src="../js/auth.js"></script>
 <script>
 /* ─── 配置 ─── */
-// v2.5.8：使用 Mock 数据；龙虾 admin RPC 上线后把 USE_MOCK 改 false 即可自动切真。
-const USE_MOCK = true;
+// v2.6.1：龙虾 daoxu.admin.* RPC 全部上线（users.list / user.get / user.update / user.reset_password / user.delete）
+// 切 Real 模式，走 DaoxuAuth.adminXxx adapter。Mock 分支保留，万一后端挂了可临时切回。
+const USE_MOCK = false;
 
 /* ─── Mock 数据 ─── */
 // 初始种子数据（localStorage 持久化后以 localStorage 为准）
@@ -328,7 +329,36 @@ function mockLoad(){
 function mockSave(arr){ try{ localStorage.setItem(MOCK_KEY, JSON.stringify(arr)); }catch(e){} }
 
 /* ─── Admin Adapter（Mock/Real 切换点）─── */
-// 龙虾 daoxu.admin.* RPC 上线后，把 USE_MOCK 改 false，或把 Real 分支对接 DaoxuAuth._call
+
+// 统一把后端 real / 本地 mock 两种用户结构规范成 UI 用的同一份模型
+function normalizeUser(u){
+  if(!u) return u;
+  var memories = u.globalMemories || u.memories || [];
+  return {
+    userId: u.userId,
+    username: u.username,
+    nickname: u.nickname || '',
+    role: u.role || 'user',          // 系统权限（顶层）
+    disabled: !!u.disabled,
+    deletedAt: u.deletedAt || null,
+    mustChangePassword: !!u.mustChangePassword,
+    createdAt: u.createdAt,
+    updatedAt: u.updatedAt || u.createdAt,
+    lastLoginAt: u.lastLoginAt || null,
+    profile: {                        // profile.role 是职业/职位，跟系统权限分开
+      role: (u.profile && u.profile.role) || '',
+      bio: (u.profile && u.profile.bio) || '',
+      preferences: (u.profile && u.profile.preferences) || ''
+    },
+    memories: memories,
+    stats: {
+      conversationsTotal: u.conversationsTotal != null ? u.conversationsTotal : ((u.stats && u.stats.conversationsTotal) || 0),
+      tokensTotal: u.tokensTotal != null ? u.tokensTotal : ((u.stats && u.stats.tokensTotal) || 0),
+      lastSessionAt: u.lastSessionAt || (u.stats && u.stats.lastSessionAt) || null
+    }
+  };
+}
+
 const AdminAPI = {
   async list(params){
     if(USE_MOCK){
@@ -354,14 +384,39 @@ const AdminAPI = {
       });
       return { ok:true, data:{ total: all.length, items: rows } };
     }
-    // TODO(real): return DaoxuAuth._adminCall('daoxu.admin.users.list', params);
+    // Real：调龙虾 admin.users.list（不传筛选参数，后端暂不支持；前端本地 filter+sort，用户量小时足够）
+    var r = await DaoxuAuth.adminUsersList({});
+    if(!r.ok) return r;
+    var raw = (r.data && r.data.users) || [];
+    var q = ((params && params.search) || '').toLowerCase();
+    var status = (params && params.status) || 'all';
+    var sortBy = (params && params.sortBy) || 'lastLoginAt';
+    var rows = raw.map(normalizeUser).filter(function(u){
+      if(q && u.username.toLowerCase().indexOf(q)<0 && (u.nickname||'').toLowerCase().indexOf(q)<0) return false;
+      if(status==='active' && (u.disabled || u.deletedAt)) return false;
+      if(status==='disabled' && !u.disabled) return false;
+      if(status==='deleted' && !u.deletedAt) return false;
+      return true;
+    });
+    rows.sort(function(a,b){
+      var av = sortBy==='tokensTotal' ? a.stats.tokensTotal :
+               sortBy==='conversationsTotal' ? a.stats.conversationsTotal :
+               a[sortBy];
+      var bv = sortBy==='tokensTotal' ? b.stats.tokensTotal :
+               sortBy==='conversationsTotal' ? b.stats.conversationsTotal :
+               b[sortBy];
+      return (bv>av?1:bv<av?-1:0);
+    });
+    return { ok:true, data:{ total: raw.length, items: rows } };
   },
   async get(userId){
     if(USE_MOCK){
       var u = mockLoad().find(function(x){ return x.userId===userId });
       return u ? {ok:true, data:{user:u}} : {ok:false, error:{code:'USER_NOT_FOUND'}};
     }
-    // TODO(real)
+    var r = await DaoxuAuth.adminUserGet(userId);
+    if(!r.ok) return r;
+    return { ok:true, data:{ user: normalizeUser(r.data.user) } };
   },
   async update(userId, changes){
     if(USE_MOCK){
@@ -379,7 +434,17 @@ const AdminAPI = {
       arr[i] = u; mockSave(arr);
       return {ok:true, data:{user:u}};
     }
-    // TODO(real)
+    // Real：前端 changes → 后端 patch（memories → globalMemories，其他保持）
+    var patch = {};
+    ['username','nickname','disabled'].forEach(function(k){ if(k in changes) patch[k]=changes[k] });
+    if(changes.profile){
+      patch.profile = {};
+      ['role','bio','preferences'].forEach(function(k){ if(k in changes.profile) patch.profile[k]=changes.profile[k] });
+    }
+    if('memories' in changes) patch.globalMemories = changes.memories.slice();
+    var r = await DaoxuAuth.adminUserUpdate(userId, patch);
+    if(!r.ok) return r;
+    return { ok:true, data:{ user: normalizeUser(r.data.user) } };
   },
   async resetPassword(userId){
     if(USE_MOCK){
@@ -395,7 +460,9 @@ const AdminAPI = {
       mockSave(arr);
       return {ok:true, data:{ok:true, temporaryPassword:pwd, mustChangePassword:true}};
     }
-    // TODO(real)
+    var r = await DaoxuAuth.adminUserResetPassword(userId);
+    if(!r.ok) return r;
+    return { ok:true, data:{ ok:true, temporaryPassword: r.data.temporaryPassword, mustChangePassword: true } };
   },
   async softDelete(userId){
     if(USE_MOCK){
@@ -412,7 +479,10 @@ const AdminAPI = {
       arr[i] = u; mockSave(arr);
       return {ok:true, data:{user:u}};
     }
-    // TODO(real)
+    var r = await DaoxuAuth.adminUserDelete(userId);
+    if(!r.ok) return r;
+    // 龙虾返回 {ok,userId,deleted,anonymized}，无 user 对象；上层只看 r.ok，刷新列表即可
+    return { ok:true, data:{ ok: r.data.deleted !== false } };
   }
 };
 
@@ -478,11 +548,11 @@ function renderList(rows){
 }
 function updateStats(total){
   document.getElementById('st-total').textContent = total;
-  var all = mockLoad();
+  // 从当前 listCache 计算（mock 和 real 统一走这里；listCache 结构经过 normalizeUser 是一致的）
   var now = Date.now();
-  var active = all.filter(function(u){ return !u.disabled && !u.deletedAt && u.lastLoginAt && (now - new Date(u.lastLoginAt).getTime() < 7*86400000) }).length;
-  var disabled = all.filter(function(u){ return u.disabled || u.deletedAt }).length;
-  var tokens = all.reduce(function(s,u){ return s + (u.stats.tokensTotal||0) }, 0);
+  var active = listCache.filter(function(u){ return !u.disabled && !u.deletedAt && u.lastLoginAt && (now - new Date(u.lastLoginAt).getTime() < 7*86400000) }).length;
+  var disabled = listCache.filter(function(u){ return u.disabled || u.deletedAt }).length;
+  var tokens = listCache.reduce(function(s,u){ return s + ((u.stats && u.stats.tokensTotal)||0) }, 0);
   document.getElementById('st-active').textContent = active;
   document.getElementById('st-disabled').textContent = disabled;
   document.getElementById('st-tokens').textContent = fmtNum(tokens);
@@ -546,10 +616,10 @@ function renderDrawer(u){
     '</div>'+
     '<div class="mem-add"><input id="memNew" placeholder="添加一条记忆…" maxlength="300"><button onclick="addMem()">+ 新 增</button></div>'+
     '</div>';
-  // 未开放字段
+  // 未开放字段（等龙虾加 users.email / users.phone 列 + user.update 支持）
   html += '<div class="d-group"><h3>Contact · 联系方式</h3>'+
-    '<div class="d-field"><label>手机号 <span style="color:var(--tx5);font-size:8px;margin-left:6px">V1.1 开放</span></label><input type="tel" disabled placeholder="后端字段未开放"></div>'+
-    '<div class="d-field"><label>邮箱 <span style="color:var(--tx5);font-size:8px;margin-left:6px">V1.1 开放</span></label><input type="email" disabled placeholder="后端字段未开放"></div>'+
+    '<div class="d-field"><label>手机号 <span style="color:var(--tx5);font-size:8px;margin-left:6px">后端开发中</span></label><input type="tel" disabled placeholder="龙虾本周开通"></div>'+
+    '<div class="d-field"><label>邮箱 <span style="color:var(--tx5);font-size:8px;margin-left:6px">后端开发中</span></label><input type="email" disabled placeholder="龙虾本周开通"></div>'+
     '</div>';
   // 账户状态
   html += '<div class="d-group"><h3>Status · 状态</h3>'+

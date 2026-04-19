@@ -302,6 +302,13 @@ var Mock = {
     // Mock：空壳（前端独立开发期不对接后端）。返回 ok，不做任何落盘。
     return ok({ ok:true });
   },
+  async chat_history_v2(p){ return ok({ sessionKey:p.sessionKey, total:0, offset:0, limit:p.limit||50, hasMore:false, messages:[] }) },
+  // Admin RPC 在 Mock 模式下不可用（admin/users.html 有自己的 mock 数据池，不会走到这里）
+  async admin_users_list(p){ return err('NOT_SUPPORTED','Mock 模式无 admin RPC，请切 Real') },
+  async admin_user_get(p){ return err('NOT_SUPPORTED','Mock 模式无 admin RPC') },
+  async admin_user_update(p){ return err('NOT_SUPPORTED','Mock 模式无 admin RPC') },
+  async admin_user_reset_password(p){ return err('NOT_SUPPORTED','Mock 模式无 admin RPC') },
+  async admin_user_delete(p){ return err('NOT_SUPPORTED','Mock 模式无 admin RPC') },
 
   async memory_set(p){
     var sessions = loadJSON(STORAGE.SESSIONS, {});
@@ -459,17 +466,20 @@ var Real = {
     return out;
   },
   _fromBackendUser(bu, fallbackMems){
-    // 后端 user.me 返回：{ user: {userId, username, nickname, profile:{role,bio,preferences}, globalMemories} }
-    // 前端希望平铺成：{ userId, username, profile:{nickname, occupation, detail, preferences, globalMemories}, globalMemories }
+    // 后端 user.me 返回：{ user: {userId, username, nickname, role:'admin'|'user', disabled, profile:{role,bio,preferences}, globalMemories} }
+    // 注意：顶层 role 是系统权限（admin/user），profile.role 是用户填的"职业/职位"，两者分开存
+    // 前端希望平铺成：{ userId, username, role, disabled, profile:{nickname, occupation, detail, preferences, globalMemories}, globalMemories }
     var u = bu || {};
     var bp = u.profile || {};
     var mems = u.globalMemories || fallbackMems || [];
     return {
       userId: u.userId,
       username: u.username,
+      role: u.role || 'user',         // 系统权限
+      disabled: !!u.disabled,
       profile: {
         nickname: u.nickname || '',
-        occupation: bp.role || '',
+        occupation: bp.role || '',     // 职业/职位（前端用 occupation 命名，后端用 profile.role）
         detail: bp.bio || '',
         preferences: bp.preferences || '',
         globalMemories: mems
@@ -644,6 +654,28 @@ var Real = {
   // 后端写入 chat_messages / 更新 user_stats / 追加 jsonl
   async chat_flush(p){
     return Real._call('daoxu.chat.flush', p);
+  },
+
+  // chat history_v2：从 chat_messages 读取分页历史（替代旧 chat.history）
+  async chat_history_v2(p){
+    return Real._call('daoxu.chat.history_v2', p);
+  },
+
+  // ─── Admin RPC（只有 role=admin 的 session 才能调）───
+  async admin_users_list(p){
+    return Real._call('daoxu.admin.users.list', p);
+  },
+  async admin_user_get(p){
+    return Real._call('daoxu.admin.user.get', p);
+  },
+  async admin_user_update(p){
+    return Real._call('daoxu.admin.user.update', p);
+  },
+  async admin_user_reset_password(p){
+    return Real._call('daoxu.admin.user.reset_password', p);
+  },
+  async admin_user_delete(p){
+    return Real._call('daoxu.admin.user.delete', p);
   }
 };
 
@@ -745,6 +777,36 @@ var Auth = {
     return Backend.chat_flush(payload);
   },
 
+  // 从 chat_messages 读分页历史（替代旧 chat.history，能拿到 A2 flush 过去的数据）
+  async getChatHistoryV2(params){
+    var token = Auth.getToken();
+    var payload = Object.assign({ sessionToken: token }, params);
+    return Backend.chat_history_v2(payload);
+  },
+
+  // ─── Admin 公开 API（需 role=admin，后端校验）───
+  async adminUsersList(params){
+    if(!Auth.isLoggedIn()) return { ok:false, error:{code:'UNAUTHORIZED'} };
+    var token = Auth.getToken();
+    return Backend.admin_users_list(Object.assign({sessionToken:token}, params||{}));
+  },
+  async adminUserGet(userId){
+    if(!Auth.isLoggedIn()) return { ok:false, error:{code:'UNAUTHORIZED'} };
+    return Backend.admin_user_get({ sessionToken: Auth.getToken(), userId: userId });
+  },
+  async adminUserUpdate(userId, patch){
+    if(!Auth.isLoggedIn()) return { ok:false, error:{code:'UNAUTHORIZED'} };
+    return Backend.admin_user_update({ sessionToken: Auth.getToken(), userId: userId, patch: patch });
+  },
+  async adminUserResetPassword(userId){
+    if(!Auth.isLoggedIn()) return { ok:false, error:{code:'UNAUTHORIZED'} };
+    return Backend.admin_user_reset_password({ sessionToken: Auth.getToken(), userId: userId });
+  },
+  async adminUserDelete(userId){
+    if(!Auth.isLoggedIn()) return { ok:false, error:{code:'UNAUTHORIZED'} };
+    return Backend.admin_user_delete({ sessionToken: Auth.getToken(), userId: userId });
+  },
+
   // 给 chat connect 用：返回要塞进 connect.params 的字段
   getChatAuthFields(){
     var token = Auth.getToken();
@@ -758,10 +820,18 @@ var Auth = {
     var user = {
       userId: data.userId,
       username: data.username,
+      role: data.role || 'user',       // 系统权限，admin/users.html 判断用
+      disabled: !!data.disabled,
       profile: data.profile || {},
       globalMemories: (data.profile && data.profile.globalMemories) || []
     };
     localStorage.setItem(STORAGE.CURRENT_USER, JSON.stringify(user));
+  },
+
+  // 当前登录用户是否是管理员
+  isAdmin(){
+    var u = Auth.getCachedUser();
+    return !!(u && u.role === 'admin');
   },
 
   // 调试用
