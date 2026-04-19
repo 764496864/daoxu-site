@@ -440,6 +440,29 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .msg-row.user .msg-bubble{background:rgba(196,162,101,.1);color:var(--tx);border-radius:12px 12px 4px 12px}
 .msg-row.bot .msg-bubble{background:rgba(30,30,38,.9);color:var(--tx2);border-radius:12px 12px 12px 4px;border:1px solid rgba(255,255,255,.04)}
 .msg-row.bot .msg-bubble.streaming{border-left:2px solid rgba(196,162,101,.3)}
+/* 历史会话抽屉（从聊天面板内右侧滑入覆盖） */
+.history-drawer{position:absolute;top:0;right:0;bottom:0;width:100%;background:var(--bg);z-index:3;transform:translateX(100%);transition:transform .45s var(--e2);display:flex;flex-direction:column;border-left:1px solid rgba(196,162,101,.08)}
+.history-drawer.show{transform:translateX(0)}
+.history-drawer-head{padding:14px 20px;border-bottom:1px solid rgba(196,162,101,.08);display:flex;justify-content:space-between;align-items:center;background:var(--bg);flex-shrink:0}
+.history-drawer-head h5{font-family:var(--sf);font-size:13px;color:var(--gd);letter-spacing:5px;font-weight:500;margin:0}
+.history-drawer-head .x{cursor:pointer;color:var(--tx4);font-size:18px;padding:2px 8px;transition:color .3s;line-height:1}
+.history-drawer-head .x:hover{color:var(--tx)}
+.history-drawer-body{flex:1;overflow-y:auto;padding:8px 12px 20px;scrollbar-width:thin;scrollbar-color:rgba(196,162,101,.15) transparent}
+.history-drawer-body::-webkit-scrollbar{width:3px}
+.history-drawer-body::-webkit-scrollbar-thumb{background:rgba(196,162,101,.15);border-radius:2px}
+.history-drawer-day{font-family:var(--sf);font-size:9px;color:var(--tx5);letter-spacing:3px;padding:14px 4px 8px;opacity:.6}
+.history-session-item{padding:12px 14px;margin-bottom:6px;border:1px solid rgba(196,162,101,.06);border-radius:3px;cursor:pointer;transition:all .3s;background:var(--bg);position:relative}
+.history-session-item:hover{border-color:rgba(196,162,101,.25);background:rgba(196,162,101,.03)}
+.history-session-item .hs-title{font-size:13px;color:var(--tx);line-height:1.5;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-weight:300;margin-bottom:6px}
+.history-session-item .hs-meta{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.history-session-item .hs-time{font-size:9px;color:var(--tx5);letter-spacing:1px;font-family:var(--sf)}
+.history-session-item .hs-agent{font-size:9px;color:var(--gd);opacity:.7;letter-spacing:2px;font-family:var(--sf)}
+.history-drawer-empty{padding:60px 20px;text-align:center;color:var(--tx4);font-size:12px;letter-spacing:3px;font-family:var(--sf);line-height:2.2}
+.history-drawer-loading{padding:40px 20px;text-align:center;color:var(--tx5);font-size:11px;letter-spacing:3px;font-family:var(--sf)}
+/* 当前正在查看某一条历史对话时的顶部提示条 */
+.history-viewing{background:rgba(196,162,101,.05);border-top:1px solid rgba(196,162,101,.1);border-bottom:1px solid rgba(196,162,101,.1);padding:8px 16px;font-size:10px;color:var(--tx3);letter-spacing:2px;display:flex;justify-content:space-between;align-items:center;font-family:var(--sf)}
+.history-viewing .back{cursor:pointer;color:var(--gd);transition:color .3s}
+.history-viewing .back:hover{color:var(--tx)}
 /* 聊天历史分组装饰（优雅重渲染） */
 .history-divider{display:flex;align-items:center;gap:14px;padding:18px 6px 10px;font-family:var(--sf);font-size:10px;letter-spacing:5px;color:var(--tx4);opacity:.7;text-align:center;justify-content:center}
 .history-divider::before,.history-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.18),transparent)}
@@ -832,6 +855,16 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
       </div>
     </div>
   </div>
+  <!-- 历史会话抽屉（内嵌在聊天面板内，从右滑入覆盖）-->
+  <div class="history-drawer" id="historyDrawer">
+    <div class="history-drawer-head">
+      <h5>历 史 对 话</h5>
+      <span class="x" onclick="closeHistoryDrawer()">✕</span>
+    </div>
+    <div class="history-drawer-body" id="historyDrawerBody">
+      <div class="history-drawer-loading">加 载 中…</div>
+    </div>
+  </div>
 </div>
 
 <!-- 背景音乐播放器 -->
@@ -996,26 +1029,122 @@ function selectAgent(agentId,agentName){
   connectWS(agentId,vid);
 }
 
-// 用户点"历史"按钮 → 重新从后端拉最近 50 条 chat.history
-// welcome 状态（未 selectAgent）下点击：先自动选中明一 + 连 WS，由 hello-ok 之后首次 chat.history 接管拉取
-// 握手未完成时（wsReady=false）静默等待，避免"first request must be connect"错误
-function reloadChatHistory(){
+// v2.6.4：历史按钮改为打开"历史会话抽屉"（不再直接塞到主对话区）
+// 行为：抽屉显示按 runId 分组的对话列表，点某行加载那轮对话到主聊天区
+var historyCache = [];   // 最近一次从后端拉到的原始 messages（按 id 升序）
+async function reloadChatHistory(){
+  // welcome 状态先选中明一 + 建 WS（用户感觉不到，下次打开即可看到历史）
   if(!currentAgent){
-    // 从 welcome 进入：selectAgent 会自动拉一次 chat.history，不用额外发请求
     if(typeof selectAgent === 'function') selectAgent('main','明 一');
     return;
   }
-  // 关键：不能只看 ws.readyState（TCP 开着 ≠ OpenClaw 握手完成），必须等 hello-ok
-  if(!ws||ws.readyState!==1||!wsReady){return}
-  var vid=getChatPeerId();
-  // 清掉当前显示的消息泡 + 历史分隔符 + 日期标签（保留欢迎语）
-  var box=document.getElementById('chatMessages');
+  if(!window.DaoxuAuth || !DaoxuAuth.isLoggedIn()){
+    showHistoryDrawer();
+    document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-empty">登录后才能查看跨设备历史对话</div>';
+    return;
+  }
+  showHistoryDrawer();
+  document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-loading">加 载 中…</div>';
+  var vid = getChatPeerId();
+  var sessionKey = 'agent:' + currentAgent + ':webchat:direct:' + vid;
+  try{
+    var r = await DaoxuAuth.getChatHistoryV2({ sessionKey: sessionKey, offset: 0, limit: 200 });
+    if(!r.ok){
+      document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-empty">加载失败：'+(r.error && r.error.code || 'UNKNOWN')+'</div>';
+      return;
+    }
+    historyCache = (r.data && r.data.messages) || [];
+    renderHistoryDrawer(historyCache);
+  }catch(e){
+    document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-empty">加载失败</div>';
+  }
+}
+
+function showHistoryDrawer(){ document.getElementById('historyDrawer').classList.add('show') }
+function closeHistoryDrawer(){ document.getElementById('historyDrawer').classList.remove('show') }
+
+// 把扁平 messages 按 runId 聚成"一轮对话"，按时间倒序渲染
+function renderHistoryDrawer(messages){
+  var body = document.getElementById('historyDrawerBody');
+  if(!messages || !messages.length){
+    body.innerHTML = '<div class="history-drawer-empty">还没有历史对话<br><span style="font-size:10px;color:var(--tx5);letter-spacing:2px">发几条消息后会出现在这里</span></div>';
+    return;
+  }
+  // 按 runId 分组（无 runId 的 fallback 按 createdAt 分钟切分）
+  var groups = {};
+  var order = [];
+  messages.forEach(function(m){
+    var key = m.runId || ('_t_'+String(m.createdAt||'').slice(0,16));
+    if(!groups[key]){ groups[key] = { runId:m.runId, agentId:m.agentId, firstAt:m.createdAt, lastAt:m.createdAt, userText:'', assistantText:'', messages:[] }; order.push(key); }
+    var g = groups[key];
+    g.messages.push(m);
+    if(m.createdAt < g.firstAt) g.firstAt = m.createdAt;
+    if(m.createdAt > g.lastAt) g.lastAt = m.createdAt;
+    var txt = stripUserContext(typeof m.content === 'string' ? m.content : '');
+    if(m.role === 'user' && !g.userText) g.userText = txt;
+    if(m.role === 'assistant' && !g.assistantText) g.assistantText = txt;
+  });
+  // 按 lastAt 倒序（最新在上）
+  var sorted = order.map(function(k){return groups[k]}).sort(function(a,b){ return (a.lastAt < b.lastAt ? 1 : -1) });
+  // 按日期分组显示
+  var html = '';
+  var lastDay = '';
+  sorted.forEach(function(g){
+    var day = formatHistoryDay(g.lastAt);
+    if(day && day !== lastDay){ html += '<div class="history-drawer-day">'+day+'</div>'; lastDay = day; }
+    var title = (g.userText || g.assistantText || '（空对话）').slice(0,80);
+    var time = fmtHistoryTime(g.lastAt);
+    html += '<div class="history-session-item" onclick="loadHistoryRun(\''+escapeAttr(g.runId||'')+'\')">'+
+      '<div class="hs-title">'+escapeHtml(title)+'</div>'+
+      '<div class="hs-meta"><span class="hs-time">'+time+'</span><span class="hs-agent">'+escapeHtml((g.agentId||'main').toUpperCase())+'</span></div>'+
+    '</div>';
+  });
+  body.innerHTML = html;
+}
+
+function escapeHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function escapeAttr(s){ return String(s==null?'':s).replace(/'/g,"\\'") }
+function fmtHistoryTime(iso){
+  if(!iso) return '';
+  try{ var d = new Date(iso); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0') }
+  catch(e){ return '' }
+}
+
+// 点击某轮历史 → 关闭抽屉 + 主聊天区加载该轮消息
+function loadHistoryRun(runId){
+  if(!runId){ closeHistoryDrawer(); return }
+  var msgs = historyCache.filter(function(m){ return m.runId === runId });
+  if(!msgs.length){ closeHistoryDrawer(); return }
+  msgs.sort(function(a,b){ return (a.createdAt < b.createdAt ? -1 : 1) });
+  // 清主聊天区
+  var box = document.getElementById('chatMessages');
   if(box){
     box.querySelectorAll('.msg-row, .history-divider, .history-date').forEach(function(r){r.remove()});
   }
-  // v2.6.1：切 daoxu.chat.history_v2，从 chat_messages 读（能拿到 A2 flush 过的数据）
-  var sessionToken = (window.DaoxuAuth && DaoxuAuth.getToken()) || '';
-  ws.send(JSON.stringify({type:'req',id:'h-reload-'+Date.now(),method:'daoxu.chat.history_v2',params:{sessionToken:sessionToken,sessionKey:'agent:'+currentAgent+':webchat:direct:'+vid,offset:0,limit:50}}));
+  // 顶部提示条
+  var top = document.createElement('div');
+  top.className = 'history-divider';
+  top.textContent = '— 这是过往对话 —';
+  box.appendChild(top);
+  msgs.forEach(function(m){
+    var text = stripUserContext(typeof m.content === 'string' ? m.content : '');
+    if(!text) return;
+    var row = document.createElement('div');
+    row.className = 'msg-row history ' + (m.role === 'user' ? 'user' : 'bot');
+    var bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.innerHTML = mdToHtml(text);
+    row.appendChild(bubble);
+    box.appendChild(row);
+  });
+  var bot = document.createElement('div');
+  bot.className = 'history-divider';
+  bot.textContent = '· 本 轮 已 结 束 · 点"+ 新 对 话"重新开始 ·';
+  box.appendChild(bot);
+  box.scrollTop = box.scrollHeight;
+  closeHistoryDrawer();
+  // 这一刻 currentRun 不能有残留（否则下次 sendMsg 会错配）
+  currentRun = null;
 }
 
 // 从消息文本里剥离 [user_context]...[/user_context] 块（这是给 AI 读的，不应该显示给用户 / 不应该存到 chat_messages）

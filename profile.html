@@ -231,6 +231,21 @@ footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1
     </div>
   </div>
 
+  <!-- ─── Admin 入口（仅管理员可见）─── -->
+  <a id="adminEntry" href="/admin/users.html" style="display:none;text-decoration:none;margin-bottom:24px">
+    <div style="background:linear-gradient(135deg,rgba(196,162,101,.08),rgba(196,162,101,.02));border:1px solid rgba(196,162,101,.25);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;transition:all .4s var(--e2);cursor:pointer;position:relative;overflow:hidden" onmouseover="this.style.borderColor='var(--gd)';this.style.background='linear-gradient(135deg,rgba(196,162,101,.15),rgba(196,162,101,.05))'" onmouseout="this.style.borderColor='rgba(196,162,101,.25)';this.style.background='linear-gradient(135deg,rgba(196,162,101,.08),rgba(196,162,101,.02))'">
+      <div style="position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.5"></div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gd)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z"/><path d="M9 12l2 2 4-4"/></svg>
+        <div>
+          <div style="font-family:var(--sf);font-size:15px;color:var(--gd);letter-spacing:4px;font-weight:500;margin-bottom:4px">后 台 管 理</div>
+          <div style="font-size:11px;color:var(--tx3);letter-spacing:1.5px;line-height:1.8">ADMIN · 用户列表 / 内容编辑 / 明一思考</div>
+        </div>
+      </div>
+      <span style="color:var(--gd);opacity:.6;font-size:12px;letter-spacing:3px">进 入 ›</span>
+    </div>
+  </a>
+
   <!-- ─── 账户信息 ─── -->
   <div class="card">
     <span class="card-tag">ACCOUNT · 账 户 信 息</span>
@@ -382,6 +397,12 @@ function fillForm(data){
   document.getElementById('whoName').textContent = name;
   document.getElementById('whoMeta').textContent = '@' + (data.username || '') + ' · userId: ' + String(data.userId || '').slice(0,12) + '...';
   document.getElementById('avatar').textContent = (name.charAt(0) || '·');
+
+  // Admin 入口：仅管理员可见（顶层 role==='admin' 或在兜底白名单里）
+  var ADMIN_FALLBACK_IDS = ['9af175c9-79ca-4d36-8b54-fcb2dcc15568']; // 子枫
+  var isAdmin = (data.role === 'admin') || (ADMIN_FALLBACK_IDS.indexOf(data.userId) >= 0);
+  var adminEntry = document.getElementById('adminEntry');
+  if(adminEntry) adminEntry.style.display = isAdmin ? 'block' : 'none';
 
   updateCounters();
 }
