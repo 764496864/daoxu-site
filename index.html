@@ -450,6 +450,30 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .msg-row.user .msg-bubble{background:rgba(196,162,101,.1);color:var(--tx);border-radius:12px 12px 4px 12px}
 .msg-row.bot .msg-bubble{background:rgba(30,30,38,.9);color:var(--tx2);border-radius:12px 12px 12px 4px;border:1px solid rgba(255,255,255,.04)}
 .msg-row.bot .msg-bubble.streaming{border-left:2px solid rgba(196,162,101,.3)}
+/* 首次访问登录/注册引导弹窗 */
+.auth-prompt-mask{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;animation:authFadeIn .5s var(--e2) forwards}
+.auth-prompt-mask.show{display:flex}
+@keyframes authFadeIn{from{opacity:0}to{opacity:1}}
+.auth-prompt-card{max-width:440px;width:100%;background:var(--bg);border:1px solid rgba(196,162,101,.22);padding:48px 40px 36px;position:relative;text-align:center;box-shadow:0 40px 120px rgba(0,0,0,.8);animation:authCardIn .6s var(--e2) forwards}
+.auth-prompt-card::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.6}
+@keyframes authCardIn{from{transform:translateY(20px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+.auth-prompt-lb{font-family:var(--sf);font-size:10px;letter-spacing:5px;color:var(--tx5);margin-bottom:20px}
+.auth-prompt-card h2{font-family:var(--sf);font-size:24px;color:var(--tx);letter-spacing:6px;font-weight:600;margin-bottom:20px;line-height:1.5}
+.auth-prompt-card p{font-size:12px;color:var(--tx3);line-height:2.2;letter-spacing:1.5px;margin-bottom:32px;font-weight:300}
+.auth-prompt-actions{margin-bottom:20px}
+.auth-prompt-btn-primary{display:inline-block;background:var(--gd);color:var(--bg);padding:13px 56px;font-size:11px;letter-spacing:6px;font-weight:500;text-decoration:none;font-family:var(--ss);transition:all .4s var(--e2);border:none}
+.auth-prompt-btn-primary:hover{background:var(--gd2);letter-spacing:8px}
+.auth-prompt-hint{font-size:12px;color:var(--tx3);letter-spacing:1.5px;margin-bottom:28px}
+.auth-prompt-register{color:var(--gd);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(196,162,101,.4);padding-bottom:2px;letter-spacing:2px;transition:all .3s;margin-left:6px}
+.auth-prompt-register:hover{color:var(--tx);border-color:var(--gd)}
+.auth-prompt-dismiss{font-size:10px;color:var(--tx5);letter-spacing:3px;cursor:pointer;padding:8px;transition:color .3s;font-family:var(--sf)}
+.auth-prompt-dismiss:hover{color:var(--tx3)}
+@media(max-width:480px){
+  .auth-prompt-card{padding:36px 24px 28px}
+  .auth-prompt-card h2{font-size:19px;letter-spacing:4px}
+  .auth-prompt-card p{font-size:12px;line-height:2;letter-spacing:1px}
+  .auth-prompt-btn-primary{padding:13px 40px;letter-spacing:4px}
+}
 /* 历史会话抽屉（从聊天面板内右侧滑入覆盖） */
 .history-drawer{position:absolute;top:0;right:0;bottom:0;width:100%;background:var(--bg);z-index:3;transform:translateX(100%);transition:transform .45s var(--e2);display:flex;flex-direction:column;border-left:1px solid rgba(196,162,101,.08)}
 .history-drawer.show{transform:translateX(0)}
@@ -895,6 +919,22 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
   </div>
 </div>
 
+<!-- 首次访问登录/注册引导弹窗（未登录用户首次打开显示，关闭后本次 session 不再弹） -->
+<div class="auth-prompt-mask" id="authPromptMask" style="display:none">
+  <div class="auth-prompt-card">
+    <div class="auth-prompt-lb">WELCOME · 欢 迎</div>
+    <h2>让 明 一 记 住 你</h2>
+    <p>登录后解锁 ——<br>跨设备永久记忆 · 14 个智能体 · 每日世界观察 · 个性化档案</p>
+    <div class="auth-prompt-actions">
+      <a href="/login.html" class="auth-prompt-btn-primary">登 录</a>
+    </div>
+    <div class="auth-prompt-hint">
+      还没有账号？<a href="/register.html" class="auth-prompt-register">立 即 注 册 ›</a>
+    </div>
+    <div class="auth-prompt-dismiss" onclick="dismissAuthPrompt()">先 随 便 看 看 ›</div>
+  </div>
+</div>
+
 <!-- 背景音乐播放器 -->
 <div id="mp" onclick="toggleMusic()" role="button" aria-label="背景音乐开关" style="position:fixed;bottom:28px;right:28px;z-index:999;width:48px;height:48px;border-radius:50%;border:1px solid rgba(196,162,101,.25);background:rgba(7,7,10,.9);backdrop-filter:blur(12px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .6s var(--e2);opacity:.6" onmouseenter="this.style.opacity='1';this.style.borderColor='rgba(196,162,101,.5)'" onmouseleave="this.style.opacity='.6';this.style.borderColor='rgba(196,162,101,.2)'">
   <svg id="mp-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4A265" stroke-width="1.5" stroke-linecap="round">
@@ -1184,44 +1224,70 @@ function stripUserContext(s){
   return s.replace(/\[user_context\][\s\S]*?\[\/user_context\]\s*/g, '').trim();
 }
 
-// A2：开始新一轮对话的记录（未登录跳过；每一轮 sendMsg 调一次）
+// A2：开始新一轮对话的记录（登录 / 未登录都记录；未登录会存 localStorage，登录后自动 sync 云端）
 function startNewRun(userText){
-  if(!(window.DaoxuAuth && DaoxuAuth.isLoggedIn())) return;
   var vid = getChatPeerId();
   currentRun = {
     runId: 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
     sessionKey: 'agent:' + currentAgent + ':webchat:direct:' + vid,
-    userId: vid,  // 登录状态下 getChatPeerId 返回 user_id（auth.js.getChatAuthFields 约定）
+    userId: vid,  // 登录：真 user_id；未登录：匿名 vid（登录后 flushLocalBuffer 会替换）
     agentId: currentAgent,
-    userText: stripUserContext(userText),  // flush 前剥离内部 prompt 块
+    userText: stripUserContext(userText),
     userTs: new Date().toISOString(),
     assistantText: '',
     assistantTs: null
   };
 }
 
-// A2：本轮对话结束时 flush 两条消息到龙虾后端（chat_messages / user_stats / jsonl）
+// A2：本轮对话结束 → 登录则直接 flush 云端；未登录则存 localStorage buffer
 function finalizeRunAndFlush(assistantText){
   if(!currentRun) return;
   var r = currentRun; currentRun = null;
   r.assistantText = assistantText || '';
   r.assistantTs = new Date().toISOString();
-  if(!window.DaoxuAuth || typeof DaoxuAuth.chatFlush !== 'function') return;
-  try{
-    DaoxuAuth.chatFlush({
-      sessionKey: r.sessionKey,
-      userId: r.userId,
-      messages: [
-        {sessionKey:r.sessionKey,userId:r.userId,agentId:r.agentId,role:'user',messageKind:'text',content:r.userText,runId:r.runId,tokensIn:null,tokensOut:null,createdAt:r.userTs},
-        {sessionKey:r.sessionKey,userId:r.userId,agentId:r.agentId,role:'assistant',messageKind:'text',content:r.assistantText,runId:r.runId,tokensIn:null,tokensOut:null,createdAt:r.assistantTs}
-      ],
-      conversationIncrement: true,
-      tokensTotal: 0,  // 前端不精确知道 tokens；后端自行估算或忽略
-      lastSessionAt: r.assistantTs,
-      rawJsonlPath: null
-    }).catch(function(e){ console.warn('[chat.flush] failed:',e) });
-  }catch(e){ console.warn('[chat.flush] threw:',e) }
+  if(!window.DaoxuAuth) return;
+  var batch = {
+    sessionKey: r.sessionKey,
+    userId: r.userId,
+    messages: [
+      {sessionKey:r.sessionKey,userId:r.userId,agentId:r.agentId,role:'user',messageKind:'text',content:r.userText,runId:r.runId,tokensIn:null,tokensOut:null,createdAt:r.userTs},
+      {sessionKey:r.sessionKey,userId:r.userId,agentId:r.agentId,role:'assistant',messageKind:'text',content:r.assistantText,runId:r.runId,tokensIn:null,tokensOut:null,createdAt:r.assistantTs}
+    ],
+    conversationIncrement: true,
+    tokensTotal: 0,
+    lastSessionAt: r.assistantTs,
+    rawJsonlPath: null
+  };
+  if(DaoxuAuth.isLoggedIn()){
+    // 已登录：直接 flush 云端
+    try{
+      DaoxuAuth.chatFlush(batch).catch(function(e){ console.warn('[chat.flush] failed:',e) });
+    }catch(e){ console.warn('[chat.flush] threw:',e) }
+  }else{
+    // 未登录：存 localStorage，登录后由 autoSyncLocalBuffer 批量同步到云端
+    if(typeof DaoxuAuth.bufferLocalRun === 'function') DaoxuAuth.bufferLocalRun(batch);
+  }
 }
+
+// 页面加载：如果当前已登录且 localStorage 有未同步的本地 buffer（之前未登录聊的） → 批量 sync 云端
+(function autoSyncLocalBuffer(){
+  var tries = 0;
+  function tick(){
+    if(!window.DaoxuAuth && tries < 20){ tries++; setTimeout(tick, 100); return }
+    if(!window.DaoxuAuth || !DaoxuAuth.isLoggedIn()) return;
+    var hasBuffer = false;
+    try{ hasBuffer = (JSON.parse(localStorage.getItem('daoxu_local_chat_buffer')||'[]').length > 0) }catch(e){}
+    if(!hasBuffer) return;
+    DaoxuAuth.flushLocalBuffer().then(function(r){
+      if(r && r.synced > 0) console.log('[auto-sync] 已同步 '+r.synced+' 轮本地对话到云端（登录前聊的）');
+    }).catch(function(e){ console.warn('[auto-sync]', e) });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', tick);
+  }else{
+    tick();
+  }
+})();
 
 // 把消息时间戳格式化为 "今 天" / "昨 天" / "2026-04-19"（用于历史分组）
 function formatHistoryDay(ts){
@@ -1557,6 +1623,35 @@ function startAgent(agentId,agentName){
   if(!chatExpanded){chatExpanded=true;document.getElementById('chatPanel').classList.add('expanded');document.querySelector('.chat-expand').innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6m10-10h-6V4"/></svg>';document.querySelector('.chat-expand').title='缩小';}
   setTimeout(function(){selectAgent(agentId,agentName)},200);
 }
+
+// 首次访问引导：未登录用户打开站点，延迟弹出登录/注册提示（可关闭，本次 session 不再弹）
+function dismissAuthPrompt(){
+  try{ sessionStorage.setItem('daoxu_auth_prompt_dismissed','1') }catch(e){}
+  var mask = document.getElementById('authPromptMask');
+  if(mask){ mask.classList.remove('show'); mask.style.display='none' }
+}
+(function autoShowAuthPrompt(){
+  // 等 DaoxuAuth 加载好 + 延迟 1s（不遮首屏）
+  var tries = 0;
+  function tick(){
+    if(!window.DaoxuAuth && tries < 20){ tries++; setTimeout(tick, 100); return }
+    // 已登录 → 不弹
+    if(window.DaoxuAuth && DaoxuAuth.isLoggedIn()) return;
+    // 本次 session 已关过 → 不再弹
+    try{ if(sessionStorage.getItem('daoxu_auth_prompt_dismissed') === '1') return }catch(e){}
+    // URL 带 ?agent= 参数（从智能体广场跳回来的）→ 不弹（不打扰正在进入聊天的用户）
+    try{ if(new URLSearchParams(location.search).get('agent')) return }catch(e){}
+    setTimeout(function(){
+      var mask = document.getElementById('authPromptMask');
+      if(mask){ mask.style.display='flex'; mask.classList.add('show') }
+    }, 1000);
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', tick);
+  }else{
+    tick();
+  }
+})();
 
 // 从 agents.html / profile.html 跳回首页时 URL 带 ?agent=xxx → 自动打开聊天并选中智能体
 // （避免用户感觉"跳主页刷新了"）

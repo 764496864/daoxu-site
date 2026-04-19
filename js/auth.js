@@ -783,13 +783,59 @@ var Auth = {
   },
 
   // A2：把一轮完整对话（user + assistant 两条）推给后端落盘 + 累计 stats
-  // 未登录直接跳过（匿名用户不走持久化）。登录用户只需在 chat final 时调一次。
+  // 登录用户直接 flush；未登录用户由调用方走 bufferLocalRun 存 localStorage，登录后 flushLocalBuffer 同步
   async chatFlush(batch){
     if(!Auth.isLoggedIn()) return { ok:false, error:{code:'NOT_LOGGED_IN'} };
     var token = Auth.getToken();
-    // 附带 sessionToken 让后端校验调用方（必填）
     var payload = Object.assign({ sessionToken: token }, batch);
     return Backend.chat_flush(payload);
+  },
+
+  // 未登录时把一轮对话存 localStorage（登录后会自动 sync 云端）
+  bufferLocalRun(batch){
+    if(!batch) return;
+    try{
+      var key = 'daoxu_local_chat_buffer';
+      var arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push(batch);
+      // 限制最多存 100 轮，防止恶意或异常膨胀
+      if(arr.length > 100) arr = arr.slice(-100);
+      localStorage.setItem(key, JSON.stringify(arr));
+    }catch(e){ console.warn('[bufferLocalRun]', e) }
+  },
+
+  // 登录成功后调：把本地 buffer 批量 sync 云端，替换匿名 vid 为真 userId
+  async flushLocalBuffer(){
+    if(!Auth.isLoggedIn()) return { ok:false, error:{code:'NOT_LOGGED_IN'} };
+    var user = Auth.getCachedUser();
+    if(!user || !user.userId) return { ok:false, error:{code:'NO_USER'} };
+    var key = 'daoxu_local_chat_buffer';
+    var arr;
+    try{ arr = JSON.parse(localStorage.getItem(key) || '[]') }catch(e){ return {ok:false, error:{code:'PARSE_ERROR'}} }
+    if(!arr.length) return { ok:true, synced:0 };
+    var synced = 0, failed = 0;
+    var newUserId = user.userId;
+    for(var i=0;i<arr.length;i++){
+      var b = arr[i];
+      // 把匿名 vid 替换成真 user_id（sessionKey 尾部 peerId 部分 + 每条 message 的 userId/sessionKey）
+      var newSessionKey = (b.sessionKey || '').replace(/:[^:]+$/, ':' + newUserId);
+      var batch = {
+        sessionKey: newSessionKey,
+        userId: newUserId,
+        messages: (b.messages || []).map(function(m){
+          return Object.assign({}, m, { userId: newUserId, sessionKey: newSessionKey });
+        }),
+        conversationIncrement: b.conversationIncrement === undefined ? true : b.conversationIncrement,
+        tokensTotal: b.tokensTotal || 0,
+        lastSessionAt: b.lastSessionAt,
+        rawJsonlPath: null
+      };
+      var r = await Auth.chatFlush(batch);
+      if(r.ok) synced++; else failed++;
+    }
+    // 全部尝试完就清 localStorage（即使部分失败——重试风险>收益，避免重复）
+    try{ localStorage.removeItem(key) }catch(e){}
+    return { ok: failed===0, synced:synced, failed:failed };
   },
 
   // 从 chat_messages 读分页历史（替代旧 chat.history，能拿到 A2 flush 过去的数据）
