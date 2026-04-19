@@ -949,7 +949,7 @@ function renderContent(content,foldable){
 }
 // Format current time as HH:MM for chat timestamps
 function fmtTime(){var d=new Date();return d.getHours().toString().padStart(2,"0")+":"+d.getMinutes().toString().padStart(2,"0")}
-var ws=null,currentAgent='',streamingDiv=null,streamText='';
+var ws=null,wsReady=false,currentAgent='',streamingDiv=null,streamText='';
 // Select an agent, build chat UI, and initiate WebSocket connection
 function selectAgent(agentId,agentName){
   currentAgent=agentId;
@@ -980,13 +980,15 @@ function selectAgent(agentId,agentName){
 
 // 用户点"历史"按钮 → 重新从后端拉最近 50 条 chat.history
 // welcome 状态（未 selectAgent）下点击：先自动选中明一 + 连 WS，由 hello-ok 之后首次 chat.history 接管拉取
+// 握手未完成时（wsReady=false）静默等待，避免"first request must be connect"错误
 function reloadChatHistory(){
   if(!currentAgent){
     // 从 welcome 进入：selectAgent 会自动拉一次 chat.history，不用额外发请求
     if(typeof selectAgent === 'function') selectAgent('main','明 一');
     return;
   }
-  if(!ws||ws.readyState!==1){return}
+  // 关键：不能只看 ws.readyState（TCP 开着 ≠ OpenClaw 握手完成），必须等 hello-ok
+  if(!ws||ws.readyState!==1||!wsReady){return}
   var vid=getChatPeerId();
   // 清掉当前显示的消息泡 + 历史分隔符 + 日期标签（保留欢迎语）
   var box=document.getElementById('chatMessages');
@@ -1018,6 +1020,7 @@ function connectWS(agentId,vid){
   var url=base+'/chat?session=agent:'+encodeURIComponent(agentId)+':main';
   console.log('[connectWS] '+url);
   ws=new WebSocket(url);
+  wsReady=false;  // 重置握手状态；hello-ok 到达才算真正 ready
   ws.onopen=function(){};
   ws.onmessage=function(e){
     var d;try{d=JSON.parse(e.data)}catch(err){console.log("WS parse error:",err);return}
@@ -1031,6 +1034,7 @@ function connectWS(agentId,vid){
     }
     // Handle hello-ok: connection established, request chat history
     if(d.type==='res'&&d.ok&&d.payload&&d.payload.type==='hello-ok'){
+      wsReady=true;  // 握手完成，可以发业务 method（chat.history / chat.send 等）
       // Keep welcome area + greeting, only remove loading indicators
       var loadingHint=document.getElementById('typingHint');if(loadingHint)loadingHint.remove();
       ws.send(JSON.stringify({type:'req',id:'h1',method:'chat.history',params:{sessionKey:'agent:'+agentId+':webchat:direct:'+vid,limit:50}}));
@@ -1097,8 +1101,8 @@ function connectWS(agentId,vid){
       }
     }
   };
-  ws.onerror=function(){document.getElementById('chatMessages').innerHTML='<div class="msg bot">连接失败，请稍后重试</div>'};
-  ws.onclose=function(){};
+  ws.onerror=function(){wsReady=false;document.getElementById('chatMessages').innerHTML='<div class="msg bot">连接失败，请稍后重试</div>'};
+  ws.onclose=function(){wsReady=false};
 }
 // Send user message via WebSocket and show typing indicator
 var pendingMsg=null;
