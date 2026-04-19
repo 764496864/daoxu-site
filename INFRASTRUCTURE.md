@@ -1,11 +1,15 @@
 # 道序科技官网 — 新 Claude 必读文档
 
 > **接手任何官网相关任务的第一步：读完这个文件**。
-> 然后才读同目录 `资料.md`（v9 总知识库），最后才看代码。
-> 不读这个就直接动手 = 90% 概率重复 4.15 那次大故障的弯路。
+> 然后才看代码。不读这个就直接动手 = 90% 概率重复 4.15 那次大故障的弯路。
 >
-> 最近一次更新：2026-04-15（v9.1 故障复盘 + 链路澄清）
-> 维护人：每次重大操作完都要回来更新这里
+> 最近一次更新：**2026-04-19（v2.6.8 · 账户系统全链路 + admin 后台 + A2 数据层上线）**
+>
+> **新增重要章节**：
+> - 第十四章 **账户系统 V2**（daoxu-auth plugin 架构 + 全部 RPC + 前端 adapter）
+> - 第十五章 **admin 后台**（两个页面 + 双密码锁 + 管理员白名单）
+> - 第十六章 **A2 数据层**（chat_messages / user_stats / jsonl 自动落盘）
+> - 第十七章 **龙虾工作流**（后端协作规范 + PASS/FAIL 硬纪律）
 
 ---
 
@@ -455,5 +459,328 @@ dig +short www.daoxu.com.cn @1.1.1.1
 - 改了 DNS / Tunnel UUID / Vercel 配置 → 改第二节、第四节
 - 改了 WebSocket 协议 / URL 格式 → 改第五节
 - 加了新 README 应该提醒的事 → 加到第九节"不要做"列表
+- 账户系统 / admin / 数据层架构改动 → 改第十四~十六节
+
+---
+
+## 十四、账户系统 V2（daoxu-auth plugin）
+
+### 14.1 整体架构
+
+```
+┌─────────────────────────────────┐
+│  前端（浏览器）                   │
+│  daoxu.com.cn/login.html 等      │
+│  通过 js/auth.js 封装             │
+└───────────┬─────────────────────┘
+            │ WebSocket (wss://chat.daoxu.com.cn/chat?session=agent:main:auth-rpc)
+            ▼
+┌─────────────────────────────────┐
+│  Cloudflare Named Tunnel         │
+│  (同聊天通道复用)                 │
+└───────────┬─────────────────────┘
+            │
+            ▼
+┌─────────────────────────────────┐
+│  WSL Ubuntu                      │
+│  OpenClaw Gateway :18789         │
+│  └─ plugins/daoxu-auth 插件      │  ← 后端同事"龙虾"维护
+└───────────┬─────────────────────┘
+            │
+            ▼
+┌─────────────────────────────────┐
+│  SQLite                          │
+│  ~/.openclaw/state/auth.db       │
+│  + 其他表见第十六节               │
+└─────────────────────────────────┘
+```
+
+### 14.2 龙虾（后端同事）的 plugin 目录
+
+**路径**：`/home/administratorzifeng/.openclaw/extensions/daoxu-auth/`
+
+**关键文件**：
+```
+daoxu-auth/
+├── index.js                  ← plugin 入口（方法注册 + hook）
+├── lib/
+│   ├── db.js                 ← schema + 迁移（幂等 ALTER）
+│   ├── runtime.js            ← runtime 初始化（建 V2 三张表）
+│   ├── chat-store.js         ← V2 数据层（chat_messages / user_stats / jsonl）
+│   ├── hooks.js              ← A1 hook 注册（不可用，见 17.2）
+│   └── methods/              ← 每个 daoxu.* method 一个文件
+│       ├── user-register.js
+│       ├── user-login.js
+│       ├── user-me.js
+│       ├── profile-update.js
+│       ├── memory-set.js
+│       ├── stats-me.js
+│       ├── chat-flush.js
+│       ├── chat-history-v2.js
+│       ├── chat-sessions-list.js
+│       ├── admin-users-list.js
+│       ├── admin-user-get.js
+│       ├── admin-user-update.js
+│       ├── admin-user-reset-password.js
+│       └── admin-user-delete.js
+```
+
+### 14.3 全部 RPC 方法清单（LIVE）
+
+**用户类（未登录也能调的首批）**：
+- `daoxu.user.register` — 注册账户
+- `daoxu.user.login` — 登录（返回 sessionToken）
+- `daoxu.user.logout` — 登出
+- `daoxu.user.recover_questions` — 找回密码：取安全问题
+- `daoxu.user.recover` — 找回密码：答题 + 重置
+
+**登录后（需 sessionToken）**：
+- `daoxu.user.me` — 拿自己的完整 user 对象
+- `daoxu.profile.update` — 改昵称 / 职业 / 简介 / 偏好 / **email** / **phone**
+- `daoxu.memory.set` — 写全局记忆数组（最多 50 条，每条 ≤ 300 字）
+- `daoxu.stats.me` — 自己的对话统计
+- `daoxu.chat.flush` — **A2 核心**：前端一轮对话结束后推 user+assistant 消息落盘
+- `daoxu.chat.history_v2` — 读某个 sessionKey 的消息列表（替代老 chat.history）
+- `daoxu.chat.sessions.list` — 列出自己的所有 session（一个 agent 一条）
+
+**admin 类（需 system_role='admin'）**：
+- `daoxu.admin.users.list` — 用户列表（支持 search/status/sortBy/offset/limit）
+- `daoxu.admin.user.get` — 单用户完整档案
+- `daoxu.admin.user.update` — 改任意用户的 profile / memories / disabled / email / phone
+- `daoxu.admin.user.reset_password` — 生成 12 位临时密码（只返回一次）
+- `daoxu.admin.user.delete` — 软删除 + 匿名化（不真删历史）
+
+### 14.4 数据契约（响应结构）
+
+**顶层 user 对象**（所有返回用户的接口统一）：
+
+```json
+{
+  "userId": "UUID v4",
+  "username": "子枫03",
+  "nickname": "陈璐",
+  "role": "admin",            ← 顶层：系统权限（admin / user）
+  "disabled": false,
+  "createdAt": "ISO-8601 UTC",
+  "lastLoginAt": "ISO-8601 UTC",
+  "conversationsTotal": 2,
+  "tokensTotal": 27,
+  "email": "zifeng@test.daoxu.com",
+  "phone": "13800138000",
+  "profile": {                 ← profile 层：用户可编辑的档案
+    "role": "创始人",          ← profile.role 是职业/职位（别跟顶层 role 混）
+    "bio": "...",
+    "preferences": "..."
+  },
+  "globalMemories": ["记忆 1", "记忆 2"]
+}
+```
+
+**⚠ 核心陷阱**：`user.role` 是系统权限 admin / user，`user.profile.role` 是用户填的职业（如"创始人"）。**两个字段名字一样但含义不同**，DB 里也分开（`users.system_role` 存权限，`users.role` 存职业）。前端 `_fromBackendUser` 有相应 adapter。
+
+### 14.5 前端 `js/auth.js` 结构
+
+- `var Mock = {...}` — localStorage 本地假后端（开发期用）
+- `var Real = {...}` — 走 auth-rpc WebSocket 调 daoxu.* 方法
+- `var Backend = (BACKEND_MODE === 'real') ? Real : Mock` — 开关
+- `window.DaoxuAuth = Auth` — 公开 API
+
+**公开 API**（页面调这些）：
+```js
+DaoxuAuth.register(payload)         DaoxuAuth.login(payload)
+DaoxuAuth.logout()                  DaoxuAuth.refreshMe()
+DaoxuAuth.updateProfile(profile)    DaoxuAuth.setMemories(arr)
+DaoxuAuth.getStats()                DaoxuAuth.isLoggedIn() / isAdmin()
+DaoxuAuth.getToken() / getCachedUser()
+DaoxuAuth.chatFlush(batch)          ← A2：聊天每轮结束前端调
+DaoxuAuth.getChatHistoryV2(params)  DaoxuAuth.getChatSessionsList(params)
+DaoxuAuth.adminUsersList(params)    DaoxuAuth.adminUserGet(userId)
+DaoxuAuth.adminUserUpdate(userId, patch)
+DaoxuAuth.adminUserResetPassword(userId)
+DaoxuAuth.adminUserDelete(userId)
+```
+
+---
+
+## 十五、admin 后台
+
+### 15.1 两个页面（顶部 tab 互相跳）
+
+- `/admin/` — **内容管理**（编辑 index.html 用的 content/*.json，走 GitHub PAT）
+- `/admin/users.html` — **用户管理**（LIVE 真数据，走 daoxu.admin.* RPC）
+
+### 15.2 admin 身份识别
+
+两条路（OR 关系）：
+
+1. **顶层白名单**（龙虾后端 config）：
+   - `/home/administratorzifeng/.openclaw/openclaw.json` 的 `pluginConfig.daoxu-auth.adminUserIds`
+   - 启动时 daoxu-auth 把这些 userId 的 `users.system_role` 置为 `'admin'`
+   - 当前白名单：`["9af175c9-79ca-4d36-8b54-fcb2dcc15568"]`（子枫）
+
+2. **前端兜底白名单**（`admin/users.html` + `profile.html` 硬编码）：
+   - `var ADMIN_FALLBACK_IDS = ['9af175c9-79ca-4d36-8b54-fcb2dcc15568']`
+   - 龙虾后端 role 字段偶尔故障时仍能进。前端 UI 门槛而已，真实鉴权在后端 admin.* RPC 里
+
+### 15.3 内容管理（`/admin/`）双密码锁
+
+**登录方式**：GitHub Personal Access Token（PAT），只给 `764496864/daoxu-site` 仓库 `contents: read & write` 权限。
+
+**本地密码锁**（v2.5.9 起）：
+- 首次：输 PAT + 勾选"用本地密码锁住" + 设 6+ 位密码 + 确认
+- 加密：PBKDF2(150k iterations) + AES-GCM 加密 PAT，密文存 `localStorage['daoxu_admin_pat_enc']`
+- 之后：只输本地密码 → 解密 PAT → 登录
+- 密码永不离开浏览器。忘密码可"重置本地数据"清空重新输 PAT
+
+### 15.4 用户管理（`/admin/users.html`）
+
+- 列表：搜索（用户名 / 昵称 / 邮箱 / 电话）+ 状态筛选（全部 / 活跃 / 停用 / 已注销）+ 排序（创建 / 最后登录 / tokens / 对话数）
+- 编辑抽屉：改用户名 / 昵称 / 职业 / 简介 / 偏好 / 记忆 / 邮箱 / 电话 / 账户状态
+- 密码重置：生成 12 位临时明文，**只显示一次**（+ 一键复制）
+- 软删除：把 profile 字段清空、username 改为 `deleted_<id>`、nickname 改为"已注销用户"；**历史消息/stats/jsonl 保留**（不是 GDPR 擦除）
+
+---
+
+## 十六、A2 数据层（自动落盘）
+
+### 16.1 为什么是 A2 不是 A1
+
+A1 = 纯后端 plugin hook 监听。尝试过（`api.on('before_dispatch')` / `agent_end`）但 OpenClaw SDK 的 hook 注册始终报 `missing name` warning，实际未生效。**已彻底放弃 A1**。
+
+A2 = 前端在 chat final 后**主动调 daoxu.chat.flush**把一轮 user+assistant 推给后端。由于前端能精确知道一轮对话的边界，不丢数据。
+
+### 16.2 三张新表
+
+```sql
+-- 消息表（user/assistant 逐条落）
+CREATE TABLE chat_messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT NOT NULL,
+  agent_id TEXT,
+  session_key TEXT NOT NULL,
+  role TEXT NOT NULL,           -- 'user' | 'assistant'
+  message_kind TEXT,            -- 'text' | ...
+  content TEXT NOT NULL,        -- ⚠ 已剥离 [user_context] 块（前端 stripUserContext）
+  tokens_in INTEGER,
+  tokens_out INTEGER,
+  run_id TEXT,                  -- 前端生成的一轮对话标识
+  message_hash TEXT,            -- sha1(content+runId) 防重
+  created_at TEXT NOT NULL
+);
+
+-- 用户统计
+CREATE TABLE user_stats (
+  user_id TEXT PRIMARY KEY,
+  conversations_total INTEGER DEFAULT 0,  -- 每轮对话 +1
+  tokens_total INTEGER DEFAULT 0,          -- in + out 累加
+  last_session_at TEXT
+);
+
+-- 会话归档（Q2 预留，还没大量用）
+CREATE TABLE user_session_archives (
+  user_id TEXT, session_key TEXT, archived_at TEXT, ...
+);
+```
+
+### 16.3 jsonl 双写
+
+每轮 flush 除写 DB 外，还 append 到：
+```
+~/.openclaw/state/users/<user_id>/transcripts/<sha1(session_key)>.jsonl
+```
+
+每行一条 JSON（role / content / runId / tokens / createdAt）。用于：归档 / 可导出 / 将来向量化检索原料。
+
+### 16.4 前端 A2 调用点
+
+`index.html` 的 `sendMsg()` 流程：
+
+1. 用户输入 → `startNewRun(text)` 生成 runId，记录 userText/userTs（**剥离 user_context**）
+2. 发 `chat.send` 给 OpenClaw（message 体带 `[user_context]`，AI 能读；前端用原文）
+3. AI 流式回复 → `chat` event `state='delta'` 累加 → `state='final'`
+4. final 时调 `finalizeRunAndFlush(finalAssistantText)` → `DaoxuAuth.chatFlush({sessionToken, sessionKey, userId, messages:[user, assistant], ...})`
+5. 后端写 chat_messages + 更新 user_stats + append jsonl
+
+**未登录用户**：不走 chatFlush（静默跳过）。聊天体验不受影响，但不持久化。
+
+---
+
+## 十七、龙虾（后端同事）工作流
+
+### 17.1 他是谁
+
+龙虾 = 另一个 Claude 窗口，负责 daoxu-auth plugin 开发。他有自己的 WSL 终端权限（能 `openclaw gateway reload`）。子枫是**中间人**，在两个 Claude 之间传话。
+
+### 17.2 协作硬纪律（v2.6.3 建立）
+
+子枫对龙虾的**汇报要求**：**只接受 PASS 或 FAIL，不接受过程播报**。
+
+**✅ PASS 格式（四段）**：
+1. request 原样 JSON
+2. response 原样 JSON
+3. 对应 SQL 查询结果
+4. 一句话结论
+
+**❌ FAIL 格式**：
+- 失败日志原样
+- 卡点定位（哪个 hook / 哪个事件 / 哪段 SQL）
+- 结论：**切方案 / 回滚到 commit xxx**
+- 需要前端配合什么
+
+**不接受的汇报**：
+- "我正在做" / "没阻塞" / "马上就好"
+- "我改了代码，就差 reload"（reload 他自己做）
+- "下次给结果"
+
+### 17.3 reload 是他自己的职责
+
+龙虾改完 plugin 代码后必须自己 `openclaw gateway reload` 验证，不能拆给子枫做。
+
+历史上多次出现"他改完代码等 reload → 线上全挂"的假 PASS，前端要硬催他**在同一轮里跑完 reload + PASS**。
+
+### 17.4 admin 白名单新加 user_id
+
+子枫注册新管理员账户后：
+1. 登录，F12 跑 `DaoxuAuth.getCachedUser().userId` 拿 UUID
+2. 发给龙虾，让他加到 `pluginConfig.daoxu-auth.adminUserIds`
+3. 重启 gateway 生效
+4. 新 admin 下次登录后 `users.system_role = 'admin'`
+
+---
+
+## 十八、版本演进里程碑
+
+| 版本 | 时间 | 关键变化 |
+|------|------|---------|
+| v2.5.5 | 2026-04-19 | 账户系统首版上线，默认 real 模式 |
+| v2.5.6 | 2026-04-19 | 手机多浏览器 text-size-adjust 根源修复 |
+| v2.5.7 | 2026-04-19 | autoOpenAgentFromURL，握手 wsReady |
+| v2.5.8 | 2026-04-19 | admin/users.html mock UI 骨架 |
+| v2.5.9 | 2026-04-19 | admin 登录本地密码锁 PAT（PBKDF2+AES-GCM） |
+| v2.6.0 | 2026-04-19 | A2 路线前端接入 chat.flush |
+| v2.6.2 | 2026-04-19 | admin 切 LIVE 真数据 + [user_context] 剥离 |
+| v2.6.3 | 2026-04-19 | admin refreshMe + ADMIN_FALLBACK_IDS 兜底 |
+| v2.6.4 | 2026-04-19 | profile admin 入口 + 历史抽屉按 runId |
+| v2.6.5 | 2026-04-19 | 聊天 header 工具栏紧凑化 + 手机只显图标 |
+| v2.6.6 | 2026-04-19 | email / phone 字段全链路启用 |
+| v2.6.7 | 2026-04-19 | admin.users.list 切真分页 search/status/sortBy |
+| **v2.6.8** | **2026-04-19** | **历史抽屉升级为会话列表（sessions.list）** |
+
+---
+
+## 十九、给下一个接手 Claude 的话
+
+**不要**：
+- 重新发明 HANDOFF.md 之类的交班文档（Claude Code 自动压缩上下文，冗余）
+- 改 `users.role` 字段（那是职业，admin 权限在 `users.system_role`）
+- 在 profile 保存时写 `role: 'admin'`（会被误当职业字段覆盖，但 backend 拆分后应该不再出事）
+- 在 `chat_messages` 存带 `[user_context]` 的内容（前端剥离了，后端不该看到）
+- 重启 gateway 不走 `bash ~/start-daoxu.sh`
+
+**要**：
+- 任何推线上前走 CLAUDE.md 里的沙盒工作流
+- 给龙虾传话时要求四段 PASS/FAIL 硬格式
+- 新账户的 userId 记在一个地方（配置 + 用户备忘录），防止忘密码丢失身份
+- 前端 adapter 层（`js/auth.js` 的 Mock/Real）保持兼容，新 RPC 先 Mock 再 Real
 
 **版本号**：每次实质更新版本号 +0.1，标在文件顶部。
