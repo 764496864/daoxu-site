@@ -160,21 +160,46 @@ header{position:sticky;top:0;z-index:10;background:rgba(7,7,10,.96);backdrop-fil
 <!-- ═══ 登录 ═══ -->
 <div class="login-wrap" id="loginView">
   <div class="login-card">
-    <div class="login-lb">ADMIN LOGIN · 登录</div>
-    <h1>用 GitHub 令牌登录</h1>
-    <p class="tagline">道序后台用 GitHub 仓库直接存内容。你需要一个 fine-grained Personal Access Token（PAT），只给本仓库的 contents 读写权限。</p>
+    <div class="login-lb" id="loginLb">ADMIN LOGIN · 登录</div>
+    <h1 id="loginTitle">用 GitHub 令牌登录</h1>
+    <p class="tagline" id="loginTagline">道序后台用 GitHub 仓库直接存内容。你需要一个 fine-grained Personal Access Token（PAT），只给本仓库的 contents 读写权限。</p>
 
-    <div class="format-help">
+    <!-- 首次模式：教学 -->
+    <div class="format-help" id="patHelp">
       <strong>第一次使用？三步拿到 PAT：</strong><br>
       1. 打开 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">GitHub PAT 设置</a><br>
       2. <strong>Repository access</strong> 选 <code>764496864/daoxu-site</code>，<strong>Permissions → Repository → Contents</strong> 设为 <code>Read and write</code><br>
       3. 生成后的 token 粘贴到下面（<code>github_pat_...</code> 开头）
     </div>
 
-    <div class="field">
-      <label for="patInput">Personal Access Token</label>
-      <input type="password" id="patInput" placeholder="github_pat_..." autocomplete="off">
-      <div class="hint">存储在你浏览器本地（localStorage），只有你自己能用。不会上传到任何地方。</div>
+    <!-- PAT 模式字段 -->
+    <div id="patFields">
+      <div class="field">
+        <label for="patInput">Personal Access Token</label>
+        <input type="password" id="patInput" placeholder="github_pat_..." autocomplete="off">
+        <div class="hint">输一次就好，下面可以设置本地密码，以后只输密码就能进。</div>
+      </div>
+
+      <div class="field" style="padding:14px 16px;background:rgba(196,162,101,.03);border-left:2px solid rgba(196,162,101,.25);margin-bottom:16px">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:0">
+          <input type="checkbox" id="wantLock" style="width:auto;margin:0" onchange="toggleLockFields()">
+          <span style="color:var(--tx2);font-size:12px;letter-spacing:1px">用本地密码锁住这个令牌（下次只输密码）</span>
+        </label>
+        <div id="lockFields" style="display:none;margin-top:14px">
+          <div class="field"><label>设置本地密码（6 位以上）</label><input type="password" id="newPwdInput" placeholder="你自己记得住的密码" autocomplete="new-password"></div>
+          <div class="field" style="margin-bottom:0"><label>再输一次确认</label><input type="password" id="confirmPwdInput" placeholder="重复一次" autocomplete="new-password"></div>
+          <div class="hint" style="margin-top:10px">密码不会上传到任何地方。PAT 用 AES-GCM + PBKDF2(150k) 加密存本地。忘密码可重置，重新输 PAT。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 密码模式字段（有加密 PAT 时显示）-->
+    <div id="passwordFields" style="display:none">
+      <div class="field">
+        <label for="pwdInput">本地密码</label>
+        <input type="password" id="pwdInput" placeholder="你设的密码" autocomplete="current-password">
+        <div class="hint">忘了？<a href="javascript:void(0)" onclick="resetAuth()" style="color:var(--err);border-bottom:1px solid rgba(212,135,110,.3)">重置本地数据</a>（会清掉加密令牌，下次需要重新输 PAT）</div>
+      </div>
     </div>
 
     <button class="btn-primary" id="loginBtn" onclick="login()">进 入 后 台</button>
@@ -220,7 +245,42 @@ header{position:sticky;top:0;z-index:10;background:rgba(7,7,10,.96);backdrop-fil
 /* ─── 配置 ─── */
 const REPO = '764496864/daoxu-site';
 const BRANCH = 'main';
-const PAT_KEY = 'daoxu_admin_pat';
+const PAT_KEY = 'daoxu_admin_pat';           // 旧：明文（向后兼容）
+const ENC_KEY = 'daoxu_admin_pat_enc';       // 新：本地密码加密后的 PAT
+
+// 当前会话内存里的明文 PAT（密码模式下不存 localStorage，只存内存直到页面关闭）
+let _currentPat = null;
+
+/* ─── Web Crypto：PBKDF2 派生密钥 + AES-GCM 加密 PAT ─── */
+async function _deriveKey(password, salt){
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt, iterations:150000, hash:'SHA-256'},
+    baseKey,
+    {name:'AES-GCM', length:256},
+    false,
+    ['encrypt','decrypt']
+  );
+}
+async function encryptPat(pat, password){
+  const enc = new TextEncoder();
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await _deriveKey(password, salt);
+  const ctBuf = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, enc.encode(pat));
+  const _b = arr => btoa(String.fromCharCode.apply(null, Array.from(arr)));
+  return JSON.stringify({v:1, salt:_b(salt), iv:_b(iv), ct:_b(new Uint8Array(ctBuf))});
+}
+async function decryptPat(encStr, password){
+  const o = JSON.parse(encStr);
+  const _u = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+  const salt = _u(o.salt), iv = _u(o.iv), ct = _u(o.ct);
+  const key = await _deriveKey(password, salt);
+  const ptBuf = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ct);
+  return new TextDecoder().decode(ptBuf);
+}
+function hasEncryptedPat(){ return !!localStorage.getItem(ENC_KEY) }
 
 const FILES = [
   {path:'content/global.json',   label:'全局 · 品牌联系'},
@@ -301,7 +361,8 @@ const READONLY_KEYS = new Set(['id']);
 /* ─── 工具 ─── */
 const api = path => 'https://api.github.com/repos/' + REPO + path;
 const headers = () => ({
-  'Authorization': 'Bearer ' + localStorage.getItem(PAT_KEY),
+  // 优先用内存里的 PAT（密码模式解密出来的），fallback 到明文 localStorage（旧模式兼容）
+  'Authorization': 'Bearer ' + (_currentPat || localStorage.getItem(PAT_KEY) || ''),
   'Accept': 'application/vnd.github+json',
   'X-GitHub-Api-Version': '2022-11-28'
 });
@@ -347,33 +408,100 @@ function summarize(obj, idx){
 /* ─── 状态 ─── */
 let currentFile = null;   // { path, data, sha, config }
 
-/* ─── 登录 ─── */
+/* ─── 登录：两种模式（PAT / 本地密码）─── */
+function toggleLockFields(){
+  document.getElementById('lockFields').style.display = document.getElementById('wantLock').checked ? 'block' : 'none';
+}
+function resetAuth(){
+  if(!confirm('确定重置？加密的令牌会被清空，下次需要重新输入 PAT 并重新设置本地密码。')) return;
+  localStorage.removeItem(ENC_KEY);
+  localStorage.removeItem(PAT_KEY);
+  _currentPat = null;
+  location.reload();
+}
+
 async function login(){
-  const pat = document.getElementById('patInput').value.trim();
   const msg = document.getElementById('loginMsg');
   const btn = document.getElementById('loginBtn');
-  if(!pat.startsWith('github_pat_') && !pat.startsWith('ghp_')){
-    showMsg(msg, 'err', '令牌格式不对。应该是 <code>github_pat_...</code> 或 <code>ghp_...</code> 开头。');
+  btn.disabled = true;
+
+  // ─── 分支 A：密码模式（已有加密 PAT）───
+  if(hasEncryptedPat()){
+    const pwd = document.getElementById('pwdInput').value;
+    if(!pwd || pwd.length < 6){
+      showMsg(msg, 'err', '密码至少 6 位');
+      btn.disabled = false; return;
+    }
+    btn.textContent = '解 锁 中…';
+    let pat;
+    try{
+      pat = await decryptPat(localStorage.getItem(ENC_KEY), pwd);
+    }catch(e){
+      showMsg(msg, 'err', '密码错误。<br><small style="opacity:.7">如果你确定密码对，可能是本地加密数据损坏，可点"重置本地数据"。</small>');
+      btn.disabled = false; btn.textContent = '进 入 后 台'; return;
+    }
+    btn.textContent = '验 证 令 牌…';
+    _currentPat = pat;
+    try{
+      const r = await fetch(api(''), { headers: headers() });
+      if(!r.ok){ const err = await r.json().catch(()=>({})); throw new Error(err.message || ('HTTP ' + r.status)); }
+      const repoInfo = await r.json();
+      showMsg(msg, 'ok', '解锁成功，已连接 <strong>' + repoInfo.full_name + '</strong>');
+      setTimeout(enterEditor, 500);
+    }catch(e){
+      _currentPat = null;
+      showMsg(msg, 'err', 'GitHub 令牌已失效：' + e.message + '<br><small style="opacity:.7">需要重新拿 PAT，点"重置本地数据"。</small>');
+      btn.disabled = false; btn.textContent = '进 入 后 台';
+    }
     return;
   }
-  btn.disabled = true; btn.textContent = '验 证 中…';
-  localStorage.setItem(PAT_KEY, pat);
-  try {
+
+  // ─── 分支 B：PAT 模式（首次 / 没设密码）───
+  const pat = document.getElementById('patInput').value.trim();
+  if(!pat.startsWith('github_pat_') && !pat.startsWith('ghp_')){
+    showMsg(msg, 'err', '令牌格式不对。应该是 <code>github_pat_...</code> 或 <code>ghp_...</code> 开头。');
+    btn.disabled = false; return;
+  }
+  const wantLock = document.getElementById('wantLock').checked;
+  let newPwd = '', confirmPwd = '';
+  if(wantLock){
+    newPwd = document.getElementById('newPwdInput').value;
+    confirmPwd = document.getElementById('confirmPwdInput').value;
+    if(newPwd.length < 6){ showMsg(msg, 'err', '本地密码至少 6 位'); btn.disabled = false; return; }
+    if(newPwd !== confirmPwd){ showMsg(msg, 'err', '两次密码不一致'); btn.disabled = false; return; }
+  }
+  btn.textContent = '验 证 中…';
+  _currentPat = pat;
+  try{
     const r = await fetch(api(''), { headers: headers() });
     if(!r.ok){ const err = await r.json().catch(()=>({})); throw new Error(err.message || ('HTTP ' + r.status)); }
     const repoInfo = await r.json();
-    showMsg(msg, 'ok', '验证通过。已连接仓库 <strong>' + repoInfo.full_name + '</strong>');
+
+    if(wantLock){
+      // 加密保存 + 清旧明文
+      btn.textContent = '加 锁 中…';
+      const enc = await encryptPat(pat, newPwd);
+      localStorage.setItem(ENC_KEY, enc);
+      localStorage.removeItem(PAT_KEY);
+      showMsg(msg, 'ok', '验证通过，已用本地密码加锁。下次只输密码就能进。');
+    } else {
+      // 保持旧行为：明文存 localStorage
+      localStorage.setItem(PAT_KEY, pat);
+      showMsg(msg, 'ok', '验证通过。已连接 <strong>' + repoInfo.full_name + '</strong>');
+    }
     setTimeout(enterEditor, 600);
-  } catch(e){
-    localStorage.removeItem(PAT_KEY);
+  }catch(e){
+    _currentPat = null;
     showMsg(msg, 'err', '验证失败：' + e.message + '<br><small style="opacity:.7">检查：① 令牌格式 ② 令牌权限（contents: read & write）③ 网络 / Clash 设置</small>');
     btn.disabled = false; btn.textContent = '进 入 后 台';
   }
 }
 
 function logout(){
-  if(!confirm('确定退出？本地令牌会被清除。')) return;
+  if(!confirm('确定退出？本地令牌/加密数据会被清除。')) return;
   localStorage.removeItem(PAT_KEY);
+  localStorage.removeItem(ENC_KEY);
+  _currentPat = null;
   location.reload();
 }
 
@@ -677,22 +805,48 @@ async function save(){
 }
 
 /* ─── 启动 ─── */
+// 三种状态：
+// ① 有加密 PAT（ENC_KEY）→ 密码模式，等用户输密码解锁
+// ② 有明文 PAT（PAT_KEY）→ 旧行为：自动验证，成功就进；失败提示重新输
+// ③ 都没有 → PAT 模式，首次输入
 (function init(){
+  const patFields = document.getElementById('patFields');
+  const pwdFields = document.getElementById('passwordFields');
+  const patHelp = document.getElementById('patHelp');
+  const title = document.getElementById('loginTitle');
+  const tagline = document.getElementById('loginTagline');
+
+  if(hasEncryptedPat()){
+    // 状态 ①：密码解锁模式
+    patFields.style.display = 'none';
+    patHelp.style.display = 'none';
+    pwdFields.style.display = 'block';
+    title.textContent = '输入本地密码';
+    tagline.textContent = '令牌已加锁。输入你设的本地密码解锁 GitHub 令牌进入后台。';
+    setTimeout(function(){ document.getElementById('pwdInput').focus() }, 100);
+    return;
+  }
+
   const pat = localStorage.getItem(PAT_KEY);
   if(pat){
+    // 状态 ②：旧明文 PAT，尝试自动验证
+    _currentPat = pat;
     document.getElementById('patInput').value = pat;
     document.getElementById('loginBtn').textContent = '验 证 中…';
     document.getElementById('loginBtn').disabled = true;
     fetch(api(''), { headers: headers() }).then(r => {
       if(r.ok) enterEditor();
       else {
+        _currentPat = null;
         document.getElementById('loginBtn').disabled = false;
         document.getElementById('loginBtn').textContent = '进 入 后 台';
-        showMsg(document.getElementById('loginMsg'), 'info', '上次保存的令牌已失效，请重新输入。');
+        showMsg(document.getElementById('loginMsg'), 'info', '上次保存的令牌已失效，请重新输入。<br><small style="opacity:.7">小提示：这次可以勾选"用本地密码锁住"，以后只需要记住密码。</small>');
         localStorage.removeItem(PAT_KEY);
       }
     });
+    return;
   }
+  // 状态 ③：PAT 模式（默认），什么都不用做，HTML 默认就是这个状态
 })();
 </script>
 
