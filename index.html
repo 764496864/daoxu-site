@@ -421,8 +421,18 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .chat-panel.expanded #chatInput{padding:16px 24px}
 .chat-panel.expanded #chatInput textarea{height:44px;font-size:14px}
 .chat-panel.expanded .msg-bubble{font-size:14.5px;padding:12px 16px;max-width:560px}
-.chat-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.03);background:var(--bg)}
-.chat-header h4{font-family:var(--sf);font-size:14px;color:var(--gd);letter-spacing:4px;font-weight:400}
+.chat-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.03);background:var(--bg);gap:12px}
+.chat-header h4{font-family:var(--sf);font-size:14px;color:var(--gd);letter-spacing:4px;font-weight:400;flex-shrink:0}
+/* 右侧工具栏：新对话 / 历史 / 分隔线 / 放大 / 关闭 聚成一组 */
+.chat-toolbar{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.ct-btn{cursor:pointer;color:var(--gd);opacity:.6;font-size:10px;letter-spacing:3px;padding:5px 10px;transition:all .3s;border:1px solid rgba(196,162,101,.15);border-radius:2px;font-family:var(--sf);align-items:center;gap:6px}
+.ct-btn:hover{opacity:1;border-color:rgba(196,162,101,.4);background:rgba(196,162,101,.04)}
+.ct-btn svg{flex-shrink:0}
+.ct-btn.show{display:inline-flex}
+.ct-divider{width:1px;height:16px;background:rgba(196,162,101,.15);margin:0 2px;display:inline-block}
+.ct-sys{cursor:pointer;color:var(--tx4);font-size:12px;padding:6px;transition:color .3s;line-height:1;border:1px solid rgba(255,255,255,.08);border-radius:4px;display:flex;align-items:center;justify-content:center;width:28px;height:28px}
+.ct-sys:hover{color:var(--tx)}
+.chat-close.ct-sys{font-size:14px;border:none;width:auto;height:auto;padding:4px 8px}
 .chat-close{cursor:pointer;color:var(--tx4);font-size:18px;padding:4px 8px;transition:color .3s}
 .chat-close:hover{color:var(--tx)}
 .chat-body{height:calc(100% - 52px);display:flex;align-items:center;justify-content:center;text-align:center;padding:32px;background:var(--bg)}
@@ -502,6 +512,12 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 #agentList::-webkit-scrollbar-thumb{background:rgba(196,162,101,.15);border-radius:2px}
 @media(max-width:480px){
   .chat-panel{background:var(--bg);bottom:0;right:0;width:100%;height:85vh;max-width:100%;border-radius:12px 12px 0 0}
+  /* 手机端聊天 header 工具栏：只显示图标，隐藏文字（避免挤） */
+  .chat-header{padding:14px 14px}
+  .chat-header h4{font-size:13px;letter-spacing:3px}
+  .ct-btn{padding:5px 7px;gap:0}
+  .ct-btn .ct-label{display:none}
+  .chat-toolbar{gap:6px}
   .chat-fab{bottom:20px;right:68px}
   #mp{bottom:20px !important;right:16px !important}
 }
@@ -841,8 +857,20 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 </div>
 <div class="chat-panel" id="chatPanel">
   <div class="chat-header">
-    <h4>明 一</h4><span id="chatNewBtn" onclick="newConversation()" style="cursor:pointer;color:var(--gd);opacity:.55;font-size:10px;letter-spacing:3px;padding:5px 12px;margin-left:12px;transition:all .3s;border:1px solid rgba(196,162,101,.15);border-radius:2px;font-family:var(--sf);display:none;align-items:center;gap:6px" title="开始新对话（清空当前窗口）"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><path d="M12 5v14M5 12h14"/></svg>新 对 话</span><span id="chatHistoryBtn" onclick="reloadChatHistory()" style="cursor:pointer;color:var(--gd);opacity:.55;font-size:10px;letter-spacing:3px;padding:5px 12px;margin-left:8px;transition:all .3s;border:1px solid rgba(196,162,101,.15);border-radius:2px;font-family:var(--sf);display:none;align-items:center;gap:6px" title="查看过往历史对话"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>历 史</span>
-    <div style="display:flex;align-items:center;gap:12px"><span class="chat-expand" onclick="toggleExpand()" style="cursor:pointer;color:var(--tx4);font-size:12px;padding:6px;transition:color .3s;line-height:1;border:1px solid rgba(255,255,255,.08);border-radius:4px;display:flex;align-items:center;justify-content:center;width:28px;height:28px" title="放大"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg></span><span class="chat-close" onclick="toggleChat()">✕</span></div>
+    <h4>明 一</h4>
+    <div class="chat-toolbar">
+      <span id="chatNewBtn" onclick="newConversation()" class="ct-btn" title="开始新对话（清空当前窗口）" style="display:none">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="ct-label">新 对 话</span>
+      </span>
+      <span id="chatHistoryBtn" onclick="reloadChatHistory()" class="ct-btn" title="查看过往历史对话" style="display:none">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span class="ct-label">历 史</span>
+      </span>
+      <span class="ct-divider" id="ctDivider" style="display:none"></span>
+      <span class="chat-expand ct-sys" onclick="toggleExpand()" title="放大"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg></span>
+      <span class="chat-close ct-sys" onclick="toggleChat()">✕</span>
+    </div>
   </div>
   <div class="chat-body">
     <div id="chatContent">
@@ -954,14 +982,19 @@ let chatOpen=false;
 function toggleChat(){
   chatOpen=!chatOpen;
   document.getElementById('chatPanel').classList.toggle('show',chatOpen);
-  // 登录用户打开聊天时显示"新对话 / 历史"两个按钮（登录才能跨设备同步）
+  // 登录用户打开聊天时显示"新对话 / 历史 / 分隔线"（未登录隐藏）
   if(chatOpen){
     var loggedIn = !!(window.DaoxuAuth && DaoxuAuth.isLoggedIn());
-    var newBtn = document.getElementById('chatNewBtn');
-    var historyBtn = document.getElementById('chatHistoryBtn');
-    if(newBtn) newBtn.style.display = loggedIn ? 'inline-flex' : 'none';
-    if(historyBtn) historyBtn.style.display = loggedIn ? 'inline-flex' : 'none';
+    _toggleToolbarBtns(loggedIn);
   }
+}
+function _toggleToolbarBtns(show){
+  var newBtn = document.getElementById('chatNewBtn');
+  var historyBtn = document.getElementById('chatHistoryBtn');
+  var divider = document.getElementById('ctDivider');
+  if(newBtn) newBtn.style.display = show ? 'inline-flex' : 'none';
+  if(historyBtn) historyBtn.style.display = show ? 'inline-flex' : 'none';
+  if(divider) divider.style.display = show ? 'inline-block' : 'none';
 }
 
 // 新对话：清空当前聊天区（保留欢迎语），下一条消息会生成新 runId
@@ -1019,12 +1052,8 @@ function selectAgent(agentId,agentName){
   var gBubble=document.createElement('div');gBubble.className='msg-bubble';gBubble.textContent=greeting;
   gRow.appendChild(gBubble);document.getElementById('chatMessages').appendChild(gRow);
 
-  // 登录用户进入聊天时显示"新对话 + 历史"两个按钮
-  var loggedIn2 = !!(window.DaoxuAuth && DaoxuAuth.isLoggedIn());
-  var newBtn = document.getElementById('chatNewBtn');
-  var historyBtn = document.getElementById('chatHistoryBtn');
-  if(newBtn) newBtn.style.display = loggedIn2 ? 'inline-flex' : 'none';
-  if(historyBtn) historyBtn.style.display = loggedIn2 ? 'inline-flex' : 'none';
+  // 登录用户进入聊天时显示"新对话 / 历史 / 分隔线"（未登录隐藏）
+  _toggleToolbarBtns(!!(window.DaoxuAuth && DaoxuAuth.isLoggedIn()));
 
   connectWS(agentId,vid);
 }
