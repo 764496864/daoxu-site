@@ -487,8 +487,9 @@ const AdminAPI = {
 };
 
 /* ─── 守卫：必须是 admin 才能进 ─── */
-// Mock 阶段：完全不强制登录，直接放行（方便本地预览 + 龙虾 RPC 未就绪时 UI 先看）
-// 真实阶段（USE_MOCK=false）：需登录 + role==='admin'
+// 兜底白名单（在龙虾后端 user.me 顶层 role 字段完全部署之前，用这里兜住）
+// 等龙虾 role 字段稳定后可以删；前端 user_id 公开不构成安全风险（鉴权在后端 admin.* RPC 内做）
+var ADMIN_FALLBACK_IDS = ['9af175c9-79ca-4d36-8b54-fcb2dcc15568']; // 子枫
 function checkAuth(){
   if(USE_MOCK){
     return true;
@@ -499,6 +500,7 @@ function checkAuth(){
   }
   var u = DaoxuAuth.getCachedUser();
   if(u && u.role === 'admin') return true;
+  if(u && ADMIN_FALLBACK_IDS.indexOf(u.userId) >= 0) return true;  // 兜底白名单
   showGuard('权限不足', '当前账户不是管理员。如需访问，请联系子枫把你的 user_id 加入 adminUserIds 白名单。');
   return false;
 }
@@ -793,10 +795,14 @@ function toast(text, type){
 
 /* ─── 启动 ─── */
 var initRetry = 0;
-(function init(){
+async function init(){
   // 等 DaoxuAuth 加载好（最多 1 秒；超时 + mock 模式也直接放行）
   if(!window.DaoxuAuth && initRetry < 20){
     initRetry++; setTimeout(init, 50); return;
+  }
+  // Real 模式：强制拉一次 me，用最新 role 刷新 cached user（防 localStorage 陈旧数据）
+  if(!USE_MOCK && window.DaoxuAuth && DaoxuAuth.isLoggedIn()){
+    try{ await DaoxuAuth.refreshMe(); }catch(e){ console.warn('[admin] refreshMe failed:', e) }
   }
   if(!checkAuth()) return;
   var u = (window.DaoxuAuth && DaoxuAuth.getCachedUser()) || null;
@@ -805,7 +811,8 @@ var initRetry = 0;
     : '<span style="color:var(--tx5)">(MOCK 预览)</span>';
   document.getElementById('mainView').style.display = 'block';
   refreshList();
-})();
+}
+init();
 
 // Esc 关闭抽屉 / 模态
 document.addEventListener('keydown', function(e){
