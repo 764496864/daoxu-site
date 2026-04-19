@@ -454,7 +454,9 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .auth-prompt-mask{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;animation:authFadeIn .5s var(--e2) forwards}
 .auth-prompt-mask.show{display:flex}
 @keyframes authFadeIn{from{opacity:0}to{opacity:1}}
-.auth-prompt-card{max-width:440px;width:100%;background:var(--bg);border:1px solid rgba(196,162,101,.22);padding:48px 40px 36px;position:relative;text-align:center;box-shadow:0 40px 120px rgba(0,0,0,.8);animation:authCardIn .6s var(--e2) forwards}
+.auth-prompt-card{max-width:440px;width:100%;background:var(--bg);border:1px solid rgba(196,162,101,.22);padding:48px 40px 40px;position:relative;text-align:center;box-shadow:0 40px 120px rgba(0,0,0,.8);animation:authCardIn .6s var(--e2) forwards}
+.auth-prompt-close{position:absolute;top:14px;right:18px;font-size:18px;color:var(--tx4);cursor:pointer;padding:6px 10px;transition:all .3s;line-height:1;border-radius:4px;z-index:2}
+.auth-prompt-close:hover{color:var(--tx);background:rgba(255,255,255,.04)}
 .auth-prompt-card::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--gd),transparent);opacity:.6}
 @keyframes authCardIn{from{transform:translateY(20px) scale(.96);opacity:0}to{transform:none;opacity:1}}
 .auth-prompt-lb{font-family:var(--sf);font-size:10px;letter-spacing:5px;color:var(--tx5);margin-bottom:20px}
@@ -922,6 +924,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 <!-- 首次访问登录/注册引导弹窗（未登录用户首次打开显示，关闭后本次 session 不再弹） -->
 <div class="auth-prompt-mask" id="authPromptMask" style="display:none">
   <div class="auth-prompt-card">
+    <span class="auth-prompt-close" onclick="dismissAuthPrompt()" title="关闭">✕</span>
     <div class="auth-prompt-lb">WELCOME · 欢 迎</div>
     <h2>让 明 一 记 住 你</h2>
     <p>登录后解锁 ——<br>跨设备永久记忆 · 14 个智能体 · 每日世界观察 · 个性化档案</p>
@@ -931,7 +934,6 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
     <div class="auth-prompt-hint">
       还没有账号？<a href="/register.html" class="auth-prompt-register">立 即 注 册 ›</a>
     </div>
-    <div class="auth-prompt-dismiss" onclick="dismissAuthPrompt()">先 随 便 看 看 ›</div>
   </div>
 </div>
 
@@ -1029,12 +1031,15 @@ function toggleChat(){
   }
 }
 function _toggleToolbarBtns(show){
+  // v2.7.0：按钮常驻显示（登录/未登录都能用）
+  //  - 未登录：新对话清本地屏；历史读 localStorage buffer
+  //  - 登录：新对话清屏；历史走 sessions.list 云端
   var newBtn = document.getElementById('chatNewBtn');
   var historyBtn = document.getElementById('chatHistoryBtn');
   var divider = document.getElementById('ctDivider');
-  if(newBtn) newBtn.style.display = show ? 'inline-flex' : 'none';
-  if(historyBtn) historyBtn.style.display = show ? 'inline-flex' : 'none';
-  if(divider) divider.style.display = show ? 'inline-block' : 'none';
+  if(newBtn) newBtn.style.display = 'inline-flex';
+  if(historyBtn) historyBtn.style.display = 'inline-flex';
+  if(divider) divider.style.display = 'inline-block';
 }
 
 // 新对话：清空当前聊天区（保留欢迎语），下一条消息会生成新 runId
@@ -1098,16 +1103,50 @@ function selectAgent(agentId,agentName){
   connectWS(agentId,vid);
 }
 
-// v2.6.8：历史按钮拉"会话列表"（一个 agent 一条，点进去看那个 agent 的完整对话）
-// 后端走 daoxu.chat.sessions.list，按 sessionKey GROUP BY，返回每个 agent 的消息数+最后时间+首条 snippet
+// 从 localStorage buffer 聚合成"会话列表"结构（未登录用）
+function getLocalBufferSessions(){
+  try{
+    var arr = JSON.parse(localStorage.getItem('daoxu_local_chat_buffer') || '[]');
+    var map = {};
+    arr.forEach(function(batch){
+      var key = batch.sessionKey; if(!key) return;
+      if(!map[key]){
+        map[key] = {
+          sessionKey: key,
+          agentId: (batch.messages && batch.messages[0] && batch.messages[0].agentId) || 'main',
+          messageCount: 0,
+          lastMessageAt: batch.lastSessionAt || '',
+          firstMessageSnippet: ''
+        };
+      }
+      map[key].messageCount += (batch.messages || []).length;
+      if(batch.lastSessionAt && batch.lastSessionAt > map[key].lastMessageAt) map[key].lastMessageAt = batch.lastSessionAt;
+      if(!map[key].firstMessageSnippet){
+        var firstUser = (batch.messages || []).find(function(m){ return m.role === 'user' });
+        if(firstUser) map[key].firstMessageSnippet = (firstUser.content || '').slice(0, 60);
+      }
+    });
+    return Object.keys(map).map(function(k){ return map[k] }).sort(function(a,b){ return a.lastMessageAt < b.lastMessageAt ? 1 : -1 });
+  }catch(e){ return [] }
+}
+
+// v2.7.0：历史按钮 — 登录走云端 sessions.list；未登录读本地 buffer（一登录自动 sync 云端）
 async function reloadChatHistory(){
-  if(!window.DaoxuAuth || !DaoxuAuth.isLoggedIn()){
-    showHistoryDrawer();
-    document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-empty">登录后才能查看跨设备历史对话</div>';
-    return;
-  }
   showHistoryDrawer();
   document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-loading">加 载 中…</div>';
+
+  // ─ 未登录：读 localStorage buffer 展示本地缓存的对话（登录后这些会被同步云端）─
+  if(!window.DaoxuAuth || !DaoxuAuth.isLoggedIn()){
+    var localSessions = getLocalBufferSessions();
+    if(!localSessions.length){
+      document.getElementById('historyDrawerBody').innerHTML = '<div class="history-drawer-empty">还没有历史对话<br><span style="font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:2">跟智能体聊几句后会出现在这里<br>登录后自动同步到云端，换设备也能看</span></div>';
+      return;
+    }
+    renderSessionsDrawer(localSessions);
+    return;
+  }
+
+  // ─ 登录：云端 sessions.list ─
   try{
     var r = await DaoxuAuth.getChatSessionsList({ offset: 0, limit: 50 });
     if(!r.ok){
@@ -1173,11 +1212,9 @@ function fmtHistoryTime(iso){
 async function loadSessionHistory(sessionKey, agentId){
   if(!sessionKey){ closeHistoryDrawer(); return }
   closeHistoryDrawer();
-  // 如果当前 agent 跟目标不同，切换 agent（selectAgent 会重建 WS，不自动拉 history）
   if(agentId && agentId !== currentAgent && typeof selectAgent === 'function'){
     selectAgent(agentId, getAgentDisplayName(agentId));
   }
-  // 给一点时间让 selectAgent 构建好 DOM；如果没换 agent 就立即执行
   setTimeout(async function(){
     var box = document.getElementById('chatMessages');
     if(box){
@@ -1187,10 +1224,42 @@ async function loadSessionHistory(sessionKey, agentId){
     top.className = 'history-divider';
     top.textContent = '— 这是过往对话 —';
     if(box) box.appendChild(top);
+
+    // v2.7.0：未登录从 localStorage buffer 拿；登录从云端 history_v2 拿
+    var msgs = [];
+    if(!window.DaoxuAuth || !DaoxuAuth.isLoggedIn()){
+      try{
+        var arr = JSON.parse(localStorage.getItem('daoxu_local_chat_buffer') || '[]');
+        arr.forEach(function(batch){
+          if(batch.sessionKey === sessionKey && Array.isArray(batch.messages)){
+            msgs = msgs.concat(batch.messages);
+          }
+        });
+        msgs.sort(function(a,b){ return (a.createdAt < b.createdAt ? -1 : 1) });
+        var lastDayL = '';
+        msgs.forEach(function(m){
+          var text = stripUserContext(typeof m.content === 'string' ? m.content : '');
+          if(!text || text.charAt(0)==='{') return;
+          var day = formatHistoryDay(m.createdAt);
+          if(day && day !== lastDayL){ var dl=document.createElement('div');dl.className='history-date';dl.textContent=day;if(box) box.appendChild(dl);lastDayL=day }
+          var row=document.createElement('div');row.className='msg-row history '+(m.role==='user'?'user':'bot');
+          var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=mdToHtml(text);
+          row.appendChild(bubble);if(box) box.appendChild(row);
+        });
+        var botL = document.createElement('div');botL.className='history-divider';
+        botL.textContent='· 本 对 话 已 结 束 · 登录后自动同步云端 ·';
+        if(box) box.appendChild(botL);
+        if(box) box.scrollTop = box.scrollHeight;
+      }catch(e){ console.warn('[loadSession local]', e) }
+      currentRun = null;
+      return;
+    }
+
+    // 登录：拉云端
     try{
       var r = await DaoxuAuth.getChatHistoryV2({ sessionKey: sessionKey, offset: 0, limit: 200 });
       if(!r.ok || !r.data || !r.data.messages){ return }
-      var msgs = r.data.messages.slice().sort(function(a,b){ return (a.createdAt < b.createdAt ? -1 : 1) });
+      msgs = r.data.messages.slice().sort(function(a,b){ return (a.createdAt < b.createdAt ? -1 : 1) });
       var lastDay = '';
       msgs.forEach(function(m){
         var text = stripUserContext(typeof m.content === 'string' ? m.content : '');
