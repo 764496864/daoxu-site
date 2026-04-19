@@ -386,20 +386,28 @@ const AdminAPI = {
       });
       return { ok:true, data:{ total: all.length, items: rows } };
     }
-    // Real：调龙虾 admin.users.list（不传筛选参数，后端暂不支持；前端本地 filter+sort，用户量小时足够）
-    var r = await DaoxuAuth.adminUsersList({});
-    if(!r.ok) return r;
-    var raw = (r.data && r.data.users) || [];
-    var q = ((params && params.search) || '').toLowerCase();
+    // Real：把 search/status/sortBy/offset/limit 都传给后端（龙虾 ② PASS 后支持）
+    // 前端本地 filter+sort 作为兜底（后端 status/sortBy 实际是否生效还不完全确定）
+    var search = (params && params.search) || '';
     var status = (params && params.status) || 'all';
     var sortBy = (params && params.sortBy) || 'lastLoginAt';
+    var offset = (params && params.offset) || 0;
+    var limit = (params && params.limit) || 100;
+    var r = await DaoxuAuth.adminUsersList({search:search, status:status, sortBy:sortBy, offset:offset, limit:limit});
+    if(!r.ok) return r;
+    var raw = (r.data && r.data.users) || [];
+    var q = search.toLowerCase();
     var rows = raw.map(normalizeUser).filter(function(u){
-      if(q && u.username.toLowerCase().indexOf(q)<0 && (u.nickname||'').toLowerCase().indexOf(q)<0) return false;
+      // 后端已经按 search 过滤过了，这里兜底（若后端没 match email/phone）
+      if(q && u.username.toLowerCase().indexOf(q)<0 && (u.nickname||'').toLowerCase().indexOf(q)<0
+          && (u.email||'').toLowerCase().indexOf(q)<0 && (u.phone||'').indexOf(q)<0) return false;
+      // status 过滤兜底（龙虾 SQL 里暂没 WHERE disabled/deleted）
       if(status==='active' && (u.disabled || u.deletedAt)) return false;
       if(status==='disabled' && !u.disabled) return false;
       if(status==='deleted' && !u.deletedAt) return false;
       return true;
     });
+    // sortBy 兜底（龙虾目前 SQL 固定 ORDER BY created_at DESC）
     rows.sort(function(a,b){
       var av = sortBy==='tokensTotal' ? a.stats.tokensTotal :
                sortBy==='conversationsTotal' ? a.stats.conversationsTotal :
@@ -409,7 +417,7 @@ const AdminAPI = {
                b[sortBy];
       return (bv>av?1:bv<av?-1:0);
     });
-    return { ok:true, data:{ total: raw.length, items: rows } };
+    return { ok:true, data:{ total: (r.data.total != null ? r.data.total : rows.length), items: rows, hasMore: !!r.data.hasMore } };
   },
   async get(userId){
     if(USE_MOCK){
