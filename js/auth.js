@@ -463,6 +463,8 @@ var Real = {
     if(fp.occupation !== undefined) out.role = fp.occupation;
     if(fp.detail !== undefined) out.bio = fp.detail;
     if(fp.preferences !== undefined) out.preferences = fp.preferences;
+    if(fp.email !== undefined) out.email = fp.email;
+    if(fp.phone !== undefined) out.phone = fp.phone;
     return out;
   },
   _fromBackendUser(bu, fallbackMems){
@@ -472,16 +474,23 @@ var Real = {
     var u = bu || {};
     var bp = u.profile || {};
     var mems = u.globalMemories || fallbackMems || [];
+    // email/phone 后端可能放在顶层 u.email/u.phone 或 profile.email/profile.phone，两种都兼容
+    var email = u.email || bp.email || '';
+    var phone = u.phone || bp.phone || '';
     return {
       userId: u.userId,
       username: u.username,
       role: u.role || 'user',         // 系统权限
       disabled: !!u.disabled,
+      email: email,
+      phone: phone,
       profile: {
         nickname: u.nickname || '',
         occupation: bp.role || '',     // 职业/职位（前端用 occupation 命名，后端用 profile.role）
         detail: bp.bio || '',
         preferences: bp.preferences || '',
+        email: email,                  // 放 profile 里一份方便 form 统一 bind
+        phone: phone,
         globalMemories: mems
       },
       globalMemories: mems
@@ -822,6 +831,8 @@ var Auth = {
       username: data.username,
       role: data.role || 'user',       // 系统权限，admin/users.html 判断用
       disabled: !!data.disabled,
+      email: data.email || (data.profile && data.profile.email) || '',
+      phone: data.phone || (data.profile && data.profile.phone) || '',
       profile: data.profile || {},
       globalMemories: (data.profile && data.profile.globalMemories) || []
     };

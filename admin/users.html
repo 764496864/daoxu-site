@@ -345,6 +345,8 @@ function normalizeUser(u){
     createdAt: u.createdAt,
     updatedAt: u.updatedAt || u.createdAt,
     lastLoginAt: u.lastLoginAt || null,
+    email: u.email || (u.profile && u.profile.email) || '',
+    phone: u.phone || (u.profile && u.profile.phone) || '',
     profile: {                        // profile.role 是职业/职位，跟系统权限分开
       role: (u.profile && u.profile.role) || '',
       bio: (u.profile && u.profile.bio) || '',
@@ -434,12 +436,12 @@ const AdminAPI = {
       arr[i] = u; mockSave(arr);
       return {ok:true, data:{user:u}};
     }
-    // Real：前端 changes → 后端 patch（memories → globalMemories，其他保持）
+    // Real：前端 changes → 后端 patch（memories → globalMemories，email/phone 塞 profile 层，其他保持）
     var patch = {};
     ['username','nickname','disabled'].forEach(function(k){ if(k in changes) patch[k]=changes[k] });
     if(changes.profile){
       patch.profile = {};
-      ['role','bio','preferences'].forEach(function(k){ if(k in changes.profile) patch.profile[k]=changes.profile[k] });
+      ['role','bio','preferences','email','phone'].forEach(function(k){ if(k in changes.profile) patch.profile[k]=changes.profile[k] });
     }
     if('memories' in changes) patch.globalMemories = changes.memories.slice();
     var r = await DaoxuAuth.adminUserUpdate(userId, patch);
@@ -618,10 +620,10 @@ function renderDrawer(u){
     '</div>'+
     '<div class="mem-add"><input id="memNew" placeholder="添加一条记忆…" maxlength="300"><button onclick="addMem()">+ 新 增</button></div>'+
     '</div>';
-  // 未开放字段（等龙虾加 users.email / users.phone 列 + user.update 支持）
+  // 联系方式（龙虾已打通 email/phone 字段）
   html += '<div class="d-group"><h3>Contact · 联系方式</h3>'+
-    '<div class="d-field"><label>手机号 <span style="color:var(--tx5);font-size:8px;margin-left:6px">后端开发中</span></label><input type="tel" disabled placeholder="龙虾本周开通"></div>'+
-    '<div class="d-field"><label>邮箱 <span style="color:var(--tx5);font-size:8px;margin-left:6px">后端开发中</span></label><input type="email" disabled placeholder="龙虾本周开通"></div>'+
+    '<div class="d-field"><label>手机号</label><input type="tel" id="f-phone" value="'+escHtml(u.phone||'')+'" placeholder="如 13800138000" maxlength="20" oninput="markDirty()"></div>'+
+    '<div class="d-field"><label>邮箱</label><input type="email" id="f-email" value="'+escHtml(u.email||'')+'" placeholder="如 you@domain.com" maxlength="120" oninput="markDirty()"></div>'+
     '</div>';
   // 账户状态
   html += '<div class="d-group"><h3>Status · 状态</h3>'+
@@ -676,14 +678,21 @@ async function saveUser(){
   var bio = document.getElementById('f-bio').value.trim();
   var prefs = document.getElementById('f-preferences').value.trim();
   var disabled = document.getElementById('f-disabled').value === 'true';
+  var phoneEl = document.getElementById('f-phone');
+  var emailEl = document.getElementById('f-email');
+  var phone = phoneEl ? phoneEl.value.trim() : '';
+  var email = emailEl ? emailEl.value.trim() : '';
   // 从 UI 同步 memories 输入（inline 编辑的情况）
   var memInputs = document.querySelectorAll('#memList .mi-text');
   var mems = Array.prototype.map.call(memInputs, function(i){ return i.value.trim() }).filter(Boolean);
   // 验证
   if(!/^[\p{L}\p{N}_\-.]{4,20}$/u.test(username)){ toast('用户名 4-20 字符','err'); return }
+  if(phone && !/^[\d+\-\s()]{5,20}$/.test(phone)){ toast('手机号格式不对','err'); return }
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ toast('邮箱格式不对','err'); return }
   var changes = {
     username:username, nickname:nickname, disabled:disabled,
-    profile:{role:roleTxt, bio:bio, preferences:prefs},
+    profile:{role:roleTxt, bio:bio, preferences:prefs, email:email, phone:phone},
+    email:email, phone:phone,
     memories: mems
   };
   var saveBtn = document.getElementById('saveBtn');

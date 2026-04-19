@@ -265,14 +265,14 @@ footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1
 
     <div class="row2">
       <div class="field">
-        <label>手机号 <span class="ver-chip">后端开发中</span></label>
-        <div class="hint">绑定后可用于找回密码 / 重要通知（龙虾本周开通）</div>
-        <input type="tel" id="f-phone" disabled placeholder="即将开通">
+        <label>手机号</label>
+        <div class="hint">可用于找回密码 / 接收重要通知（目前不强制验证，可随时修改）</div>
+        <input type="tel" id="f-phone" placeholder="如 13800138000" maxlength="20">
       </div>
       <div class="field">
-        <label>邮箱 <span class="ver-chip">后端开发中</span></label>
-        <div class="hint">绑定后可接收重要通知（龙虾本周开通）</div>
-        <input type="email" id="f-email" disabled placeholder="即将开通">
+        <label>邮箱</label>
+        <div class="hint">可接收重要通知（目前不强制验证，可随时修改）</div>
+        <input type="email" id="f-email" placeholder="如 you@domain.com" maxlength="120">
       </div>
     </div>
   </div>
@@ -390,6 +390,8 @@ function fillForm(data){
   document.getElementById('f-occupation').value = p.occupation || '';
   document.getElementById('f-detail').value = p.detail || '';
   document.getElementById('f-preferences').value = p.preferences || '';
+  document.getElementById('f-phone').value = data.phone || p.phone || '';
+  document.getElementById('f-email').value = data.email || p.email || '';
   var mems = (p.globalMemories || data.globalMemories || []);
   document.getElementById('f-memories').value = mems.join('\n');
 
@@ -502,11 +504,27 @@ async function saveAll(){
     }
   }
 
+  var phone = document.getElementById('f-phone').value.trim();
+  var email = document.getElementById('f-email').value.trim();
+  // 基础校验：允许空，填了就得像那么回事
+  if(phone && !/^[\d+\-\s()]{5,20}$/.test(phone)){
+    btn.disabled = false; btn.textContent = '保 存 全 部';
+    showToast('手机号格式看起来不对', true);
+    return;
+  }
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    btn.disabled = false; btn.textContent = '保 存 全 部';
+    showToast('邮箱格式不对', true);
+    return;
+  }
+
   var profile = {
     nickname: document.getElementById('f-nickname').value.trim(),
     occupation: document.getElementById('f-occupation').value.trim(),
     detail: document.getElementById('f-detail').value.trim(),
     preferences: document.getElementById('f-preferences').value.trim(),
+    email: email,
+    phone: phone,
     globalMemories: memories
   };
 
