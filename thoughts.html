@@ -251,9 +251,15 @@ function toggleMenu(){
   document.querySelector('.nr').classList.toggle('open');
   document.querySelector('.overlay').classList.toggle('show');
 }
-document.querySelectorAll('.nr a').forEach(a => a.addEventListener('click', () => {
-  if(document.querySelector('.nr').classList.contains('open')) setTimeout(toggleMenu, 160);
-}));
+document.querySelectorAll('.nr a').forEach(function(a){a.addEventListener('click',function(e){
+  if(window.innerWidth>768)return;
+  var h=this.getAttribute('href');
+  if(!h)return;
+  if(h.charAt(0)==='#'||h.indexOf('/#')===0){setTimeout(toggleMenu,160);return}
+  e.preventDefault();
+  toggleMenu();
+  setTimeout(function(){location.href=h},80);
+})});
 
 // ─── Markdown 渲染（和首页 fmtContent 一致，带 HTML 转义防 XSS）───
 function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}

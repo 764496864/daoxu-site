@@ -299,9 +299,15 @@ function toggleMenu(){
 function toggleFAQ(el){
   el.parentElement.classList.toggle('open');
 }
-document.querySelectorAll('.nr a').forEach(a => a.addEventListener('click', () => {
-  if(document.querySelector('.nr').classList.contains('open')) setTimeout(toggleMenu, 160);
-}));
+document.querySelectorAll('.nr a').forEach(function(a){a.addEventListener('click',function(e){
+  if(window.innerWidth>768)return;
+  var h=this.getAttribute('href');
+  if(!h)return;
+  if(h.charAt(0)==='#'||h.indexOf('/#')===0){setTimeout(toggleMenu,160);return}
+  e.preventDefault();
+  toggleMenu();
+  setTimeout(function(){location.href=h},80);
+})});
 
 // ─── Markdown → HTML 渲染器（全站通用）───
 // 支持：**bold** | *italic* | `code` | [text](url) | \n 换行
