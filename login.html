@@ -59,6 +59,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .mode-banner{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:rgba(196,162,101,.1);border:1px solid rgba(196,162,101,.25);color:var(--gd);font-size:10px;letter-spacing:3px;padding:6px 16px;z-index:50;backdrop-filter:blur(10px);opacity:0;transition:opacity .5s}
 .mode-banner.show{opacity:1}
 
+.page-close{position:fixed;top:86px;right:28px;width:40px;height:40px;border:1px solid rgba(255,255,255,.08);background:rgba(7,7,10,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--tx3);cursor:pointer;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .4s;text-decoration:none;z-index:200;font-family:var(--ss)}
+.page-close:hover{color:var(--gd);border-color:rgba(196,162,101,.35);background:rgba(7,7,10,.95)}
 footer{padding:32px 64px;text-align:center;border-top:1px solid rgba(255,255,255,.03);background:var(--bg)}
 footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1.9}
 
@@ -69,6 +71,7 @@ footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1
   .nr a{font-size:13px;letter-spacing:4px;color:var(--tx2)}
   .nr a:hover,.nr a.active{color:var(--gd)}
   .ham{display:flex !important}
+  .page-close{top:72px;right:16px;width:36px;height:36px;font-size:20px}
   .auth-shell{padding:96px 16px 40px}
   .auth-card{padding:40px 26px}
   .auth-card h1{font-size:22px;letter-spacing:5px}
@@ -84,6 +87,7 @@ footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1
     <span class="nb">道 序 科 技</span>
   </a>
   <div class="nr">
+    <a href="/">首页</a>
     <a href="/about.html">关于</a>
     <a href="/services.html">服务</a>
     <a href="/agents.html">智能体</a>
@@ -95,6 +99,8 @@ footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 <div class="overlay" onclick="toggleMenu()"></div>
+
+<a href="/" class="page-close" aria-label="回主页" title="回主页">×</a>
 
 <div class="mode-banner" id="modeBanner">BETA · 体验预览</div>
 

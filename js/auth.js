@@ -10,6 +10,22 @@
 (function(global){
 'use strict';
 
+// v2.5.5 迁移：龙虾 daoxu-auth plugin 24/7 已上线，Real 成为默认
+// 如果之前在 Mock 模式下存过数据，清掉（因为那些账户不在真后端）
+(function migrateToReal(){
+  try{
+    if(localStorage.getItem('daoxu_auth_migrated_v255') !== '1'){
+      ['daoxu_mock_users','daoxu_mock_sessions','daoxu_session_token','daoxu_current_user'].forEach(function(k){
+        localStorage.removeItem(k);
+      });
+      if(localStorage.getItem('daoxu_auth_mode') === 'mock'){
+        localStorage.removeItem('daoxu_auth_mode');
+      }
+      localStorage.setItem('daoxu_auth_migrated_v255','1');
+    }
+  }catch(e){}
+})();
+
 var BACKEND_MODE = (function(){
   try{
     var qs = new URLSearchParams(location.search).get('authMode');
@@ -19,7 +35,7 @@ var BACKEND_MODE = (function(){
     var saved = localStorage.getItem('daoxu_auth_mode');
     if(saved === 'real' || saved === 'mock') return saved;
   }catch(e){}
-  return 'mock'; // 默认走 mock，等龙虾后端好了改成 real
+  return 'real'; // v2.5.5 起默认 real，龙虾 plugin 已 24/7 在线
 })();
 
 // 账户 RPC 独立 WS 连接（跟 index.html 聊天 WS 隔离，避免互相干扰）
