@@ -90,6 +90,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 .ver-chip{display:inline-block;font-size:9px;letter-spacing:3px;padding:3px 9px;border:1px solid rgba(196,162,101,.25);color:var(--gd);margin-left:8px;opacity:.8;vertical-align:middle;background:rgba(196,162,101,.05)}
 
+/* ─── 钱包 / 卡密兑换 ─── */
+.wallet-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+.wallet-cell{background:rgba(196,162,101,.04);border:1px solid rgba(196,162,101,.12);padding:22px 20px;text-align:left;position:relative;min-height:106px}
+.wallet-cell::before{content:'';position:absolute;top:0;left:18%;right:18%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.22),transparent)}
+.wallet-cell .wl-label{font-size:10px;color:var(--tx4);letter-spacing:3px;margin-bottom:12px}
+.wallet-cell .wl-value{display:flex;align-items:baseline;gap:2px;color:var(--gd)}
+.wallet-cell .wl-cny{font-family:var(--sf);font-size:15px;opacity:.7;font-weight:400}
+.wallet-cell .wl-num{font-family:var(--sf);font-size:30px;font-weight:700;letter-spacing:1px;line-height:1.1}
+.wallet-cell .wl-hint{font-size:10px;color:var(--tx5);letter-spacing:1px;margin-top:10px}
+.wallet-cell.loading .wl-num{color:var(--tx4)}
+
+.redeem-row{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+.redeem-row input{flex:1;min-width:200px;background:rgba(196,162,101,.03);border:1px solid rgba(196,162,101,.12);color:var(--tx);font-family:var(--ss);font-size:14px;padding:13px 16px;letter-spacing:1px;font-weight:300;outline:none;transition:border-color .6s,background .6s;border-radius:0;text-transform:uppercase}
+.redeem-row input:focus{border-color:rgba(196,162,101,.4);background:rgba(196,162,101,.05)}
+.redeem-row input::placeholder{color:var(--tx5);font-weight:300;text-transform:none;letter-spacing:.5px}
+.redeem-btn{flex:0 0 auto;padding:13px 30px;margin:0}
+.redeem-tip{font-size:11px;letter-spacing:1.5px;line-height:1.8;margin-top:14px;min-height:16px;color:var(--gd);opacity:0;transition:opacity .5s}
+.redeem-tip.show{opacity:1}
+.redeem-tip.err{color:#c98686}
+
 .toast{position:fixed;top:90px;left:50%;transform:translateX(-50%);background:rgba(7,7,10,.95);border:1px solid rgba(196,162,101,.3);color:var(--gd);padding:12px 28px;font-size:12px;letter-spacing:3px;z-index:9999;opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;backdrop-filter:blur(20px)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(8px)}
 .toast.err{border-color:rgba(180,80,80,.4);color:#c98686}
@@ -139,6 +159,9 @@ footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1
   .account-strip .right button{padding:7px 12px}
   .row2{grid-template-columns:1fr}
   .stats-grid{grid-template-columns:1fr}
+  .wallet-grid{grid-template-columns:1fr}
+  .redeem-row input{min-width:0}
+  .redeem-btn{width:100%}
   .welcome-modal{padding:32px 22px 24px}
   .welcome-modal h2{font-size:18px;letter-spacing:3px}
   footer{padding:24px 16px}
@@ -317,6 +340,30 @@ footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1
     <span class="saved-tip" id="savedTip">✓ 已云端同步</span>
   </div>
 
+  <!-- ─── 我的余额 / 卡密兑换 ─── -->
+  <div class="card" style="margin-top:32px">
+    <span class="card-tag">WALLET · 我 的 余 额</span>
+
+    <div class="wallet-grid">
+      <div class="wallet-cell" id="wallet-digital_human">
+        <div class="wl-label">数 字 人 余 额</div>
+        <div class="wl-value"><span class="wl-cny">¥</span><span class="wl-num" id="bal-digital_human">—</span></div>
+        <div class="wl-hint">数字人卡密充值的余额</div>
+      </div>
+      <div class="wallet-cell" id="wallet-strategist">
+        <div class="wl-label">参 谋 余 额</div>
+        <div class="wl-value"><span class="wl-cny">¥</span><span class="wl-num" id="bal-strategist">—</span></div>
+        <div class="wl-hint">参谋 / 军师卡密充值的余额</div>
+      </div>
+    </div>
+
+    <div class="redeem-row">
+      <input type="text" id="redeemCode" maxlength="64" placeholder="输入卡密，如 DAOXU-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+      <button class="btn redeem-btn" id="redeemBtn" onclick="doRedeem()">兑 换</button>
+    </div>
+    <div class="redeem-tip" id="redeemTip"></div>
+  </div>
+
   <!-- ─── 基础看板 ─── -->
   <div class="card" style="margin-top:32px">
     <span class="card-tag">STATS · 基 础 看 板</span>
@@ -439,6 +486,8 @@ async function loadInitial(){
     maybeShowWelcome();
     // 基础看板数据（异步，不阻塞主流程）
     loadStats();
+    // 我的余额（异步，不阻塞主流程）
+    loadWallet();
   }else if(r.error && (r.error.code === 'TOKEN_EXPIRED' || r.error.code === 'UNAUTHORIZED')){
     location.replace('/login.html?next=/profile.html');
   }else{
@@ -481,6 +530,103 @@ async function reloadFromServer(){
   if(r.ok){ fillForm(r.data); showToast('已从云端拉取最新') }
   else showToast('刷新失败', true);
 }
+
+// ─── 钱包 / 卡密 ───
+var PRODUCT_LABELS = { digital_human:'数字人', strategist:'参谋' };
+
+function fmtCny(cents){
+  // 分 → 元，保留两位（整数则不显示小数尾巴）
+  var yuan = (Number(cents) || 0) / 100;
+  return (yuan % 1 === 0) ? String(yuan) : yuan.toFixed(2);
+}
+
+function renderBalances(balances){
+  // balances: [{product, balanceCents, frozenCents}]
+  var map = {};
+  (balances || []).forEach(function(b){ map[b.product] = b; });
+  ['digital_human','strategist'].forEach(function(prod){
+    var el = document.getElementById('bal-' + prod);
+    var cell = document.getElementById('wallet-' + prod);
+    if(!el) return;
+    var b = map[prod];
+    el.textContent = fmtCny(b ? b.balanceCents : 0);
+    if(cell) cell.classList.remove('loading');
+  });
+}
+
+async function loadWallet(){
+  // Mock 模式：余额无意义，占位即可
+  if(DaoxuAuth.mode === 'mock'){
+    renderBalances([
+      { product:'digital_human', balanceCents:0 },
+      { product:'strategist', balanceCents:0 }
+    ]);
+    return;
+  }
+  ['digital_human','strategist'].forEach(function(prod){
+    var cell = document.getElementById('wallet-' + prod);
+    if(cell) cell.classList.add('loading');
+  });
+  var r = await DaoxuAuth.getWalletBalances();
+  if(r.ok){
+    renderBalances(r.data.balances);
+  }else if(r.error && (r.error.code === 'TOKEN_EXPIRED' || r.error.code === 'UNAUTHORIZED')){
+    location.replace('/login.html?next=/profile.html');
+  }else{
+    // 静默失败（余额不是关键路径）——保持占位 —
+    renderBalances([]);
+  }
+}
+
+var REDEEM_ERR = {
+  CODE_NOT_FOUND: '卡密不存在，检查一下有没有输错',
+  CODE_USED: '这张卡密已经被使用过了',
+  CODE_VOID: '这张卡密已作废',
+  CODE_EXPIRED: '这张卡密已过期',
+  CODE_NO_VALUE: '该卡密无可充值面额',
+  INVALID_REQUEST: '请输入卡密',
+  UNAUTHORIZED: '登录已失效，请重新登录',
+  TOKEN_EXPIRED: '登录已失效，请重新登录',
+  NETWORK_ERROR: '网络异常，请稍后再试'
+};
+
+function showRedeemTip(msg, isErr){
+  var t = document.getElementById('redeemTip');
+  t.textContent = msg;
+  t.className = 'redeem-tip show' + (isErr ? ' err' : '');
+}
+
+async function doRedeem(){
+  var input = document.getElementById('redeemCode');
+  var btn = document.getElementById('redeemBtn');
+  var code = (input.value || '').trim();
+  if(!code){ showRedeemTip('请输入卡密', true); return; }
+
+  btn.disabled = true; btn.textContent = '兑 换 中 ...';
+  var r = await DaoxuAuth.redeemCode(code);
+  btn.disabled = false; btn.textContent = '兑 换';
+
+  if(r.ok){
+    var label = PRODUCT_LABELS[r.data.product] || r.data.product;
+    showRedeemTip('✓ 已充入「' + label + '」¥' + fmtCny(r.data.addedCents) + ' · 当前余额 ¥' + fmtCny(r.data.balanceCents));
+    input.value = '';
+    showToast('兑换成功 · ' + label + ' +¥' + fmtCny(r.data.addedCents));
+    // 刷新余额（直接用返回的新余额更新对应产品，再后台拉一次全量）
+    var el = document.getElementById('bal-' + r.data.product);
+    if(el) el.textContent = fmtCny(r.data.balanceCents);
+    loadWallet();
+  }else if(r.error && (r.error.code === 'TOKEN_EXPIRED' || r.error.code === 'UNAUTHORIZED')){
+    location.replace('/login.html?next=/profile.html');
+  }else{
+    var code2 = r.error && r.error.code;
+    showRedeemTip(REDEEM_ERR[code2] || (r.error && r.error.message) || '兑换失败', true);
+  }
+}
+
+// 回车即兑换
+document.getElementById('redeemCode').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ e.preventDefault(); doRedeem(); }
+});
 
 async function saveAll(){
   var btn = document.getElementById('saveBtn');
