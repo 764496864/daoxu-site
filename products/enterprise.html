@@ -73,6 +73,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .nr a:hover,.nr a.active{color:var(--gd)}
 .nr .np{display:inline-flex;align-items:center;gap:7px;letter-spacing:3px;font-size:10px;padding:7px 18px;border:1px solid rgba(196,162,101,.3);color:var(--gd);transition:all .6s}
 .nr .np:hover{background:var(--gd);color:var(--bg)}
+.nr .np.guest{color:var(--tx4)}
+.nr .nc-chat{background:var(--gd);color:var(--bg)!important;padding:8px 18px;border-radius:3px;letter-spacing:3px;font-size:10px;transition:all .5s var(--e2)}
+.nr .nc-chat:hover{box-shadow:0 0 18px rgba(196,162,101,.45);letter-spacing:4px}
 .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
 .ham span{width:22px;height:1px;background:var(--gd);transition:all .3s}
 .overlay{position:fixed;inset:0;background:rgba(7,7,10,.7);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:998}
@@ -124,9 +127,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 信任 grid */
 .trust{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
-.trust .ti{border:1px solid rgba(196,162,101,.1);padding:26px 24px;border-radius:3px}
+.trust .ti{border:1px solid rgba(196,162,101,.1);padding:26px 24px;border-radius:3px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.trust .ti:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .trust .ti h4{font-family:var(--sf);font-size:15px;color:var(--gd);letter-spacing:1px;font-weight:600;margin-bottom:10px}
-.trust .ti p{font-size:13px;color:var(--tx3);line-height:1.9;font-weight:300}
+.trust .ti p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
 
 /* 交付 table */
 .dtable{width:100%;border-collapse:collapse;margin-top:32px}
@@ -141,8 +145,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 价格 cards */
 .pcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:34px}
-.pcard{border:1px solid rgba(196,162,101,.12);padding:30px 28px;border-radius:3px;position:relative;transition:border-color .6s}
-.pcard:hover{border-color:rgba(196,162,101,.3)}
+.pcard{border:1px solid rgba(196,162,101,.12);padding:30px 28px;border-radius:3px;position:relative;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.pcard:hover{border-color:rgba(196,162,101,.3);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .pcard.feat{border-color:rgba(196,162,101,.3);background:linear-gradient(135deg,rgba(196,162,101,.04),transparent 70%)}
 .pcard .pc-tier{font-family:var(--sf);font-size:18px;color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:6px}
 .pcard .pc-for{font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:1.7;margin-bottom:16px;min-height:34px}
@@ -151,9 +155,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 案例 */
 .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
-.ccard{border:1px solid rgba(196,162,101,.1);padding:26px 22px;border-radius:3px}
+.ccard{border:1px solid rgba(196,162,101,.1);padding:26px 22px;border-radius:3px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.ccard:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .ccard h4{font-family:var(--sf);font-size:15px;color:var(--tx);letter-spacing:1px;font-weight:600;margin-bottom:10px}
-.ccard p{font-size:13px;color:var(--tx3);line-height:1.9;font-weight:300}
+.ccard p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
 
 /* boundary */
 .boundary{max-width:680px;margin:32px auto 0;border-left:2px solid rgba(196,162,101,.2);padding:8px 0 8px 24px}
@@ -163,7 +168,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .sub-cta{max-width:700px;margin:48px auto 90px;padding:60px 40px;text-align:center;background:var(--bg);border:1px solid rgba(196,162,101,.1);position:relative}
 .sub-cta::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.4),transparent)}
 .sub-cta h2{font-family:var(--sf);font-size:clamp(19px,2.4vw,24px);color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:18px;line-height:1.7}
-.sub-cta p{font-size:14px;color:var(--tx3);letter-spacing:1.5px;line-height:2.2;margin-bottom:30px}
+.sub-cta p{font-size:14px;color:var(--tx2);letter-spacing:1.5px;line-height:2.2;margin-bottom:30px}
 
 /* footer */
 footer{padding:48px 32px;text-align:center;border-top:1px solid rgba(255,255,255,.03)}
@@ -198,15 +203,15 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr"><a href="/">首页</a><a href="/products.html" class="active">产品</a><a href="/systems.html">系统</a><a href="/cases.html">案例</a><a href="/about.html">关于</a><a href="/agents.html">智能体</a><a href="/thoughts.html">明一日报</a><a href="/#cnt">联系</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">登 录</span></a></div>
+  <div class="nr"><a href="/">首页</a><a href="/products.html" class="active">产品与服务</a><a href="/about.html">关于道序</a><a href="/cases.html">案例</a><a href="/agents.html">AI 应用中心</a><a href="/thoughts.html">洞察</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">客 户 登 录</span></a><a href="/?agent=main" class="nc-chat">与 明 一 聊 聊</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
-<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||user.username;if(dot)dot.style.display=''}}catch(e){}})();</script>
+<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||'个人中心';if(dot)dot.style.display=''}}catch(e){}})();</script>
 <div class="overlay" onclick="toggleMenu()"></div>
 
 <!-- HERO -->
 <header class="phero">
-  <div class="crumb"><a href="/">首页</a> · <a href="/products.html">产品</a> · 政企 · 集团 · 平台方向</div>
+  <div class="crumb"><a href="/">首页</a> · <a href="/products.html">产品中心</a> · 政企 · 集团 · 平台方向</div>
   <span class="flag">PLATFORM · 政 企 · 行 业</span>
   <h1>政企 · 集团 · 平台方向</h1>
   <p class="moo">面向政企、集团、行业的<br>AI 应用开发与系统集成。</p>
@@ -308,16 +313,16 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
 <!-- 相关案例 -->
 <section class="psec wide">
   <span class="lb rv">CASES · 代 表 能 力 案 例</span>
-  <h2 class="rv d1">道序及联合技术体系具备的能力</h2>
+  <h2 class="rv d1">道序具备的能力</h2>
   <div class="cases rv d1">
-    <div class="ccard"><h4>政策解读平台<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">联合技术体系案例</span></h4><p>汇聚政策数据，提供智能检索、要点归纳和适用性辅助分析，后台持续更新。</p></div>
-    <div class="ccard"><h4>文旅智能客服<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">联合技术体系案例</span></h4><p>把公众号历史文章和服务信息转为知识库，提供游客问答与人工转接。</p></div>
-    <div class="ccard"><h4>铁路智能巡检<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">联合技术体系案例</span></h4><p>结合移动端、定位、图像识别与告警能力建设行业应用，巡检从「人防」走向「技防」。</p></div>
-    <div class="ccard"><h4>员工手册与 SOP 系统<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">联合技术体系案例</span></h4><p>将制度、SOP 和项目资料转为员工可问、可查的内部系统。</p></div>
-    <div class="ccard"><h4>项目资料管理智能体<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">联合技术体系案例</span></h4><p>对合同、照片、单据和扫描件进行识别、归档与查询。</p></div>
+    <div class="ccard"><h4>政策解读平台<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">道序落地案例</span></h4><p>汇聚政策数据，提供智能检索、要点归纳和适用性辅助分析，后台持续更新。</p></div>
+    <div class="ccard"><h4>文旅智能客服<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">道序落地案例</span></h4><p>把公众号历史文章和服务信息转为知识库，提供游客问答与人工转接。</p></div>
+    <div class="ccard"><h4>铁路智能巡检<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">道序落地案例</span></h4><p>结合移动端、定位、图像识别与告警能力建设行业应用，巡检从「人防」走向「技防」。</p></div>
+    <div class="ccard"><h4>员工手册与 SOP 系统<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">道序落地案例</span></h4><p>将制度、SOP 和项目资料转为员工可问、可查的内部系统。</p></div>
+    <div class="ccard"><h4>项目资料管理智能体<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">道序落地案例</span></h4><p>对合同、照片、单据和扫描件进行识别、归档与查询。</p></div>
     <div class="ccard"><h4>连锁门店 AI 店长中台<span style="display:block;font-size:10px;color:var(--gd);letter-spacing:2px;margin-top:4px;opacity:.7">合作生态案例</span></h4><p>AI 店长、AI 顾问与经营数据中台，把总部标准下沉到每家门店，数据自动生成分析报告。</p></div>
   </div>
-  <p class="lead rv d2" style="font-size:12.5px;color:var(--tx4);margin-top:24px">以上包含道序及联合技术体系的历史项目经验，具体客户名称、项目归属和数据以授权口径为准。案例为能力证明，不承诺同等结果，具体方案需基于诊断设计。</p>
+  <p class="lead rv d2" style="font-size:12.5px;color:var(--tx4);margin-top:24px">以上包含道序的历史项目经验，具体客户名称、项目归属和数据以授权口径为准。案例为能力证明，不承诺同等结果，具体方案需基于诊断设计。</p>
 </section>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
@@ -354,12 +359,13 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
 <footer>
   <div class="ft-links">
     <a href="/">首页</a>
-    <a href="/products.html">产品</a>
-    <a href="/systems.html">系统</a>
-    <a href="/cases.html">案例</a>
     <a href="/about.html">关于</a>
+    <a href="/products.html">产品中心</a>
+    <a href="/systems.html">系统登录</a>
+    <a href="/cases.html">案例</a>
     <a href="/agents.html">智能体</a>
-    <a href="/thoughts.html">明一日报</a>
+    <a href="/thoughts.html">日报</a>
+    <a href="/#cnt">联系</a>
     <a href="/faq.html">常见问题</a>
   </div>
   <div class="ft-meta">

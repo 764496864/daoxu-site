@@ -75,6 +75,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .nr a:hover,.nr a.active{color:var(--gd)}
 .nr .np{display:inline-flex;align-items:center;gap:7px;letter-spacing:3px;font-size:10px;padding:7px 18px;border:1px solid rgba(196,162,101,.3);color:var(--gd);transition:all .6s}
 .nr .np:hover{background:var(--gd);color:var(--bg)}
+.nr .np.guest{color:var(--tx4)}
+.nr .nc-chat{background:var(--gd);color:var(--bg)!important;padding:8px 18px;border-radius:3px;letter-spacing:3px;font-size:10px;transition:all .5s var(--e2)}
+.nr .nc-chat:hover{box-shadow:0 0 18px rgba(196,162,101,.45);letter-spacing:4px}
 .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
 .ham span{width:22px;height:1px;background:var(--gd);transition:all .3s}
 .overlay{position:fixed;inset:0;background:rgba(7,7,10,.7);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:998}
@@ -126,9 +129,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 信任 grid */
 .trust{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
-.trust .ti{border:1px solid rgba(196,162,101,.1);padding:26px 24px;border-radius:3px}
+.trust .ti{border:1px solid rgba(196,162,101,.1);padding:26px 24px;border-radius:3px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.trust .ti:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .trust .ti h4{font-family:var(--sf);font-size:15px;color:var(--gd);letter-spacing:1px;font-weight:600;margin-bottom:10px}
-.trust .ti p{font-size:13px;color:var(--tx3);line-height:1.9;font-weight:300}
+.trust .ti p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
 
 /* 交付 table */
 .dtable{width:100%;border-collapse:collapse;margin-top:32px}
@@ -143,8 +147,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 价格 cards */
 .pcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:34px}
-.pcard{border:1px solid rgba(196,162,101,.12);padding:30px 28px;border-radius:3px;position:relative;transition:border-color .6s}
-.pcard:hover{border-color:rgba(196,162,101,.3)}
+.pcard{border:1px solid rgba(196,162,101,.12);padding:30px 28px;border-radius:3px;position:relative;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.pcard:hover{border-color:rgba(196,162,101,.3);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .pcard.feat{border-color:rgba(196,162,101,.3);background:linear-gradient(135deg,rgba(196,162,101,.04),transparent 70%)}
 .pcard .pc-tier{font-family:var(--sf);font-size:18px;color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:6px}
 .pcard .pc-for{font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:1.7;margin-bottom:16px;min-height:34px}
@@ -153,9 +157,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 案例 */
 .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
-.ccard{border:1px solid rgba(196,162,101,.1);padding:26px 22px;border-radius:3px}
+.ccard{border:1px solid rgba(196,162,101,.1);padding:26px 22px;border-radius:3px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.ccard:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .ccard h4{font-family:var(--sf);font-size:15px;color:var(--tx);letter-spacing:1px;font-weight:600;margin-bottom:10px}
-.ccard p{font-size:13px;color:var(--tx3);line-height:1.9;font-weight:300}
+.ccard p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
+
+/* deliverable cards */
+.dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:32px}
+.dcard{border:1px solid rgba(196,162,101,.14);padding:24px 22px;border-radius:3px;position:relative;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.dcard:hover{border-color:rgba(196,162,101,.34);box-shadow:0 0 30px rgba(196,162,101,.07);transform:translateY(-2px)}
+.dcard .dno{font-family:var(--sf);font-size:12px;color:var(--gd);letter-spacing:2px;opacity:.7}
+.dcard h4{font-family:var(--sf);font-size:15.5px;color:var(--tx);letter-spacing:1px;font-weight:600;margin:6px 0 10px}
+.dcard p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
+
+/* 客户得到 outcome row */
+.outcome{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
+.oc{border:1px solid rgba(196,162,101,.12);padding:26px 22px;border-radius:3px;text-align:center;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.oc:hover{border-color:rgba(196,162,101,.3);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
+.oc .ocn{font-family:var(--sf);font-size:20px;color:var(--gd);font-weight:700;letter-spacing:1px;margin-bottom:10px}
+.oc p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
+
+/* 日常使用 flow row */
+.usage{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:32px;align-items:stretch}
+.ucol{border:1px solid rgba(196,162,101,.12);padding:24px 22px;border-radius:3px;margin:0 6px}
+.ucol .ulb{font-size:10px;color:var(--gd);letter-spacing:3px;display:block;margin-bottom:12px}
+.ucol p{font-size:13px;color:var(--tx2);line-height:1.95;font-weight:300}
+.ucol p+p{margin-top:8px}
 
 /* boundary */
 .boundary{max-width:680px;margin:32px auto 0;border-left:2px solid rgba(196,162,101,.2);padding:8px 0 8px 24px}
@@ -165,7 +192,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .sub-cta{max-width:700px;margin:48px auto 90px;padding:60px 40px;text-align:center;background:var(--bg);border:1px solid rgba(196,162,101,.1);position:relative}
 .sub-cta::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.4),transparent)}
 .sub-cta h2{font-family:var(--sf);font-size:clamp(19px,2.4vw,24px);color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:18px;line-height:1.7}
-.sub-cta p{font-size:14px;color:var(--tx3);letter-spacing:1.5px;line-height:2.2;margin-bottom:30px}
+.sub-cta p{font-size:14px;color:var(--tx2);letter-spacing:1.5px;line-height:2.2;margin-bottom:30px}
 
 /* footer */
 footer{padding:48px 32px;text-align:center;border-top:1px solid rgba(255,255,255,.03)}
@@ -184,9 +211,13 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
   .ham{display:flex !important}
   .phero{padding:120px 20px 32px}
   .psec{padding:40px 20px}
-  .trust{grid-template-columns:1fr}
-  .pcards{grid-template-columns:1fr}
-  .cases{grid-template-columns:1fr}
+  .trust{grid-template-columns:1fr !important}
+  .pcards{grid-template-columns:1fr !important}
+  .cases{grid-template-columns:1fr !important}
+  .dgrid{grid-template-columns:1fr}
+  .outcome{grid-template-columns:1fr}
+  .usage{grid-template-columns:1fr}
+  .ucol{margin:0 0 12px}
   .dtable td:first-child{width:40%}
 }
 @media(max-width:480px){.phero{padding:108px 16px 28px}.psec{padding:32px 16px}.flow .fstep{font-size:12px;padding:8px 12px}}
@@ -200,198 +231,161 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr"><a href="/">首页</a><a href="/products.html" class="active">产品</a><a href="/systems.html">系统</a><a href="/cases.html">案例</a><a href="/about.html">关于</a><a href="/agents.html">智能体</a><a href="/thoughts.html">明一日报</a><a href="/#cnt">联系</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">登 录</span></a></div>
+  <div class="nr"><a href="/">首页</a><a href="/products.html" class="active">产品与服务</a><a href="/about.html">关于道序</a><a href="/cases.html">案例</a><a href="/agents.html">AI 应用中心</a><a href="/thoughts.html">洞察</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">客 户 登 录</span></a><a href="/?agent=main" class="nc-chat">与 明 一 聊 聊</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
-<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||user.username;if(dot)dot.style.display=''}}catch(e){}})();</script>
+<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||'个人中心';if(dot)dot.style.display=''}}catch(e){}})();</script>
 <div class="overlay" onclick="toggleMenu()"></div>
 
-<!-- HERO -->
+<!-- ① 第一屏 · 一句话结果 -->
 <header class="phero">
-  <div class="crumb"><a href="/">首页</a> · <a href="/products.html">产品</a> · 销售教练智能体</div>
+  <div class="crumb"><a href="/">首页</a> · <a href="/products.html">产品中心</a> · 销售教练智能体</div>
   <span class="flag">SALES COACH · 销 售 教 练</span>
   <h1>道序｜销售教练智能体</h1>
   <p class="moo">让成交有方法，<br>让新人少走弯路。</p>
-  <p class="price-line">标准价格 9,800 · 接口与私有化等如有需要另行评估</p>
+  <p class="lead rv" style="margin-top:30px">把企业产品、销售流程、销冠经验与真实客户对话，做成销售随时<strong>可问、可练、可复盘</strong>的 AI 教练——让每一次对话，都成为下一次成交可以使用的经验。</p>
+  <p class="price-line">标准价格 9,800</p>
   <div class="acts">
-    <a class="btn bo" href="/?agent=main">和明一聊聊</a>
-    <a class="btn bg" href="#price">看交付与价格</a>
+    <a class="btn bo" href="/?agent=main">让明一判断是否适合我</a>
+    <a class="btn bg" href="#cta">预约人工沟通</a>
   </div>
 </header>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 这是什么 -->
+<!-- ② 你是否遇到这些问题 -->
 <section class="psec">
-  <span class="lb rv">WHAT IT IS · 这 是 什 么</span>
-  <h2 class="rv d1">把每一次真实对话，变成下一次成交可以使用的经验</h2>
-  <p class="lead rv d1">销售每天都在产生有价值的数据——客户问了什么、为什么犹豫、哪一句话让客户继续沟通、哪个节点过早报价、哪种异议总处理不好。但这些聊天和录音通常用完就消失了。</p>
-  <p class="lead rv d2">销售教练智能体，把企业<strong>产品、销售流程、销冠经验和真实客户对话</strong>，做成销售随时<strong>可问、可练、可复盘</strong>的 AI 教练。</p>
-</section>
-
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-
-<!-- 四个关键使用时刻 -->
-<section class="psec">
-  <span class="lb rv">FOUR MOMENTS · 四 个 关 键 时 刻</span>
-  <h2 class="rv d1">从沟通前到团队训练，每个节点都有依据</h2>
-  <div class="pcards rv d1" style="grid-template-columns:repeat(2,1fr)">
-    <div class="pcard feat">
-      <div class="pc-tier">沟通前</div>
-      <div class="pc-for">帮销售做好准备</div>
-      <p style="font-size:12.5px;color:var(--tx3);line-height:1.9;font-weight:300;margin-top:6px">输入客户身份、行业、来源和历史沟通，辅助输出本次目标、最值得确认的问题、客户可能的顾虑、先讲价值还是先讲案例、方案与价格的顺序、需要避免的表达。</p>
-    </div>
-    <div class="pcard">
-      <div class="pc-tier">沟通中</div>
-      <div class="pc-for">面对异议不再只会背话术</div>
-      <p style="font-size:12.5px;color:var(--tx3);line-height:1.9;font-weight:300;margin-top:6px">当客户说"贵、考虑一下、没时间、对比一下"，给出异议背后的可能原因、建议追问、不同语气的回复参考、是否适合继续推进、下一步动作。</p>
-    </div>
-    <div class="pcard">
-      <div class="pc-tier">沟通后</div>
-      <div class="pc-for">复盘聊天和录音</div>
-      <p style="font-size:12.5px;color:var(--tx3);line-height:1.9;font-weight:300;margin-top:6px">把聊天记录或录音转写交给 AI，分析需求有没有问清、讲得太多还是问得太少、价值是否与客户问题相关、哪个节点失去信任、下一次应该怎么跟。</p>
-    </div>
-    <div class="pcard">
-      <div class="pc-tier">团队训练</div>
-      <div class="pc-for">让新人反复练</div>
-      <p style="font-size:12.5px;color:var(--tx3);line-height:1.9;font-weight:300;margin-top:6px">AI 模拟不同类型客户，销售进行角色演练，系统给出问题和改进建议，让销冠经验从一对一带教中释放出来。</p>
-    </div>
-  </div>
-</section>
-
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-
-<!-- 典型输出结构 -->
-<section class="psec">
-  <span class="lb rv">OUTPUT · 典 型 输 出 结 构</span>
-  <h2 class="rv d1">不只给一句漂亮话术，先解释为什么，再给下一步</h2>
-  <ol class="plist rv d1" style="counter-reset:step;list-style:none">
-    <li>客户当前状态</li>
-    <li>客户真实需求与未说出口的顾虑</li>
-    <li>本次沟通做对了什么</li>
-    <li>最影响成交的问题</li>
-    <li>建议下一句话怎么说</li>
-    <li>下一次跟进时间与目标</li>
-    <li>这次对话可以沉淀什么团队经验</li>
-  </ol>
-</section>
-
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-
-<!-- 标准交付 + 价格 -->
-<section class="psec" id="price">
-  <span class="lb rv">DELIVERY · 标 准 交 付</span>
-  <h2 class="rv d1">标准价格 9,800，交付九件事</h2>
-  <table class="dtable rv d1">
-    <tr><td>销售资料盘点</td><td>产品、价格、案例、客户、销售流程和现有话术</td></tr>
-    <tr><td>销售知识库</td><td>统一企业产品与销售口径</td></tr>
-    <tr><td>客户类型与阶段模型</td><td>识别不同客户和购买阶段</td></tr>
-    <tr><td>异议处理库</td><td>高频异议、追问逻辑与表达参考</td></tr>
-    <tr><td>销冠经验沉淀</td><td>把优秀销售方法转成可训练内容</td></tr>
-    <tr><td>销售教练智能体</td><td>分析、建议、训练与复盘入口</td></tr>
-    <tr><td>真实场景测试</td><td>使用客户聊天或录音进行验证</td></tr>
-    <tr><td>团队使用培训</td><td>让销售和管理者会用</td></tr>
-    <tr><td>首轮调优</td><td>根据真实使用修正输出</td></tr>
-  </table>
-  <p class="lead rv d2" style="font-size:13px;color:var(--tx4);margin-top:24px">第三方转写、接口、企业系统接入、私有化和长期运维如有需要，另行评估。多产品多团队知识库、CRM 接入、自动转写与批量复盘、管理看板、销冠思维克隆等升级项目按需求定制报价。</p>
-</section>
-
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-
-<!-- 适合谁 -->
-<section class="psec">
-  <span class="lb rv">FOR WHOM · 适 合 谁</span>
-  <h2 class="rv d1">有销售团队、靠对话成交的生意</h2>
-  <div class="chips rv d1">
-    <span>3 人以上销售团队</span><span>招商加盟 · 连锁</span><span>企业服务 · 咨询</span><span>教育培训</span><span>律师财税</span><span>高客单 · 长决策链</span>
-  </div>
-  <p class="lead rv d2">新人上手慢、销冠能力难复制、需要多次跟进、产品和价格复杂容易讲错、客户大量流失在"考虑一下、再看看、回去商量"——这类生意最受用。管理者每天要听录音、看聊天，却没时间逐个辅导，也由 AI 接住。</p>
-</section>
-
-<!-- 解决什么 -->
-<section class="psec">
-  <span class="lb rv">PROBLEM · 解 决 什 么</span>
-  <h2 class="rv d1">销售团队最浪费的资产，是每天发生的真实对话</h2>
+  <span class="lb rv">PAIN · 你 是 否 遇 到 这 些</span>
+  <h2 class="rv d1">每天都在发生的真实对话，用完就消失了</h2>
   <ul class="plist rv d1">
-    <li>客户为什么犹豫、哪一句让客户继续沟通，没人沉淀</li>
-    <li>哪个节点过早报价、哪种异议总处理不好，反复重演</li>
-    <li>销冠为什么能成交，隐性经验讲不清、传不下去</li>
-    <li>新人聊着聊着就没有下一步，跟进没节奏</li>
-    <li>产品价格复杂、口径不统一，销售容易讲错</li>
+    <li>客户为什么犹豫、哪一句话让客户继续聊下去，没人沉淀得下来。</li>
+    <li>哪个节点报价太早、哪种异议总处理不好，团队里反复重演。</li>
+    <li>销冠为什么能成交，那点隐性经验讲不清，也带不给新人。</li>
+    <li>新人聊着聊着就没有下一步，跟进没节奏，客户慢慢就凉了。</li>
+    <li>产品和价格复杂、口径不统一，不同人讲出来不一样，容易讲错。</li>
+    <li>客户大量流失在"考虑一下、再看看、回去商量"，没人知道为什么。</li>
   </ul>
 </section>
 
+<!-- ③ 这个产品是什么，也不是什么 -->
+<section class="psec">
+  <span class="lb rv">SCOPE · 是 什 么 · 不 是 什 么</span>
+  <h2 class="rv d1">它教销售更会判断，不替销售去成交</h2>
+  <div class="trust rv d1">
+    <div class="ti"><h4>它是</h4><p>一个吃透了你企业产品、销售流程、销冠经验与真实对话的 AI 教练，覆盖沟通前准备、沟通中异议、沟通后复盘与团队训练四个关键时刻。</p></div>
+    <div class="ti"><h4>它不是</h4><p>不是自动成交机器人，不是保证业绩的工具，不是让销售机械背标准话术，不是替代真实客户关系，也不是监控惩罚员工的单一评分器。</p></div>
+  </div>
+  <p class="lead rv d2">它不止做一次演示就走，而是交付一套<strong>可使用、可验收、可维护</strong>的销售教练系统——让销冠经验从一对一带教中释放出来，沉淀成团队都能调用的能力。</p>
+</section>
+
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 三类角色怎么用 -->
-<section class="psec wide">
-  <span class="lb rv">ROLES · 谁 怎 么 用</span>
-  <h2 class="rv d1">一线销售、销冠、管理者，各取所需</h2>
-  <div class="cases rv d1">
-    <div class="ccard"><h4>一线销售</h4><p>沟通前准备、异议处理建议、跟进文案、自我复盘、模拟训练。</p></div>
-    <div class="ccard"><h4>销冠</h4><p>把隐性经验讲清楚、审核补充话术、提供优秀案例、参与模型校准，从重复带教中释放时间。</p></div>
-    <div class="ccard"><h4>销售管理者</h4><p>统一产品口径、快速查看复盘摘要、识别团队共性问题、建设训练题库、把优秀经验持续沉淀。</p></div>
+<!-- ④ 客户最终得到什么 -->
+<section class="psec">
+  <span class="lb rv">OUTCOME · 你 最 终 得 到 什 么</span>
+  <h2 class="rv d1">先讲你能感知到的成果，再讲它怎么做到</h2>
+  <div class="outcome rv d1">
+    <div class="oc"><div class="ocn">新人上手更快</div><p>沟通前有准备、异议有参考、跟进有节奏，不再全靠一句句试错和销冠手把手带。</p></div>
+    <div class="oc"><div class="ocn">销冠经验留得下</div><p>把"为什么他能成交"的隐性判断讲清楚、沉淀成训练内容，人走了经验不走。</p></div>
+    <div class="oc"><div class="ocn">口径统一、复盘有据</div><p>产品价格口径一致，管理者不必逐个听录音，也能看到团队共性问题与改进点。</p></div>
+  </div>
+  <p class="lead rv d2">这些成果，落在下面四个使用时刻和一整套交付物上——而不是一句漂亮话术。</p>
+</section>
+
+<!-- ⑤ 完整交付清单 -->
+<section class="psec">
+  <span class="lb rv">DELIVERABLES · 完 整 交 付 清 单</span>
+  <h2 class="rv d1">标准价格 9,800，七项交付物逐项可见</h2>
+  <div class="dgrid rv d1">
+    <div class="dcard"><span class="dno">01</span><h4>产品知识库</h4><p>盘点产品、价格、案例与客户，统一企业产品与销售口径，让不同人讲出来一致、不讲错。</p></div>
+    <div class="dcard"><span class="dno">02</span><h4>销售流程</h4><p>梳理从触达到成交的关键节点与现有话术，让每一步沟通都有可依据的流程。</p></div>
+    <div class="dcard"><span class="dno">03</span><h4>客户类型模型</h4><p>识别不同客户类型与购买阶段，让销售知道这个客户处在哪一步、该用什么策略。</p></div>
+    <div class="dcard"><span class="dno">04</span><h4>异议处理库</h4><p>高频异议、背后原因、追问逻辑与不同语气的表达参考，面对"贵、考虑一下"不再只会背话术。</p></div>
+    <div class="dcard"><span class="dno">05</span><h4>跟进策略与复盘模板</h4><p>跟进时间与目标的节奏建议，以及统一的对话复盘模板，让每次沟通都能转成下一次的经验。</p></div>
+    <div class="dcard"><span class="dno">06</span><h4>销售教练智能体</h4><p>分析、建议、训练与复盘的统一入口，沉淀销冠经验，可模拟不同客户陪销售反复练。</p></div>
+    <div class="dcard"><span class="dno">07</span><h4>团队培训与首轮调优</h4><p>真实场景测试，教销售与管理者会用，并根据真实使用修正输出。</p></div>
   </div>
 </section>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 验收标准 -->
+<!-- ⑥ 日常如何使用 -->
+<section class="psec wide">
+  <span class="lb rv">IN USE · 日 常 如 何 使 用</span>
+  <h2 class="rv d1">你输入什么 → AI 输出什么 → 团队怎么调用</h2>
+  <div class="usage rv d1">
+    <div class="ucol"><span class="ulb">你输入</span><p><strong style="color:var(--tx);font-weight:400">沟通前</strong>：客户身份、行业、来源与历史沟通。</p><p><strong style="color:var(--tx);font-weight:400">沟通后</strong>：一段聊天记录或录音转写。</p></div>
+    <div class="ucol"><span class="ulb">AI 输出</span><p>本次目标、最该确认的问题、客户可能的顾虑、表达顺序与要避免的话；复盘则给出客户状态、真实需求、做对了什么、最影响成交的问题与下一句怎么说。</p></div>
+    <div class="ucol"><span class="ulb">团队调用</span><p>一线销售日常自查与跟进，销冠审核补充话术、参与校准，管理者查看复盘摘要、识别共性问题、建设训练题库，新人用 AI 模拟客户反复练。</p></div>
+  </div>
+  <p class="lead rv d2" style="font-size:14px">覆盖四个关键时刻：沟通前准备、沟通中异议处理、沟通后复盘、团队训练。</p>
+</section>
+
+<!-- ⑦ 服务流程与周期 -->
+<section class="psec wide">
+  <span class="lb rv">PROCESS · 服 务 流 程 与 周 期</span>
+  <h2 class="rv d1">资料盘点 → 建库建模 → 搭建测试 → 培训调优</h2>
+  <div class="flow rv d1">
+    <span class="fstep">① 销售资料盘点</span><span class="farrow">→</span>
+    <span class="fstep">② 知识库与客户模型</span><span class="farrow">→</span>
+    <span class="fstep">③ 异议库与销冠经验沉淀</span><span class="farrow">→</span>
+    <span class="fstep">④ 教练智能体搭建</span><span class="farrow">→</span>
+    <span class="fstep">⑤ 真实场景测试</span><span class="farrow">→</span>
+    <span class="fstep">⑥ 团队培训与首轮调优</span>
+  </div>
+  <div class="trust rv d2" style="margin-top:34px">
+    <div class="ti"><h4>道序做什么</h4><p>盘点资料、搭建知识库与客户模型、沉淀异议与销冠经验、搭建教练智能体、组织测试与首轮调优、完成团队培训。</p></div>
+    <div class="ti"><h4>你做什么</h4><p>提供产品价格与案例资料、开放真实聊天或录音、由管理者与优秀销售共同校准口径、参与场景测试与验收。</p></div>
+  </div>
+  <p class="lead rv d3" style="font-size:13.5px;color:var(--tx4)">第三方转写、接口、企业系统接入、私有化与长期运维如有需要，另行评估；具体周期以项目确认单为准。</p>
+</section>
+
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+
+<!-- ⑧ 验收标准 -->
 <section class="psec">
   <span class="lb rv">ACCEPTANCE · 验 收 标 准</span>
   <h2 class="rv d1">验收不是看 AI 会不会说好听的话</h2>
-  <p class="lead rv d1">上线前，建议至少完成：企业产品与价格口径确认、高频客户问题和异议清单确认、典型客户场景测试、成交与失败对话测试、管理者和优秀销售共同校准、团队使用培训、数据权限和使用边界确认。</p>
+  <p class="lead rv d1">上线前至少完成：企业产品与价格口径确认、高频客户问题与异议清单确认、典型客户场景测试、成交与失败对话测试、管理者与优秀销售共同校准、团队使用培训、数据权限与使用边界确认；交付后由维护人按真实使用持续更新。</p>
   <div class="boundary rv d2" style="border-left-color:rgba(196,162,101,.35)">
     <p style="color:var(--tx2)">验收看的是：它能否在约定的真实场景中，给出<strong style="color:var(--gd);font-weight:400">有依据、符合企业口径、对销售有帮助</strong>的分析与建议。</p>
   </div>
 </section>
 
+<!-- ⑨ 案例 -->
+<section class="psec wide">
+  <span class="lb rv">CASES · 代 表 案 例（匿 名）</span>
+  <h2 class="rv d1">真实落地，按客户授权脱敏呈现</h2>
+  <div class="cases rv d1" style="grid-template-columns:repeat(2,1fr)">
+    <div class="ccard"><h4>某区域财税公司</h4><p>把产品口径、客户类型与高频异议沉淀成教练智能体，统一团队话术、加快新人上手，管理者用复盘摘要替代逐个听录音。<br><span style="color:var(--gd);font-size:12px">道序角色：场景诊断 / 方案统筹 / 知识与智能体交付 / 团队培训</span></p></div>
+    <div class="ccard"><h4>某连锁门店</h4><p>把招商与到店成交的销冠经验转成可训练内容，新人用 AI 模拟客户反复练，跟进有了统一节奏与复盘依据。<br><span style="color:var(--gd);font-size:12px">道序角色：场景诊断 / 方案统筹 / 知识与智能体交付 / 团队培训</span></p></div>
+  </div>
+  <p class="lead rv d2" style="font-size:12.5px;color:var(--tx4);margin-top:24px">案例均经客户授权脱敏；案例用于证明方向，不承诺同等业绩结果，具体方案需基于诊断设计。</p>
+</section>
+
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 不是什么 -->
+<!-- ⑩ 边界与常见问题 -->
 <section class="psec">
-  <span class="lb rv">NOT · 它 不 是 什 么</span>
-  <h2 class="rv d1">它帮销售更有准备、更会判断、更能复盘</h2>
-  <ul class="plist rv d1">
-    <li>不是自动成交机器人</li>
-    <li>不是保证业绩的工具</li>
-    <li>不是让销售机械背标准话术</li>
-    <li>不是替代真实客户关系</li>
-    <li>不是监控和惩罚员工的单一评分器</li>
-    <li>不是未经授权收集客户数据的系统</li>
-  </ul>
-</section>
-
-<!-- FAQ -->
-<section class="psec">
-  <span class="lb rv">FAQ · 常 见 问 题</span>
-  <h2 class="rv d1">买之前，先想清楚这几件事</h2>
+  <span class="lb rv">FAQ · 边 界 与 常 见 问 题</span>
+  <h2 class="rv d1">不夸大、不承诺业绩</h2>
   <table class="dtable rv d1">
+    <tr><td>能保证提升多少业绩吗？</td><td>不能。销售结果还受流量、产品、价格、品牌、执行与客户关系影响，它提升的是销售的准备、判断与复盘能力。</td></tr>
     <tr><td>直接把聊天记录发进去就行吗？</td><td>可以作为输入，但效果取决于产品知识、销售流程和企业口径是否先配置清楚。</td></tr>
-    <tr><td>可以听录音吗？</td><td>可以分析录音或录音转写，具体取决于使用平台、文件格式和项目范围。</td></tr>
+    <tr><td>可以听录音吗？</td><td>可以分析录音或录音转写，具体取决于使用平台、文件格式与项目范围。</td></tr>
     <tr><td>能实时在聊天时提示吗？</td><td>标准版以沟通前准备和沟通后复盘为主；如需企业微信、CRM 或实时辅助，需要定制接入。</td></tr>
-    <tr><td>能保证提升多少业绩吗？</td><td>不能。销售结果还受到流量、产品、价格、品牌、执行和客户关系影响。</td></tr>
     <tr><td>适合只有一个销售的人吗？</td><td>也可以，但团队越大、对话越多、销冠经验越明显，组织价值越高。</td></tr>
+    <tr><td>客户数据安全吗？</td><td>项目会明确数据来源是否合法、是否需脱敏、谁可上传查看导出、保存多久、结束后如何删除；未经授权，客户聊天、录音与企业资料不用于其他项目。</td></tr>
   </table>
-  <p class="lead rv d2" style="font-size:12.5px;color:var(--tx4);margin-top:22px">相关模块：获客内容智能体、客服智能体可按需组合进同一套企业知识库，作为面向客户与团队的出口协同使用。</p>
 </section>
 
-<!-- 数据与隐私 -->
-<section class="psec">
-  <span class="lb rv">PRIVACY · 数 据 与 隐 私</span>
-  <h2 class="rv d1">数据与隐私，必须先讲清楚</h2>
-  <div class="boundary rv d1">
-    <p>销售聊天和录音可能包含客户姓名、联系方式、购买意向、商业信息和员工表现。项目应明确：数据来源是否合法、客户和员工是否得到适当告知、哪些字段需要脱敏、谁可以上传查看导出、数据保存多久、项目结束后如何删除或交还、是否允许用于团队训练与案例展示。未经授权，客户聊天、录音和企业资料不得用于其他项目。</p>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="sub-cta rv">
+<!-- ⑪ 下一步 -->
+<section class="sub-cta rv" id="cta">
   <h2>让每一次对话，都成为下一次成交的经验</h2>
-  <p>销售高手不是只会一句话，而是能判断客户、理解阶段、选择策略并持续复盘。<br>先聊聊你的销售团队和真实场景，再给方案。</p>
+  <p>先让明一看看你的销售团队和真实场景，再判断要不要做、怎么做。<br>每一次合作，都从一个真实问题开始。</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-    <a class="btn bo" href="/?agent=main">和明一聊聊</a>
-    <a class="btn bg" href="/products.html">看完整产品体系</a>
+    <a class="btn bo" href="/?agent=main">让明一判断是否适合我</a>
+    <a class="btn bg" href="/products.html">预约人工沟通</a>
   </div>
   <p style="font-size:13px;color:var(--tx4);letter-spacing:1px;margin-top:26px;margin-bottom:0">咨询 / 预约：微信 · 电话 CL13889506035（同号）</p>
 </section>
@@ -399,12 +393,13 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
 <footer>
   <div class="ft-links">
     <a href="/">首页</a>
-    <a href="/products.html">产品</a>
-    <a href="/systems.html">系统</a>
-    <a href="/cases.html">案例</a>
     <a href="/about.html">关于</a>
+    <a href="/products.html">产品中心</a>
+    <a href="/systems.html">系统登录</a>
+    <a href="/cases.html">案例</a>
     <a href="/agents.html">智能体</a>
-    <a href="/thoughts.html">明一日报</a>
+    <a href="/thoughts.html">日报</a>
+    <a href="/#cnt">联系</a>
     <a href="/faq.html">常见问题</a>
   </div>
   <div class="ft-meta">

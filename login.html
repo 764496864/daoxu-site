@@ -27,6 +27,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .nr a.active{color:var(--gd)}
 .nr .nc{color:var(--gd);padding:7px 18px;border:1px solid rgba(196,162,101,.2);letter-spacing:3px;transition:all .6s}
 .nr .nc:hover{background:var(--gd);color:var(--bg)}
+.nr .np{display:inline-flex;align-items:center;gap:7px;letter-spacing:3px;font-size:10px;padding:7px 18px;border:1px solid rgba(196,162,101,.3);color:var(--gd);transition:all .6s}
+.nr .np:hover{background:var(--gd);color:var(--bg)}
+.nr .np.guest{color:var(--tx4)}
+.nr .nc-chat{background:var(--gd);color:var(--bg)!important;padding:8px 18px;border-radius:3px;letter-spacing:3px;font-size:10px;transition:all .5s var(--e2)}
+.nr .nc-chat:hover{box-shadow:0 0 18px rgba(196,162,101,.45);letter-spacing:4px}
 .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
 .ham span{width:22px;height:1px;background:var(--gd);transition:all .3s}
 .overlay{position:fixed;inset:0;background:rgba(7,7,10,.7);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:998}
@@ -86,16 +91,7 @@ footer .ft-meta{font-size:10px;color:var(--tx5);letter-spacing:2px;line-height:1
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 46C24 38 30 32 36 30" stroke="#C4A265" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".45"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr">
-    <a href="/">首页</a>
-    <a href="/products.html">产品</a>
-    <a href="/systems.html">系统</a>
-    <a href="/cases.html">案例</a>
-    <a href="/about.html">关于</a>
-    <a href="/agents.html">智能体</a>
-    <a href="/thoughts.html">明一日报</a>
-    <a href="/#cnt">联系</a>
-  </div>
+  <div class="nr"><a href="/">首页</a><a href="/products.html">产品与服务</a><a href="/about.html">关于道序</a><a href="/cases.html">案例</a><a href="/agents.html">AI 应用中心</a><a href="/thoughts.html">洞察</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">客 户 登 录</span></a><a href="/?agent=main" class="nc-chat">与 明 一 聊 聊</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 <div class="overlay" onclick="toggleMenu()"></div>

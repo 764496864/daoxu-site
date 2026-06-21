@@ -80,6 +80,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .nr .nc:hover{background:var(--gd);color:var(--bg)}
 .nr .np{display:inline-flex;align-items:center;gap:7px;letter-spacing:3px;transition:all .6s;font-size:10px;padding:7px 18px;border:1px solid rgba(196,162,101,.3);color:var(--gd)}
 .nr .np:hover{background:var(--gd);color:var(--bg)}
+.nr .np.guest{color:var(--tx4)}
+.nr .nc-chat{background:var(--gd);color:var(--bg)!important;padding:8px 18px;border-radius:3px;letter-spacing:3px;font-size:10px;transition:all .5s var(--e2)}
+.nr .nc-chat:hover{box-shadow:0 0 18px rgba(196,162,101,.45);letter-spacing:4px}
 .nr .np-dot{display:none}
 .nr .np.set{padding:0 0 0 14px;border:0;border-left:1px solid rgba(196,162,101,.2);color:var(--gd)}
 .nr .np.set:hover{background:transparent;color:var(--tx)}
@@ -92,13 +95,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .sub-hero{padding:140px 64px 50px;text-align:center;max-width:900px;margin:0 auto}
 .sub-hero .lb{font-size:11px;color:var(--tx4);letter-spacing:6px;display:block;margin-bottom:28px}
 .sub-hero h1{font-family:var(--sf);font-size:clamp(30px,4.4vw,48px);font-weight:700;letter-spacing:clamp(3px,0.8vw,8px);color:var(--tx);line-height:1.4;margin-bottom:24px}
-.sub-hero .tagline{font-size:clamp(13.5px,1.3vw,15px);color:var(--tx3);letter-spacing:1.5px;line-height:2.1;font-weight:300;max-width:640px;margin:0 auto}
+.sub-hero .tagline{font-size:clamp(13.5px,1.3vw,15px);color:var(--tx2);letter-spacing:1.5px;line-height:2.1;font-weight:300;max-width:640px;margin:0 auto}
 .sub-hero .dv{height:1px;max-width:80px;margin:44px auto 0;background:linear-gradient(90deg,transparent,rgba(196,162,101,.35),transparent)}
 
 /* Featured 明一卡片 */
 .featured-wrap{max-width:900px;margin:40px auto;padding:0 64px}
-.featured-card{background:var(--bg);border:1px solid rgba(196,162,101,.15);padding:56px 52px;position:relative;overflow:hidden;display:flex;align-items:center;gap:44px;transition:border-color 1s;box-shadow:inset 0 1px 0 rgba(196,162,101,.06)}
-.featured-card:hover{border-color:rgba(196,162,101,.3)}
+.featured-card{background:var(--bg);border:1px solid rgba(196,162,101,.15);padding:56px 52px;position:relative;overflow:hidden;display:flex;align-items:center;gap:44px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2);box-shadow:inset 0 1px 0 rgba(196,162,101,.06)}
+.featured-card:hover{border-color:rgba(196,162,101,.3);box-shadow:inset 0 1px 0 rgba(196,162,101,.06),0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .featured-card::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.5),transparent)}
 .featured-avatar{flex-shrink:0;width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,rgba(196,162,101,.12),rgba(196,162,101,.03));border:1px solid rgba(196,162,101,.25);overflow:hidden;position:relative}
 .featured-avatar img{width:100%;height:100%;object-fit:cover}
@@ -106,7 +109,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .featured-tag{font-size:10px;color:var(--gd);letter-spacing:5px;margin-bottom:12px;opacity:.7;text-transform:uppercase}
 .featured-name{font-family:var(--sf);font-size:28px;color:var(--tx);letter-spacing:6px;font-weight:700;margin-bottom:12px;line-height:1.2}
 .featured-line{font-family:var(--sf);font-size:14.5px;color:var(--gd);letter-spacing:2px;margin-bottom:16px;font-weight:400}
-.featured-desc{font-size:14px;color:var(--tx3);line-height:2.2;font-weight:300;margin-bottom:24px}
+.featured-desc{font-size:14px;color:var(--tx2);line-height:2.2;font-weight:300;margin-bottom:24px}
 .featured-btn{display:inline-block;padding:12px 32px;font-size:11px;letter-spacing:5px;border:1px solid rgba(196,162,101,.4);color:var(--gd);transition:all .6s var(--e2);cursor:pointer}
 .featured-btn:hover{background:var(--gd);color:var(--bg);letter-spacing:7px}
 
@@ -115,21 +118,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .grid-lbl{text-align:center;font-size:11px;color:var(--tx4);letter-spacing:6px;margin-bottom:36px}
 .agent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .agent-card{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:32px 28px;position:relative;overflow:hidden;cursor:pointer;transition:all 1s var(--e2);text-align:center;box-shadow:inset 0 1px 0 rgba(196,162,101,.03)}
-.agent-card:hover{border-color:rgba(196,162,101,.25);transform:translateY(-2px)}
+.agent-card:hover{border-color:rgba(196,162,101,.25);transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(196,162,101,.03),0 0 30px rgba(196,162,101,.06)}
 .agent-card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.15),transparent);transition:all 1s}
 .agent-card:hover::before{left:10%;right:10%;background:linear-gradient(90deg,transparent,rgba(196,162,101,.35),transparent)}
 .agent-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(196,162,101,.1),rgba(196,162,101,.02));border:1px solid rgba(196,162,101,.15);overflow:hidden;margin:0 auto 20px}
 .agent-avatar img{width:100%;height:100%;object-fit:cover}
 .agent-name{font-family:var(--sf);font-size:20px;color:var(--tx);letter-spacing:6px;font-weight:600;margin-bottom:8px}
 .agent-line{font-size:12px;color:var(--gd);letter-spacing:2px;margin-bottom:14px;opacity:.85;line-height:1.6;min-height:38px}
-.agent-desc{font-size:12px;color:var(--tx3);line-height:1.9;font-weight:300;margin-bottom:20px;min-height:60px}
+.agent-desc{font-size:12px;color:var(--tx2);line-height:1.9;font-weight:300;margin-bottom:20px;min-height:60px}
 .agent-btn{font-size:10px;color:var(--gd);letter-spacing:4px;padding:8px 20px;border:1px solid rgba(196,162,101,.2);display:inline-block;transition:all .6s;opacity:.7}
 .agent-card:hover .agent-btn{opacity:1;border-color:rgba(196,162,101,.5);letter-spacing:5px}
 
 .sub-cta{max-width:700px;margin:60px auto 100px;padding:64px 40px;text-align:center;background:var(--bg);border:1px solid rgba(196,162,101,.1);position:relative}
 .sub-cta::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.4),transparent)}
 .sub-cta h2{font-family:var(--sf);font-size:clamp(19px,2.4vw,24px);color:var(--tx);letter-spacing:3px;font-weight:600;margin-bottom:20px;line-height:1.6}
-.sub-cta p{font-size:14px;color:var(--tx3);letter-spacing:2px;line-height:2.2;margin-bottom:32px}
+.sub-cta p{font-size:14px;color:var(--tx2);letter-spacing:2px;line-height:2.2;margin-bottom:32px}
 .btn{display:inline-block;padding:16px 48px;font-size:12px;letter-spacing:5px;font-family:var(--ss);font-weight:400;cursor:pointer;transition:all .8s var(--e2);border:1px solid rgba(196,162,101,.4);color:var(--gd)}
 .btn:hover{background:var(--gd);color:var(--bg);letter-spacing:7px}
 
@@ -175,13 +178,13 @@ footer .ft-meta a:hover{color:var(--gd)}
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 46C24 38 30 32 36 30" stroke="#C4A265" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".45"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr"><a href="/">首页</a><a href="/products.html">产品</a><a href="/systems.html">系统</a><a href="/cases.html">案例</a><a href="/about.html">关于</a><a href="/agents.html" class="active">智能体</a><a href="/thoughts.html">明一日报</a><a href="/#cnt">联系</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">登 录</span></a></div>
+  <div class="nr"><a href="/">首页</a><a href="/products.html">产品与服务</a><a href="/about.html">关于道序</a><a href="/cases.html">案例</a><a href="/agents.html" class="active">AI 应用中心</a><a href="/thoughts.html">洞察</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">客 户 登 录</span></a><a href="/?agent=main" class="nc-chat">与 明 一 聊 聊</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 <div class="overlay" onclick="toggleMenu()"></div>
 
 <script>
-(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||user.username;if(dot)dot.style.display=''}}catch(e){}})();
+(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||'个人中心';if(dot)dot.style.display=''}}catch(e){}})();
 </script>
 
 <section class="sub-hero">
@@ -325,7 +328,7 @@ footer .ft-meta a:hover{color:var(--gd)}
 
 <footer>
   <div class="ft-links">
-    <a href="/">首页</a><a href="/products.html">产品</a><a href="/systems.html">系统</a><a href="/cases.html">案例</a><a href="/about.html">关于</a><a href="/agents.html">智能体</a><a href="/thoughts.html">明一日报</a><a href="/faq.html">常见问题</a>
+    <a href="/">首页</a><a href="/about.html">关于</a><a href="/products.html">产品中心</a><a href="/systems.html">系统登录</a><a href="/cases.html">案例</a><a href="/agents.html">智能体</a><a href="/thoughts.html">日报</a><a href="/#cnt">联系</a><a href="/faq.html">常见问题</a>
   </div>
   <div class="ft-meta">
     道序科技 DAO ORDER · 让科技融入生活，让思想创造价值<br>

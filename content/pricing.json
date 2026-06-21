@@ -1,0 +1,14 @@
+{
+  "_comment": "道序产品价格唯一数据源（对方 V3 §10 冻结口径）。官网各页 / FAQ / 结构化数据 / 明一 一律以此为准；旧价格全部作废，不得回流。",
+  "updated": "2026-06-20",
+  "currency": "CNY",
+  "products": [
+    { "id": "mind-clone",    "name": "构想™ 思维克隆系统",        "price": "个人版 19,800 元；企业版定制", "line": "A 智慧资产化" },
+    { "id": "sales-coach",   "name": "道序 销售教练智能体",        "price": "9,800 元",                    "line": "B 销售能力复制" },
+    { "id": "ai-website",    "name": "道序 AI 官网定制",          "price": "12,800 元",                   "line": "C 品牌 AI 可见" },
+    { "id": "geo",           "name": "道序 GEO AI 可见度系统",     "price": "9,800 元 / 年",               "line": "C 品牌 AI 可见" },
+    { "id": "enterprise-ai", "name": "企业 AI 落地与定制开发",     "price": "诊断后报价",                  "line": "D 企业 AI 化" },
+    { "id": "brand-visual",  "name": "品牌视觉升级",              "price": "按范围定制报价",              "line": "专项支持" }
+  ],
+  "deprecated_prices": ["3,980", "20,000", "68,000", "39,800", "98,000", "6,980", "1,980", "19,800 起"]
+}

@@ -88,6 +88,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .nr a:hover,.nr a.active{color:var(--gd)}
 .nr .np{display:inline-flex;align-items:center;gap:7px;letter-spacing:3px;font-size:10px;padding:7px 18px;border:1px solid rgba(196,162,101,.3);color:var(--gd);transition:all .6s}
 .nr .np:hover{background:var(--gd);color:var(--bg)}
+.nr .np.guest{color:var(--tx4)}
+.nr .nc-chat{background:var(--gd);color:var(--bg)!important;padding:8px 18px;border-radius:3px;letter-spacing:3px;font-size:10px;transition:all .5s var(--e2)}
+.nr .nc-chat:hover{box-shadow:0 0 18px rgba(196,162,101,.45);letter-spacing:4px}
 .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
 .ham span{width:22px;height:1px;background:var(--gd);transition:all .3s}
 .overlay{position:fixed;inset:0;background:rgba(7,7,10,.7);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:998}
@@ -139,9 +142,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 信任 grid */
 .trust{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
-.trust .ti{border:1px solid rgba(196,162,101,.1);padding:26px 24px;border-radius:3px}
+.trust .ti{border:1px solid rgba(196,162,101,.1);padding:26px 24px;border-radius:3px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.trust .ti:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .trust .ti h4{font-family:var(--sf);font-size:15px;color:var(--gd);letter-spacing:1px;font-weight:600;margin-bottom:10px}
-.trust .ti p{font-size:13px;color:var(--tx3);line-height:1.9;font-weight:300}
+.trust .ti p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
 
 /* 交付 table */
 .dtable{width:100%;border-collapse:collapse;margin-top:32px}
@@ -156,8 +160,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 价格 cards */
 .pcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:34px}
-.pcard{border:1px solid rgba(196,162,101,.12);padding:30px 28px;border-radius:3px;position:relative;transition:border-color .6s}
-.pcard:hover{border-color:rgba(196,162,101,.3)}
+.pcard{border:1px solid rgba(196,162,101,.12);padding:30px 28px;border-radius:3px;position:relative;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.pcard:hover{border-color:rgba(196,162,101,.3);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .pcard.feat{border-color:rgba(196,162,101,.3);background:linear-gradient(135deg,rgba(196,162,101,.04),transparent 70%)}
 .pcard .pc-tier{font-family:var(--sf);font-size:18px;color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:6px}
 .pcard .pc-for{font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:1.7;margin-bottom:16px;min-height:34px}
@@ -166,9 +170,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 案例 */
 .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
-.ccard{border:1px solid rgba(196,162,101,.1);padding:26px 22px;border-radius:3px}
+.ccard{border:1px solid rgba(196,162,101,.1);padding:26px 22px;border-radius:3px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.ccard:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .ccard h4{font-family:var(--sf);font-size:15px;color:var(--tx);letter-spacing:1px;font-weight:600;margin-bottom:10px}
-.ccard p{font-size:13px;color:var(--tx3);line-height:1.9;font-weight:300}
+.ccard p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
 
 /* boundary */
 .boundary{max-width:680px;margin:32px auto 0;border-left:2px solid rgba(196,162,101,.2);padding:8px 0 8px 24px}
@@ -178,7 +183,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .sub-cta{max-width:700px;margin:48px auto 90px;padding:60px 40px;text-align:center;background:var(--bg);border:1px solid rgba(196,162,101,.1);position:relative}
 .sub-cta::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.4),transparent)}
 .sub-cta h2{font-family:var(--sf);font-size:clamp(19px,2.4vw,24px);color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:18px;line-height:1.7}
-.sub-cta p{font-size:14px;color:var(--tx3);letter-spacing:1.5px;line-height:2.2;margin-bottom:30px}
+.sub-cta p{font-size:14px;color:var(--tx2);letter-spacing:1.5px;line-height:2.2;margin-bottom:30px}
 
 /* footer */
 footer{padding:48px 32px;text-align:center;border-top:1px solid rgba(255,255,255,.03)}
@@ -213,65 +218,88 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr"><a href="/">首页</a><a href="/products.html" class="active">产品</a><a href="/systems.html">系统</a><a href="/cases.html">案例</a><a href="/about.html">关于</a><a href="/agents.html">智能体</a><a href="/thoughts.html">明一日报</a><a href="/#cnt">联系</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">登 录</span></a></div>
+  <div class="nr"><a href="/">首页</a><a href="/products.html" class="active">产品与服务</a><a href="/about.html">关于道序</a><a href="/cases.html">案例</a><a href="/agents.html">AI 应用中心</a><a href="/thoughts.html">洞察</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">客 户 登 录</span></a><a href="/?agent=main" class="nc-chat">与 明 一 聊 聊</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
-<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||user.username;if(dot)dot.style.display=''}}catch(e){}})();</script>
+<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||'个人中心';if(dot)dot.style.display=''}}catch(e){}})();</script>
 <div class="overlay" onclick="toggleMenu()"></div>
 
-<!-- HERO -->
+<!-- ① HERO · 一句话结果 -->
 <header class="phero">
-  <div class="crumb"><a href="/">首页</a> · <a href="/products.html">产品</a> · AI 官网 × 道序 GEO</div>
+  <div class="crumb"><a href="/">首页</a> · <a href="/products.html">产品中心</a> · AI 官网 × 道序 GEO</div>
   <span class="flag">AI SITE × GEO · 官 网 与 可 见 度</span>
   <h1>AI 官网 × 道序 GEO</h1>
   <p class="moo">让客户看懂你，<br>也让 AI 读懂你。</p>
+  <p class="lead" style="margin-top:24px">一个对人清楚、对 AI 可读的<strong>官方信息源</strong>，加上让 AI 持续准确理解、提及、引用你的<strong>年度建设</strong>。可使用、可验收、可维护、可持续迭代。</p>
   <p class="price-line">AI 官网定制 12,800 · 道序 GEO｜AI 可见度系统 9,800 / 年</p>
   <div class="acts">
-    <a class="btn bo" href="/?agent=main">和明一聊聊</a>
-    <a class="btn bg" href="#price">看价格</a>
+    <a class="btn bo" href="/?agent=main">让明一判断是否适合我</a>
+    <a class="btn bg" href="/?agent=main">预约人工沟通</a>
   </div>
 </header>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 这是什么 -->
+<!-- ② 你是否遇到这些问题 -->
 <section class="psec">
-  <span class="lb rv">WHAT IT IS · 这 是 什 么</span>
-  <h2 class="rv d1">客户认识企业的方式，正在被 AI 改写</h2>
-  <p class="lead rv d1">过去靠搜索引擎、平台和熟人介绍，现在越来越多人先问 AI<strong>「这个行业有哪些公司、哪家更适合我」</strong>。如果你没有清楚、统一、可信的公开信息，AI 可能找不到你、说不清你、用过时信息，甚至把你和别的品牌混淆。</p>
-  <p class="lead rv d2">这件事要分两层做：先有一个<strong>可信的官方信息源</strong>（AI 官网），再做让 AI 持续准确理解、提及、引用你的<strong>持续建设</strong>（道序 GEO）。企业未来要同时服务两类「读者」——真实客户，和 AI。</p>
+  <span class="lb rv">PROBLEMS · 你 是 否 遇 到 这 些</span>
+  <h2 class="rv d1">不是没做事，是 AI 看不到你做的事</h2>
+  <p class="lead rv d1">客户认识企业的方式正在被 AI 改写——越来越多人先问 AI<strong>「这个行业有哪些公司、哪家更适合我」</strong>。如果你的公开信息不清楚、不统一、不可信，常出现这些情况：</p>
+  <ul class="plist rv d2">
+    <li>客户开始用 AI 筛服务商，AI 给出的答案里没有你</li>
+    <li>没有官网，或官网多年未更新，客户看完反而不信任</li>
+    <li>产品、案例散落在截图、海报和朋友圈，大模型读不准</li>
+    <li>信息口径到处不一致，AI 抓到的是过时甚至错误的版本</li>
+    <li>AI 把你和别的品牌混淆，或描述你时张冠李戴</li>
+    <li>想做 GEO，却连一个稳定可信的官方信息源都没有</li>
+  </ul>
 </section>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 两层关系 -->
-<section class="psec" id="price">
-  <span class="lb rv">TWO LAYERS · 分 别 解 决 什 么</span>
+<!-- ③ 是什么，也不是什么 -->
+<section class="psec">
+  <span class="lb rv">WHAT IT IS · 是 什 么 · 也 不 是 什 么</span>
   <h2 class="rv d1">AI 官网是地基，GEO 是持续建设</h2>
-  <p class="lead rv d1"><strong>AI 官网</strong>解决「有没有一个可信的官方信息源」——让客户快速看懂公司、产品、案例与联系方式，也让 AI 有机会读取你的官方事实。<strong>GEO</strong>解决「AI 能不能持续准确理解和提及你」——通过品牌事实、问题库、案例、内容结构、外部证据和持续检测，提高你在 AI 答案中被引用的机会。</p>
-  <table class="dtable rv d2">
-    <tr><td>AI 官网</td><td>地基：可信的官方信息源，一次性建设为主</td></tr>
-    <tr><td>品牌知识与案例</td><td>内容：公司、产品、案例、人物与关键词事实</td></tr>
-    <tr><td>道序 GEO</td><td>持续建设、检测与优化，按年迭代</td></tr>
-  </table>
-  <p class="lead rv d2" style="font-size:14px;color:var(--tx3);margin-top:22px">最适合的顺序通常是：<strong style="color:var(--gd)">先把官网和品牌事实建好，再做持续 GEO。</strong></p>
+  <p class="lead rv d1"><strong>AI 官网</strong>解决「有没有一个可信的官方信息源」——让客户快速看懂公司、产品、案例与联系方式，也让 AI 有机会读取你的官方事实。<strong>GEO</strong>解决「AI 能不能持续准确理解和提及你」——通过品牌事实、问题库、结构化内容、外部证据与持续检测，提高你在 AI 答案中被引用的机会。</p>
+  <div class="trust rv d2">
+    <div class="ti"><h4>它是</h4><p>面向客户与 AI 共同设计的官方信息源；面向生成式搜索与大模型回答的品牌可见度建设；可阶段检测、可按年迭代的持续工程。</p></div>
+    <div class="ti"><h4>它不是</h4><p>不是单一网页排名优化，不是关键词堆砌，不是一次性发稿，不是改个皮肤的模板站，也不是一次建设就永久有效的「霸屏」。</p></div>
+  </div>
+  <p class="lead rv d2" style="font-size:14px;color:var(--tx3);margin-top:24px">最适合的顺序通常是：<strong style="color:var(--gd)">先把官网和品牌事实建好，再做持续 GEO。</strong>企业未来要同时服务两类「读者」——真实客户，和 AI。</p>
 </section>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- AI 官网定制 -->
-<section class="psec" id="site">
-  <span class="lb rv">AI WEBSITE · 道 序 AI 官 网 定 制</span>
-  <h2 class="rv d1">面向客户与 AI 共同设计的官网</h2>
-  <p class="lead rv d1">一个标准官网要清楚回答六个问题：你是谁、你服务谁、你解决什么问题、你有哪些产品、为什么值得相信、客户下一步怎么联系。</p>
+<!-- ④ 客户最终得到什么 -->
+<section class="psec">
+  <span class="lb rv">OUTCOME · 客 户 最 终 得 到 什 么</span>
+  <h2 class="rv d1">先说成果，再说功能</h2>
+  <ul class="plist rv d1">
+    <li><strong>一个可信的官方入口</strong>——客户几分钟看懂你是谁、做什么、为什么值得选择。</li>
+    <li><strong>一套统一的品牌事实</strong>——名称、业务、产品、价格、案例、联系方式口径一致。</li>
+    <li><strong>对 AI 可读的内容结构</strong>——大模型更容易准确理解你、并在相关问题里提及你。</li>
+    <li><strong>一份 AI 可见度检测报告</strong>——看清不同 AI 如何描述你、缺什么、错在哪。</li>
+    <li><strong>一个可持续迭代的机制</strong>——按检测结果与业务变化，持续补齐与纠错。</li>
+  </ul>
+  <p class="lead rv d2" style="font-size:14px;color:var(--tx3);margin-top:24px">差异化分两层：<strong style="color:var(--tx)">客户感知</strong>上更清楚、专业、可信；<strong style="color:var(--tx)">交付验收</strong>上可使用、可验收、可维护、可持续迭代。</p>
+</section>
+
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+
+<!-- ⑤ 完整交付清单 -->
+<section class="psec" id="price">
+  <span class="lb rv">DELIVERABLES · 完 整 交 付 清 单</span>
+  <h2 class="rv d1">两份方案，分别交付什么</h2>
+  <h3 style="font-family:var(--sf);font-size:17px;color:var(--gd);letter-spacing:2px;font-weight:600;text-align:center;margin:34px 0 0">道序 AI 官网定制</h3>
   <table class="dtable rv d1">
-    <tr><td>信息架构</td><td>页面、导航、客户路径与重点层级</td></tr>
-    <tr><td>品牌内容</td><td>公司、产品、案例、优势与问答</td></tr>
-    <tr><td>页面设计</td><td>桌面与移动端视觉呈现</td></tr>
-    <tr><td>AI 可读结构</td><td>清楚的品牌事实、标题、文本与页面关系</td></tr>
-    <tr><td>基础技术</td><td>域名与服务器协助、上线与基础适配</td></tr>
-    <tr><td>留资入口</td><td>联系、预约或咨询入口</td></tr>
-    <tr><td>交接说明</td><td>后续更新与维护方式</td></tr>
+    <tr><td>信息架构</td><td>页面、导航、客户路径与重点层级规划</td></tr>
+    <tr><td>品牌内容</td><td>公司介绍、产品页、案例页与常见问答文案梳理</td></tr>
+    <tr><td>产品页</td><td>每个产品适合谁、解决什么、交付什么、如何开始</td></tr>
+    <tr><td>案例页</td><td>把做过的事整理成可信、可比较的证据结构</td></tr>
+    <tr><td>留资入口</td><td>联系、预约或咨询表单，承接客户下一步</td></tr>
+    <tr><td>移动适配</td><td>桌面与移动端一致的视觉呈现与上线部署</td></tr>
+    <tr><td>AI 可读结构</td><td>清楚的品牌事实、标题、文本与页面关系，便于大模型读取</td></tr>
   </table>
   <div class="pcards rv d2" style="grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto">
     <div class="pcard feat">
@@ -281,22 +309,13 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
       <p class="pc-for" style="margin-top:14px;min-height:0">复杂后台、支付、商城、会员、系统接口、多语言、App、小程序与长期内容运营另行评估。域名、服务器、备案、第三方付费服务与持续维护是否包含，以项目确认单为准。</p>
     </div>
   </div>
-</section>
-
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-
-<!-- 道序 GEO -->
-<section class="psec" id="geo">
-  <span class="lb rv">GEO · 道 序 AI 可 见 度 系 统</span>
-  <h2 class="rv d1">让 AI 持续准确理解、提及、引用你</h2>
-  <p class="lead rv d1">GEO 是<strong>面向生成式搜索与大模型回答的品牌可见度建设</strong>。它关注的不是单一网页排名，而是：AI 是否知道你是谁、能否准确理解你的产品、能否把你与正确的行业人群地区关联、能否找到可信证据、在相关问题里有没有机会提及你、与竞品之间有哪些信息差、AI 出错时怎么发现和修正。</p>
+  <h3 style="font-family:var(--sf);font-size:17px;color:var(--gd);letter-spacing:2px;font-weight:600;text-align:center;margin:46px 0 0">道序 GEO｜AI 可见度系统</h3>
   <table class="dtable rv d1">
-    <tr><td>品牌事实统一</td><td>统一名称、业务、产品、价格、服务对象、案例、联系方式与常见错误信息</td></tr>
-    <tr><td>客户问题矩阵</td><td>整理客户会问、AI 会答的高频问题：行业 / 选择 / 比较 / 产品 / 地区 / 信任</td></tr>
-    <tr><td>内容结构优化</td><td>让公司、产品、案例与问答更清楚完整、更容易被读取和引用</td></tr>
-    <tr><td>品牌证据建设</td><td>梳理可公开的案例、活动、媒体、合作、专业文章与第三方信息源</td></tr>
-    <tr><td>AI 可见度检测</td><td>检测不同 AI 如何描述你、是否提及、引用了什么、缺什么、有哪些错误</td></tr>
-    <tr><td>持续优化建议</td><td>按检测结果与业务变化，持续调整内容、官网、问答与公开信息布局</td></tr>
+    <tr><td>品牌事实库</td><td>统一名称、业务、产品、价格、服务对象、案例与联系方式，纠正常见错误信息</td></tr>
+    <tr><td>问题库</td><td>整理客户会问、AI 会答的高频问题：行业 / 选择 / 比较 / 产品 / 地区 / 信任</td></tr>
+    <tr><td>结构化内容</td><td>让公司、产品、案例与问答更清楚完整，更容易被读取和引用</td></tr>
+    <tr><td>检测报告</td><td>检测不同 AI 如何描述你、是否提及、引用了什么、缺什么、有哪些错误</td></tr>
+    <tr><td>阶段迭代</td><td>按检测结果与业务变化，持续调整内容、官网、问答与公开信息布局</td></tr>
   </table>
   <div class="pcards rv d2" style="grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto">
     <div class="pcard feat">
@@ -306,73 +325,90 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
       <p class="pc-for" style="margin-top:14px;min-height:0">基线诊断 → 品牌知识底座 → 问题与内容规划 → 官网与公开内容优化 → 阶段检测 → 年度迭代。具体检测频率、平台范围与内容数量，以年度服务确认单为准。</p>
     </div>
   </div>
-  <p class="lead rv d2" style="font-size:13.5px;color:var(--tx4);margin-top:22px">需要持续产出内容的招商 / 课程 / IP / 门店，可在 GEO 内容建设中按需加入<strong style="color:var(--tx3)">数字人内容矩阵</strong>等模块（按需选配，单独评估）。</p>
+  <p class="lead rv d2" style="font-size:13.5px;color:var(--tx4);margin-top:24px">需要持续产出内容的招商 / 课程 / IP / 门店，可在 GEO 内容建设中按需加入<strong style="color:var(--tx3)">数字人内容矩阵</strong>等模块（按需选配，单独评估）。</p>
 </section>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 适合谁 -->
+<!-- ⑥ 日常如何使用 -->
 <section class="psec">
-  <span class="lb rv">FOR WHOM · 什 么 企 业 最 需 要</span>
-  <h2 class="rv d1">谁该尽早把官网和品牌事实建起来</h2>
-  <div class="chips rv d1">
-    <span>没有官网，或官网多年未更新</span><span>产品服务很多，客户看不懂</span><span>有案例，却只存在截图、海报和朋友圈</span><span>高客单、强信任，客户联系前反复比较</span><span>已在做内容，但品牌事实到处不一致</span><span>客户问 AI 时找不到你</span><span>AI 对公司的描述错误或过时</span><span>想做 GEO，却没有稳定的官方信息源</span><span>个人 IP 正在升级为机构或品牌</span>
+  <span class="lb rv">IN USE · 日 常 如 何 使 用</span>
+  <h2 class="rv d1">建好之后，平时怎么用起来</h2>
+  <div class="trust rv d1" style="grid-template-columns:repeat(3,1fr)">
+    <div class="ti"><h4>当官方信息源</h4><p>客户、合作方、AI 想了解你，先到官网；销售、招商、投标都引用同一套口径。</p></div>
+    <div class="ti"><h4>新内容进结构</h4><p>有了新产品、新案例、新问答，按既定结构补进官网与品牌事实库，保持口径统一。</p></div>
+    <div class="ti"><h4>看检测、做纠错</h4><p>按阶段检测报告，发现 AI 说错、说漏、说旧的地方，及时在公开信息里补齐和修正。</p></div>
   </div>
 </section>
 
-<!-- 解决什么 -->
-<section class="psec">
-  <span class="lb rv">PROBLEM · 解 决 什 么</span>
-  <h2 class="rv d1">不是没做事，是 AI 看不到你做的事</h2>
-  <ul class="plist rv d1">
-    <li>客户开始用 AI 筛服务商，AI 答案里没有你</li>
-    <li>官网老旧或没有，客户看完不信任</li>
-    <li>品牌、产品、案例散落各处，大模型读不准</li>
-    <li>信息口径不统一，AI 抓到的是过时版本</li>
-    <li>想做 GEO，却没有稳定可信的官方信息源</li>
-  </ul>
-  <p class="lead rv d2" style="font-size:13.5px;color:var(--tx4);margin-top:24px">GEO 不是关键词堆砌，也不是一次性发稿。AI 对一个品牌的理解，来自官网、产品页、结构化案例、常见问题、团队信息、第三方来源、内容一致性与新鲜度等多个信号——所以它是品牌事实、内容系统和持续检测的共同建设。</p>
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+
+<!-- ⑦ 服务流程与周期 -->
+<section class="psec wide">
+  <span class="lb rv">PROCESS · 服 务 流 程 与 周 期</span>
+  <h2 class="rv d1">从基线诊断，到年度迭代</h2>
+  <div class="flow rv d1">
+    <span class="fstep">基线诊断</span><span class="farrow">→</span>
+    <span class="fstep">品牌知识底座</span><span class="farrow">→</span>
+    <span class="fstep">问题与内容规划</span><span class="farrow">→</span>
+    <span class="fstep">官网与公开内容优化</span><span class="farrow">→</span>
+    <span class="fstep">阶段检测</span><span class="farrow">→</span>
+    <span class="fstep">年度迭代</span>
+  </div>
+  <p class="lead rv d2" style="font-size:14px;color:var(--tx3);margin-top:30px">AI 官网以一次性建设为主，周期取决于内容成熟度与页面数量；GEO 是<strong style="color:var(--gd)">按年持续运营</strong>，检测频率、平台范围与内容数量以年度服务确认单为准。</p>
 </section>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 相关案例 -->
+<!-- ⑧ 验收标准 -->
+<section class="psec">
+  <span class="lb rv">ACCEPTANCE · 验 收 标 准</span>
+  <h2 class="rv d1">可使用 · 可验收 · 可维护 · 可持续迭代</h2>
+  <div class="trust rv d1">
+    <div class="ti"><h4>可使用</h4><p>官网在桌面与移动端正常打开、信息清楚、留资入口可用，客户能看懂、能联系。</p></div>
+    <div class="ti"><h4>可验收</h4><p>交付前后有 AI 可见度检测对照：品牌事实是否被纠正、相关问题中的提及与引用是否改善。</p></div>
+    <div class="ti"><h4>可维护</h4><p>提供更新与维护方式，团队能自己补充新产品、新案例与新问答。</p></div>
+    <div class="ti"><h4>可持续迭代</h4><p>GEO 进入年度迭代机制，按检测与业务变化持续优化，而非一次交付就结束。</p></div>
+  </div>
+</section>
+
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+
+<!-- ⑨ 案例 -->
 <section class="psec wide">
-  <span class="lb rv">CASES · 案 例 原 则</span>
+  <span class="lb rv">CASES · 案 例</span>
   <h2 class="rv d1">不虚构案例，第一套样板是道序自己</h2>
   <div class="cases rv d1" style="grid-template-columns:repeat(2,1fr)">
-    <div class="ccard"><h4>诚实说明</h4><p>道序目前不虚构 GEO 成功案例，也不使用无法核验的「AI 霸屏」截图。待形成可公开验证的项目结果后再单独补充。</p></div>
-    <div class="ccard"><h4>首批沉淀什么</h4><p>优化前后 AI 对品牌描述的变化、品牌事实错误是否被纠正、相关问题中的提及与引用变化、官网与案例体系是否完善。</p></div>
+    <div class="ccard"><h4>道序官网与 GEO（道序角色：自建样板）</h4><p>道序自己的官网与 GEO，是第一套公开、可持续验证的样板：统一品牌事实、结构化产品与案例，并按阶段检测 AI 对道序的描述变化。</p></div>
+    <div class="ccard"><h4>某专业服务机构（匿名 · 道序角色：诊断与建设）</h4><p>原有信息散落在朋友圈与海报，AI 描述错误。道序先建官方信息源与品牌事实库，再做问题库与结构化内容，逐步纠正 AI 口径。具体结果以授权口径为准。</p></div>
   </div>
-  <p class="lead rv d2" style="font-size:12.5px;color:var(--tx4);margin-top:24px">道序自己的官网与 GEO，也应成为第一套公开、可持续验证的样板。具体方案需基于诊断设计，不承诺同等结果。</p>
+  <p class="lead rv d2" style="font-size:12.5px;color:var(--tx4);margin-top:24px">道序目前不虚构 GEO 成功案例，也不使用无法核验的「AI 霸屏」截图；客户名称均匿名化处理，具体方案需基于诊断设计，不承诺同等结果。</p>
 </section>
 
-<!-- FAQ -->
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+
+<!-- ⑩ 边界与常见问题 -->
 <section class="psec">
-  <span class="lb rv">FAQ · 常 见 问 题</span>
-  <h2 class="rv d1">三个最常被问到的问题</h2>
+  <span class="lb rv">FAQ & BOUNDARY · 边 界 与 常 见 问 题</span>
+  <h2 class="rv d1">先把不承诺的事说清楚</h2>
   <div class="trust rv d1" style="grid-template-columns:1fr">
-    <div class="ti"><h4>AI 官网和 GEO 有什么区别？</h4><p>AI 官网解决「你有没有一个可信的官方信息源」；GEO 解决「AI 能不能准确理解你、引用你、推荐你」。没有官网和结构化内容，GEO 很难长期稳定，二者常打包交付。</p></div>
-    <div class="ti"><h4>GEO 多久见效？</h4><p>AI 搜索可见度是持续建设，不是一次性排名。我们做的是把信息结构化、可被引用，并阶段性监测优化；不承诺固定曝光。</p></div>
+    <div class="ti"><h4>AI 官网和 GEO 有什么区别？</h4><p>AI 官网解决「你有没有一个可信的官方信息源」；GEO 解决「AI 能不能准确理解你、引用你、推荐你」。没有官网和结构化内容，GEO 很难长期稳定，二者常配合交付。</p></div>
+    <div class="ti"><h4>GEO 多久见效？会不会承诺排名？</h4><p>AI 搜索可见度是持续建设，不是一次性排名。我们把信息结构化、可被引用，并阶段性检测优化；<strong style="color:var(--tx2)">不承诺固定排名、不承诺全平台一定推荐、不承诺固定提及次数</strong>。</p></div>
     <div class="ti"><h4>我已经有官网了，还需要做吗？</h4><p>看它是否「AI 可读」——结构化、口径统一、案例可信。多数老官网是给人看的，没为 AI 搜索准备，可在原基础上做 GEO 优化。</p></div>
-    <div class="ti"><h4>价格分别是多少？</h4><p>AI 官网定制 12,800（一次性建设为主）；道序 GEO｜AI 可见度系统 9,800 / 年（持续运营与优化）。两者都不承诺固定排名，常配合交付。</p></div>
+    <div class="ti"><h4>价格分别是多少？</h4><p>AI 官网定制 12,800（一次性建设为主）；道序 GEO｜AI 可见度系统 9,800 / 年（持续运营与优化）。两者常配合交付。</p></div>
   </div>
-</section>
-
-<!-- 边界 -->
-<section class="psec">
-  <div class="boundary rv">
+  <div class="boundary rv d2" style="margin-top:30px">
     <p>GEO 提升在 AI 搜索与大模型回答中被理解、被引用的可能性，但不承诺所有 AI 平台一定推荐、不承诺固定排名、不承诺固定提及次数、不承诺一次建设永久有效，也不保证询盘或营收结果——大模型回答机制持续变化，效果还取决于内容质量与行业竞争。我们不使用虚假媒体、伪造评价和批量垃圾内容，目前也不虚构 GEO 成功案例。AI 官网默认不含域名、服务器、备案与长期代维护，是否包含以项目确认单为准。</p>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ⑪ 下一步 · CTA -->
 <section class="sub-cta rv">
-  <h2>不确定适不适合你？</h2>
-  <p>先预约一次 30 分钟 AI 场景诊断——先看你的真实业务，再给方案。</p>
+  <h2>下一步：先判断，再决定</h2>
+  <p>不确定 AI 官网与 GEO 适不适合你？<br>先让明一根据你的真实业务判断，或预约一次人工沟通，再决定从哪开始。</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-    <a class="btn bo" href="/?agent=main">和明一聊聊</a>
-    <a class="btn bg" href="/products.html">看完整产品体系</a>
+    <a class="btn bo" href="/?agent=main">让明一判断是否适合我</a>
+    <a class="btn bg" href="/?agent=main">预约人工沟通</a>
   </div>
   <p style="font-size:13px;color:var(--tx4);letter-spacing:1px;margin-top:26px;margin-bottom:0">咨询 / 预约：微信 · 电话 CL13889506035（同号）</p>
 </section>
@@ -380,12 +416,13 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
 <footer>
   <div class="ft-links">
     <a href="/">首页</a>
-    <a href="/products.html">产品</a>
-    <a href="/systems.html">系统</a>
-    <a href="/cases.html">案例</a>
     <a href="/about.html">关于</a>
+    <a href="/products.html">产品中心</a>
+    <a href="/systems.html">系统登录</a>
+    <a href="/cases.html">案例</a>
     <a href="/agents.html">智能体</a>
-    <a href="/thoughts.html">明一日报</a>
+    <a href="/thoughts.html">日报</a>
+    <a href="/#cnt">联系</a>
     <a href="/faq.html">常见问题</a>
   </div>
   <div class="ft-meta">

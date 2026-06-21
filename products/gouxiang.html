@@ -7,7 +7,7 @@
 <meta name="description" content="构想™ 思维克隆系统：把一个人的思想、人生阅历、判断原则、方法论与表达风格系统化，做成可对话、可训练、可持续调用的 AI 分身。个人版 19,800，企业版定制。让思想可以落地，让经验可以复用。">
 <meta name="keywords" content="构想,思维克隆,思维克隆系统,AI分身,克隆思维,数字分身,经验复用,专家AI,老板AI分身,个人IP,道序科技">
 <meta property="og:title" content="构想™ 思维克隆系统 — 克隆你的思维，沉淀你的人生与方法">
-<meta property="og:description" content="把思想、人生阅历、判断原则、方法论与表达风格系统化，做成可持续调用的 AI 分身。道序科技明星产品，个人版 19,800，企业版定制。">
+<meta property="og:description" content="把思想、人生阅历、判断原则、方法论与表达风格系统化，做成可持续调用的 AI 分身。道序科技旗舰产品，个人版 19,800，企业版定制。">
 <meta property="og:type" content="product">
 <meta property="og:url" content="https://daoxu.com.cn/products/gouxiang.html">
 <meta property="og:locale" content="zh_CN">
@@ -75,6 +75,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .nr a:hover,.nr a.active{color:var(--gd)}
 .nr .np{display:inline-flex;align-items:center;gap:7px;letter-spacing:3px;font-size:10px;padding:7px 18px;border:1px solid rgba(196,162,101,.3);color:var(--gd);transition:all .6s}
 .nr .np:hover{background:var(--gd);color:var(--bg)}
+.nr .np.guest{color:var(--tx4)}
+.nr .nc-chat{background:var(--gd);color:var(--bg)!important;padding:8px 18px;border-radius:3px;letter-spacing:3px;font-size:10px;transition:all .5s var(--e2)}
+.nr .nc-chat:hover{box-shadow:0 0 18px rgba(196,162,101,.45);letter-spacing:4px}
 .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
 .ham span{width:22px;height:1px;background:var(--gd);transition:all .3s}
 .overlay{position:fixed;inset:0;background:rgba(7,7,10,.7);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:998}
@@ -126,9 +129,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 信任 grid */
 .trust{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
-.trust .ti{border:1px solid rgba(196,162,101,.1);padding:26px 24px;border-radius:3px}
+.trust .ti{border:1px solid rgba(196,162,101,.1);padding:26px 24px;border-radius:3px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.trust .ti:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .trust .ti h4{font-family:var(--sf);font-size:15px;color:var(--gd);letter-spacing:1px;font-weight:600;margin-bottom:10px}
-.trust .ti p{font-size:13px;color:var(--tx3);line-height:1.9;font-weight:300}
+.trust .ti p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
 
 /* 交付 table */
 .dtable{width:100%;border-collapse:collapse;margin-top:32px}
@@ -143,8 +147,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 价格 cards */
 .pcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:34px}
-.pcard{border:1px solid rgba(196,162,101,.12);padding:30px 28px;border-radius:3px;position:relative;transition:border-color .6s}
-.pcard:hover{border-color:rgba(196,162,101,.3)}
+.pcard{border:1px solid rgba(196,162,101,.12);padding:30px 28px;border-radius:3px;position:relative;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.pcard:hover{border-color:rgba(196,162,101,.3);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .pcard.feat{border-color:rgba(196,162,101,.3);background:linear-gradient(135deg,rgba(196,162,101,.04),transparent 70%)}
 .pcard .pc-tier{font-family:var(--sf);font-size:18px;color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:6px}
 .pcard .pc-for{font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:1.7;margin-bottom:16px;min-height:34px}
@@ -153,9 +157,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 
 /* 案例 */
 .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
-.ccard{border:1px solid rgba(196,162,101,.1);padding:26px 22px;border-radius:3px}
+.ccard{border:1px solid rgba(196,162,101,.1);padding:26px 22px;border-radius:3px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.ccard:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .ccard h4{font-family:var(--sf);font-size:15px;color:var(--tx);letter-spacing:1px;font-weight:600;margin-bottom:10px}
-.ccard p{font-size:13px;color:var(--tx3);line-height:1.9;font-weight:300}
+.ccard p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
+
+/* deliverable cards */
+.dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:32px}
+.dcard{border:1px solid rgba(196,162,101,.14);padding:24px 22px;border-radius:3px;position:relative;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.dcard:hover{border-color:rgba(196,162,101,.34);box-shadow:0 0 30px rgba(196,162,101,.07);transform:translateY(-2px)}
+.dcard .dno{font-family:var(--sf);font-size:12px;color:var(--gd);letter-spacing:2px;opacity:.7}
+.dcard h4{font-family:var(--sf);font-size:15.5px;color:var(--tx);letter-spacing:1px;font-weight:600;margin:6px 0 10px}
+.dcard p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
+
+/* 客户得到 outcome row */
+.outcome{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
+.oc{border:1px solid rgba(196,162,101,.12);padding:26px 22px;border-radius:3px;text-align:center;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.oc:hover{border-color:rgba(196,162,101,.3);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
+.oc .ocn{font-family:var(--sf);font-size:20px;color:var(--gd);font-weight:700;letter-spacing:1px;margin-bottom:10px}
+.oc p{font-size:13px;color:var(--tx2);line-height:1.9;font-weight:300}
+
+/* 日常使用 flow row */
+.usage{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:32px;align-items:stretch}
+.ucol{border:1px solid rgba(196,162,101,.12);padding:24px 22px;border-radius:3px;margin:0 6px}
+.ucol .ulb{font-size:10px;color:var(--gd);letter-spacing:3px;display:block;margin-bottom:12px}
+.ucol p{font-size:13px;color:var(--tx2);line-height:1.95;font-weight:300}
+.ucol p+p{margin-top:8px}
 
 /* boundary */
 .boundary{max-width:680px;margin:32px auto 0;border-left:2px solid rgba(196,162,101,.2);padding:8px 0 8px 24px}
@@ -165,7 +192,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .sub-cta{max-width:700px;margin:48px auto 90px;padding:60px 40px;text-align:center;background:var(--bg);border:1px solid rgba(196,162,101,.1);position:relative}
 .sub-cta::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.4),transparent)}
 .sub-cta h2{font-family:var(--sf);font-size:clamp(19px,2.4vw,24px);color:var(--tx);letter-spacing:2px;font-weight:600;margin-bottom:18px;line-height:1.7}
-.sub-cta p{font-size:14px;color:var(--tx3);letter-spacing:1.5px;line-height:2.2;margin-bottom:30px}
+.sub-cta p{font-size:14px;color:var(--tx2);letter-spacing:1.5px;line-height:2.2;margin-bottom:30px}
 
 /* footer */
 footer{padding:48px 32px;text-align:center;border-top:1px solid rgba(255,255,255,.03)}
@@ -184,9 +211,13 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
   .ham{display:flex !important}
   .phero{padding:120px 20px 32px}
   .psec{padding:40px 20px}
-  .trust{grid-template-columns:1fr}
-  .pcards{grid-template-columns:1fr}
-  .cases{grid-template-columns:1fr}
+  .trust{grid-template-columns:1fr !important}
+  .pcards{grid-template-columns:1fr !important}
+  .cases{grid-template-columns:1fr !important}
+  .dgrid{grid-template-columns:1fr}
+  .outcome{grid-template-columns:1fr}
+  .usage{grid-template-columns:1fr}
+  .ucol{margin:0 0 12px}
   .dtable td:first-child{width:40%}
 }
 @media(max-width:480px){.phero{padding:108px 16px 28px}.psec{padding:32px 16px}.flow .fstep{font-size:12px;padding:8px 12px}}
@@ -200,110 +231,99 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr"><a href="/">首页</a><a href="/products.html" class="active">产品</a><a href="/systems.html">系统</a><a href="/cases.html">案例</a><a href="/about.html">关于</a><a href="/agents.html">智能体</a><a href="/thoughts.html">明一日报</a><a href="/#cnt">联系</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">登 录</span></a></div>
+  <div class="nr"><a href="/">首页</a><a href="/products.html" class="active">产品与服务</a><a href="/about.html">关于道序</a><a href="/cases.html">案例</a><a href="/agents.html">AI 应用中心</a><a href="/thoughts.html">洞察</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">客 户 登 录</span></a><a href="/?agent=main" class="nc-chat">与 明 一 聊 聊</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
-<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||user.username;if(dot)dot.style.display=''}}catch(e){}})();</script>
+<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||'个人中心';if(dot)dot.style.display=''}}catch(e){}})();</script>
 <div class="overlay" onclick="toggleMenu()"></div>
 
-<!-- HERO -->
+<!-- ① 第一屏 · 一句话结果 -->
 <header class="phero">
-  <div class="crumb"><a href="/">首页</a> · <a href="/products.html">产品</a> · 构想™ 思维克隆系统</div>
-  <span class="flag">FLAGSHIP · 明 星 产 品</span>
+  <div class="crumb"><a href="/">首页</a> · <a href="/products.html">产品中心</a> · 构想™ 思维克隆系统</div>
+  <span class="flag">FLAGSHIP · 旗 舰 产 品</span>
   <h1>构想™ 思维克隆系统</h1>
   <p class="moo">克隆你的思维，<br>也沉淀你的人生与方法。</p>
-  <p class="price-line">个人版 19,800 · 企业版定制 · 让思想可以落地，让经验可以复用</p>
+  <p class="lead rv" style="margin-top:30px">把一个人的思想、人生阅历、判断原则、方法论与表达风格系统化，做成<strong>可对话、可训练、可持续调用</strong>的 AI 分身——让一生形成的经验，成为可以反复使用的智慧资产。</p>
+  <p class="price-line">个人版 19,800 · 企业版定制</p>
   <div class="acts">
-    <a class="btn bo" href="/?agent=main">和明一聊聊</a>
-    <a class="btn bg" href="#price">看价格与版本</a>
+    <a class="btn bo" href="/?agent=main">让明一判断是否适合我</a>
+    <a class="btn bg" href="#cta">预约人工沟通</a>
   </div>
 </header>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 这是什么 / 定位 -->
+<!-- ② 你是否遇到这些问题 -->
 <section class="psec">
-  <span class="lb rv">WHAT IT IS · 这 是 什 么</span>
-  <h2 class="rv d1">一个人真正值钱的，往往不是他知道多少</h2>
-  <p class="lead rv d1">而是：他经历过什么，如何理解世界，在关键时刻怎样判断，坚持什么、反对什么，如何把复杂问题讲明白，又经多年实践形成了哪些方法——<strong>为什么别人遇到同样的问题，做不出同样的选择。</strong></p>
-  <p class="lead rv d2">这些东西很有价值，却往往<strong>说不完整、复制不了、离开本人就无法持续</strong>。构想™ 把一个人的思想、人生阅历、判断原则、方法论和表达风格系统化，再做成可持续调用的 AI 分身。</p>
-</section>
-
-<!-- 信任与真实性 -->
-<section class="psec">
-  <span class="lb rv">NOT JUST A BOT · 不 只 是 一 个 智 能 体</span>
-  <h2 class="rv d1">它要同时完成三项资产建设</h2>
-  <p class="lead rv d1">普通智能体往往只做一件事：把资料放进去，然后回答问题。思维克隆要做的，是围绕你本人建立一套数字化智慧资产。</p>
-  <div class="trust rv d2" style="grid-template-columns:repeat(3,1fr)">
-    <div class="ti"><h4>思想资产化</h4><p>梳理世界观、价值观、认知方式、底线、原则和决策偏好。</p></div>
-    <div class="ti"><h4>人生资产化</h4><p>整理人生时间线、关键人物、转折、挫折、高光、故事和金句。</p></div>
-    <div class="ti"><h4>专业与个人品牌资产化</h4><p>提炼方法论、服务领域、代表案例、语言风格、角色定位和内容中轴。</p></div>
-  </div>
-  <p class="lead rv d3" style="font-size:14px">最终交付的不只是"一个会聊天的 AI"，而是一套围绕你本人建立的数字化智慧资产。</p>
-</section>
-
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-
-<!-- 适合谁 -->
-<section class="psec">
-  <span class="lb rv">FOR WHOM · 适 合 谁</span>
-  <h2 class="rv d1">当你已经有值得被沉淀的思想、经历与方法</h2>
-  <p class="lead rv d1">企业家与老板，很多判断只有本人会，团队总在问"这件事你会怎么处理"；专家、教授与顾问，知识体系成熟却受时间限制；律师、财税与专业服务者，经验丰富、想提升交付与新人训练；名师、培训师与个人 IP，想让内容更稳定、方法更清楚；家族企业与传承型人物，想把人生、商道、价值观留给团队或后代。</p>
-  <div class="chips rv d2">
-    <span>企业家 · 老板</span><span>专家 · 教授 · 顾问</span><span>律师 · 财税</span><span>名师 · 培训师</span><span>个人 IP</span><span>主理人</span><span>家族企业传承者</span>
-  </div>
-  <p class="lead rv d3" style="font-size:14px"><strong>一个判断标准：当你已经有值得被沉淀的思想、经历与方法，思维克隆才真正有价值。</strong></p>
-</section>
-
-<!-- 解决什么问题 -->
-<section class="psec">
-  <span class="lb rv">WHERE TO USE · 它 可 以 用 在 哪 里</span>
-  <h2 class="rv d1">从决策辅助，到智慧传承</h2>
+  <span class="lb rv">PAIN · 你 是 否 遇 到 这 些</span>
+  <h2 class="rv d1">很多判断只有你会，团队总在问"这事你会怎么处理"</h2>
   <ul class="plist rv d1">
-    <li><strong>决策辅助</strong>——面对合作、用人、产品、内容和经营问题，先获得一个基于本人原则的第二视角。</li>
-    <li><strong>团队训练</strong>——团队先向 AI 分身询问处理框架，再由本人或负责人做最终判断。</li>
-    <li><strong>内容生产</strong>——按本人的观点、方法和语言风格，辅助生成文章、视频脚本、课程结构和问答。</li>
-    <li><strong>专业服务</strong>——把重复答疑、基础分析、资料准备和方法讲解交给 AI 承担一部分。</li>
-    <li><strong>个人品牌</strong>——让内容不再只靠灵感，而是围绕稳定的思想中轴持续表达。</li>
-    <li><strong>智慧传承</strong>——让重要经历和方法不只被记录，也能被后代、团队或客户持续使用。</li>
+    <li>关键决策只有你拍得了板，你一不在，事情就停在那里。</li>
+    <li>团队学不会你的判断方式，同样的问题每次都来问你一遍。</li>
+    <li>你讲过的方法、踩过的坑，散在聊天、课件、录音里，没人整理得出来。</li>
+    <li>内容全靠你本人灵感，一忙起来表达就断更，风格也飘。</li>
+    <li>新人带教全靠你一对一口传，时间被吃掉，经验还是带不走。</li>
+    <li>你想把这一生的想法、商道和原则，留给后代或团队，却不知道从哪开始。</li>
   </ul>
 </section>
 
+<!-- ③ 这个产品是什么，也不是什么 -->
+<section class="psec">
+  <span class="lb rv">SCOPE · 是 什 么 · 不 是 什 么</span>
+  <h2 class="rv d1">提炼你为什么这样判断，不是复制你这个人</h2>
+  <div class="trust rv d1">
+    <div class="ti"><h4>它是</h4><p>把你的思想、人生阅历、判断原则、专业方法与表达风格结构化，做成可对话、可训练、可持续调用的 AI 分身，辅助你思考、表达、服务与传承。</p></div>
+    <div class="ti"><h4>它不是</h4><p>不是复制灵魂或意识，不是把历史内容简单拼接，不是百分百预测你未来的决定，更不是替你承担责任——本人始终保留最终判断。</p></div>
+  </div>
+  <p class="lead rv d2">它和企业知识库不同：知识库回答"公司知道什么"，思维克隆还要回答<strong>"这个人为什么这样判断、这样表达"</strong>。它不只卖一个会聊天的工具，而是围绕你本人建立一套数字化智慧资产。</p>
+</section>
+
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 怎么运作 / 三层 -->
+<!-- ④ 客户最终得到什么 -->
 <section class="psec">
-  <span class="lb rv">WHAT IT CLONES · 它 具 体 克 隆 什 么</span>
-  <h2 class="rv d1">六个模块，沉淀一个人为什么是今天的他</h2>
-  <table class="dtable rv d1">
-    <tr><td>人生经历</td><td>时间线、关键故事、人物、挫折、高光和转折——理解"为什么成为今天的你"。</td></tr>
-    <tr><td>个人哲学</td><td>社会观、认知观、信念、价值观和生命意义——建立稳定的思想中轴。</td></tr>
-    <tr><td>核心原则</td><td>底线、取舍、合作、用人、风险与决策原则——对新问题进行辅助推演。</td></tr>
-    <tr><td>专业方法</td><td>方法论、流程、案例、判断标准和经验——用于服务交付与团队训练。</td></tr>
-    <tr><td>语言风格</td><td>语气、结构、比喻、节奏、常用表达和金句——内容生产与品牌一致性。</td></tr>
-    <tr><td>IP 定位</td><td>角色、受众、核心理论、服务方向和内容主题——个人品牌与产品化。</td></tr>
-  </table>
+  <span class="lb rv">OUTCOME · 你 最 终 得 到 什 么</span>
+  <h2 class="rv d1">先讲你能感知到的成果，再讲它怎么做到</h2>
+  <div class="outcome rv d1">
+    <div class="oc"><div class="ocn">判断不再卡在你一个人</div><p>团队遇到合作、用人、产品、经营问题时，先获得一个基于你原则的第二视角，再交回你做最终决定。</p></div>
+    <div class="oc"><div class="ocn">经验第一次被沉淀下来</div><p>你的方法、原则和故事不再散落，被整理成可解释、可确认、可复用的体系，离开你也能持续被使用。</p></div>
+    <div class="oc"><div class="ocn">表达更稳，传承更安心</div><p>内容围绕稳定的思想中轴持续产出；人生、商道与价值观，能留给团队、客户与后代。</p></div>
+  </div>
+  <p class="lead rv d2">这些成果，来自下面真实交付的一整套资产——而不是一段提示词。</p>
 </section>
 
-<!-- 交付什么 -->
+<!-- ⑤ 完整交付清单 -->
 <section class="psec">
-  <span class="lb rv">DELIVERABLES · 你 最 后 会 得 到 什 么</span>
-  <h2 class="rv d1">不止一个会聊天的 AI，而是一套智慧资产</h2>
-  <table class="dtable rv d1">
-    <tr><td>01 人生故事档案</td><td>人生时间线、关键人物与事件、高光低谷与转折、创业或专业经历、代表故事、个人金句与内容选题。</td></tr>
-    <tr><td>02 个人哲学画像</td><td>系统梳理你的社会观、认知方式、信念、价值、原则、实践和终极目标。</td></tr>
-    <tr><td>03 核心原则与决策框架</td><td>把零散观点提炼为可解释、可确认、可修正的原则体系。</td></tr>
-    <tr><td>04 方法与案例知识库</td><td>整理你的专业方法、服务流程、案例、判断标准和常见问题。</td></tr>
-    <tr><td>05 语言表达风格库</td><td>让 AI 更接近你的表达习惯、结构和语气，同时保留清晰的边界。</td></tr>
-    <tr><td>06 个人 IP 定位与内容方向</td><td>明确角色定位、方法论、服务领域、核心理论与长期表达主题。</td></tr>
-    <tr><td>07 思维克隆体</td><td>面对新问题时，能基于你的原则、经历和方法进行分析、表达和辅助推演。</td></tr>
-    <tr><td>08 使用培训与首轮调优</td><td>用真实问题测试，确认"像不像、能不能用、哪里需要修正"。</td></tr>
-  </table>
+  <span class="lb rv">DELIVERABLES · 完 整 交 付 清 单</span>
+  <h2 class="rv d1">七项交付物，逐项可见、逐项确认</h2>
+  <div class="dgrid rv d1">
+    <div class="dcard"><span class="dno">01</span><h4>深度访谈（哲学 + 人生两类）</h4><p>哲学访谈梳理"你为什么这样想"，人生访谈梳理"你为什么成为今天的你"，为整套克隆提供真实语境。</p></div>
+    <div class="dcard"><span class="dno">02</span><h4>个人哲学画像</h4><p>系统梳理你的社会观、认知方式、信念、价值、原则、实践与终极目标，建立稳定的思想中轴。</p></div>
+    <div class="dcard"><span class="dno">03</span><h4>人生故事档案</h4><p>人生时间线、关键人物与事件、高光低谷与转折、创业或专业经历、代表故事与个人金句。</p></div>
+    <div class="dcard"><span class="dno">04</span><h4>核心原则体系与决策框架</h4><p>把零散观点提炼为可解释、可确认、可修正的原则体系，用于对新问题进行辅助推演。</p></div>
+    <div class="dcard"><span class="dno">05</span><h4>语言风格库</h4><p>语气、结构、比喻、节奏与常用表达，让 AI 更接近你的表达习惯，同时保留清晰边界。</p></div>
+    <div class="dcard"><span class="dno">06</span><h4>思维克隆体</h4><p>面对新问题时，能基于你的原则、经历与方法进行分析、表达与辅助推演的可对话分身。</p></div>
+    <div class="dcard"><span class="dno">07</span><h4>使用培训与首轮调优</h4><p>用真实问题测试，确认"像不像、能不能用、哪里要修正"，并教会你和团队怎么用。</p></div>
+  </div>
 </section>
 
-<!-- 怎么服务 流程 -->
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+
+<!-- ⑥ 日常如何使用 -->
 <section class="psec wide">
-  <span class="lb rv">PROCESS · 它 怎 么 做 出 来</span>
+  <span class="lb rv">IN USE · 日 常 如 何 使 用</span>
+  <h2 class="rv d1">你输入什么 → AI 输出什么 → 团队怎么调用</h2>
+  <div class="usage rv d1">
+    <div class="ucol"><span class="ulb">你输入</span><p>一个真实问题：某个合作要不要接、某次内容怎么讲、某个用人难题怎么权衡，或抛一段背景资料。</p></div>
+    <div class="ucol"><span class="ulb">AI 输出</span><p>基于你确认过的原则、方法与表达，给出分析框架、判断倾向、可用的表达，以及它会主动说明"这一步建议交回你本人定夺"。</p></div>
+    <div class="ucol"><span class="ulb">团队调用</span><p>团队先向分身询问处理框架做前置准备，再由你或负责人做最终判断；内容、答疑、新人训练都可日常调用。</p></div>
+  </div>
+  <p class="lead rv d2" style="font-size:14px">典型场景：决策辅助、团队训练、内容生产、专业服务前置答疑、个人品牌持续表达、智慧传承。</p>
+</section>
+
+<!-- ⑦ 服务流程与周期 -->
+<section class="psec wide">
+  <span class="lb rv">PROCESS · 服 务 流 程 与 周 期</span>
   <h2 class="rv d1">六步交付，所有核心原则必须经本人确认</h2>
   <div class="flow rv d1">
     <span class="fstep">① 资料与目标确认</span><span class="farrow">→</span>
@@ -314,116 +334,63 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
     <span class="fstep">⑥ 本人确认、培训与调优</span>
   </div>
   <div class="trust rv d2" style="margin-top:34px">
-    <div class="ti"><h4>哲学访谈回答"你为什么这样想"</h4><p>围绕社会、认知、信念、原则、实践与本源六个层次，梳理稳定观点与内在张力，决定价值观、判断方式、底线和原则。</p></div>
-    <div class="ti"><h4>人生访谈回答"你为什么成为今天的你"</h4><p>按时间线深挖关键事件、人物、情绪、选择、影响和金句，提供真实语境。同时理解哲学与人生，才更接近"遇到新问题会怎么想"。</p></div>
+    <div class="ti"><h4>道序做什么</h4><p>设计访谈、深度访谈、建模提炼、搭建克隆体、组织测试与首轮调优，并完成使用培训。</p></div>
+    <div class="ti"><h4>你做什么</h4><p>提供资料、参与两类深度访谈、确认核心原则与表达边界、参与真实问题测试与验收。</p></div>
   </div>
+  <p class="lead rv d3" style="font-size:13.5px;color:var(--tx4)">具体访谈安排、资料范围、平台形态与交付周期以项目确认单为准。</p>
 </section>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 价格 -->
-<section class="psec" id="price">
-  <span class="lb rv">PRICING · 价 格 与 版 本</span>
-  <h2 class="rv d1">个人版 19,800，企业版定制</h2>
-  <div class="pcards rv d1">
-    <div class="pcard feat"><div class="pc-tier">个人版</div><div class="pc-for">两类深度访谈 · 人生故事档案 · 个人哲学画像 · 核心原则与决策框架 · 语言风格库 · IP 定位 · 思维克隆体 · 真实问题测试 · 使用培训与首轮调优</div><div class="pc-price">19,800</div></div>
-    <div class="pcard"><div class="pc-tier">企业版</div><div class="pc-for">创始人 / 多关键人物克隆 + 企业知识库 + 销售 / 管理 / 内容智能体 + 团队权限 + 使用培训 + 持续调优；可对接企业微信等入口</div><div class="pc-price" style="font-size:20px">按需求定制</div></div>
-  </div>
-  <p class="lead rv d2" style="font-size:13.5px;margin-top:26px">个人版标准价格 <strong>19,800</strong>，实际访谈安排、资料范围、平台形态和交付时间以项目确认单为准。企业版不是简单多做一个账号，而是涉及多角色、企业知识库、权限、私有资料安全与系统接入，因此按需求定制报价。</p>
-  <p class="lead rv d3" style="font-size:13px;color:var(--tx4)">面向家族与组织的<strong>智慧传承方向</strong>，作为企业版 / 传承级能力按项目定制。</p>
-</section>
-
-<!-- 案例 -->
-<section class="psec wide">
-  <span class="lb rv">DIRECTIONS · 代 表 性 应 用 方 向</span>
-  <h2 class="rv d1">这样落地</h2>
-  <div class="cases rv d1">
-    <div class="ccard"><h4>企业家分身</h4><p>辅助团队理解创始人的经营逻辑、价值观和管理原则。</p></div>
-    <div class="ccard"><h4>专家分身</h4><p>承担基础答疑、方法讲解、内容辅助和客户前置沟通。</p></div>
-    <div class="ccard"><h4>名师 AI</h4><p>把知识体系、讲解方式和提问逻辑做成互动学习助手。</p></div>
-    <div class="ccard"><h4>主理人 AI</h4><p>把门店经营、产品研发、员工管理和客户服务经验产品化。</p></div>
-    <div class="ccard"><h4>家族与组织传承</h4><p>把人生、商道、文化与判断原则留给后代和团队。</p></div>
-    <div class="ccard"><h4>合作生态案例（匿名化）</h4><p>烘焙主理人 AI、律师 AI、名师 AI 等已落地方向，均为合作生态案例，按客户授权脱敏呈现。</p></div>
-  </div>
-  <p class="lead rv d2" style="font-size:12.5px;color:var(--tx4);margin-top:24px">具体案例需按客户授权公开；案例用于证明方向，不承诺同等商业结果。具体方案需基于诊断设计。</p>
-</section>
-
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-
-<!-- 验收四维 -->
+<!-- ⑧ 验收标准 -->
 <section class="psec">
-  <span class="lb rv">ACCEPTANCE · 如 何 判 断 像 不 像</span>
+  <span class="lb rv">ACCEPTANCE · 验 收 标 准</span>
   <h2 class="rv d1">验收不是看一句话，而是看四个维度</h2>
   <div class="trust rv d1">
-    <div class="ti"><h4>原则一致性</h4><p>面对价值冲突和取舍时，是否使用了本人确认的原则。</p></div>
+    <div class="ti"><h4>原则一致性</h4><p>面对价值冲突和取舍时，是否使用了本人确认过的原则。</p></div>
     <div class="ti"><h4>方法一致性</h4><p>面对专业问题时，是否使用了本人真实的方法与案例。</p></div>
-    <div class="ti"><h4>表达一致性</h4><p>语气、结构、节奏和常用表达是否接近本人，而不是机械模仿口头禅。</p></div>
+    <div class="ti"><h4>表达一致性</h4><p>语气、结构、节奏与常用表达是否接近本人，而不是机械模仿口头禅。</p></div>
     <div class="ti"><h4>边界一致性</h4><p>是否知道哪些问题可以回答，哪些必须交回本人或专业人员。</p></div>
   </div>
-  <p class="lead rv d2" style="font-size:14px"><strong>最终标准是：本人认可"它理解我的核心逻辑，而且在约定场景里真的能用"。</strong></p>
+  <p class="lead rv d2">用真实问题逐项测试、由本人确认口径一致；交付后维护人会按你思想与方法的变化持续更新。<strong>最终标准是：本人认可"它理解我的核心逻辑，而且在约定场景里真的能用"。</strong></p>
 </section>
 
-<!-- 它不是什么 -->
-<section class="psec">
-  <span class="lb rv">WHAT IT IS NOT · 它 不 是 什 么</span>
-  <h2 class="rv d1">先把不做的事说清楚</h2>
-  <ul class="plist rv d1">
-    <li>不是复制灵魂或意识</li>
-    <li>不是把历史内容简单拼接</li>
-    <li>不是百分百预测本人未来所有决定</li>
-    <li>不是替代本人承担责任</li>
-    <li>不是未经访谈与确认的一段提示词</li>
-    <li>不是心理治疗、宗教引导或人生控制工具</li>
-  </ul>
-  <p class="lead rv d2" style="font-size:14px"><strong>思维克隆是对思想、经历、方法和表达的结构化沉淀，不是对"人本身"的复制。</strong></p>
+<!-- ⑨ 案例 -->
+<section class="psec wide">
+  <span class="lb rv">CASES · 代 表 案 例（匿 名）</span>
+  <h2 class="rv d1">真实落地，按客户授权脱敏呈现</h2>
+  <div class="cases rv d1" style="grid-template-columns:repeat(2,1fr)">
+    <div class="ccard"><h4>某实体连锁主理人</h4><p>把门店经营、产品研发、员工管理与客户服务的判断逻辑系统化，做成主理人分身，辅助团队理解"主理人会怎么处理"。<br><span style="color:var(--gd);font-size:12px">道序角色：场景诊断 / 方案统筹 / 知识与智能体交付 / 团队培训</span></p></div>
+    <div class="ccard"><h4>某资深执业律师</h4><p>把专业方法、判断标准与表达风格沉淀为分身，承担基础答疑、方法讲解与客户前置沟通，专业判断仍交回本人。<br><span style="color:var(--gd);font-size:12px">道序角色：场景诊断 / 方案统筹 / 知识与智能体交付 / 使用培训</span></p></div>
+  </div>
+  <p class="lead rv d2" style="font-size:12.5px;color:var(--tx4);margin-top:24px">案例均经客户授权脱敏；案例用于证明方向，不承诺同等商业结果，具体方案需基于诊断设计。</p>
 </section>
 
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 
-<!-- 隐私与授权 -->
+<!-- ⑩ 边界与常见问题 -->
 <section class="psec">
-  <span class="lb rv">PRIVACY · 隐 私 与 授 权</span>
-  <h2 class="rv d1">高度私密的信息，先约定边界再开始</h2>
-  <p class="lead rv d1">思维克隆可能涉及高度私密的人生经历、价值观、声音、肖像、家庭和商业信息。项目启动前我们会明确：</p>
-  <ul class="plist rv d2">
-    <li>哪些资料可以使用</li>
-    <li>哪些内容只用于内部建模</li>
-    <li>谁可以访问</li>
-    <li>是否允许用于案例展示</li>
-    <li>是否需要脱敏</li>
-    <li>项目结束后如何保存、交付或删除</li>
-    <li>声音、肖像和数字人是否另行授权</li>
-  </ul>
-  <p class="lead rv d3" style="font-size:14px"><strong>未经授权，道序不将客户资料用于其他客户项目、公开传播或无关训练。</strong></p>
-</section>
-
-<!-- 常见问题 -->
-<section class="psec">
-  <span class="lb rv">FAQ · 常 见 问 题</span>
-  <h2 class="rv d1">关于思维克隆，你可能想问</h2>
+  <span class="lb rv">FAQ · 边 界 与 常 见 问 题</span>
+  <h2 class="rv d1">不夸大、不替你做最终判断</h2>
   <table class="dtable rv d1">
-    <tr><td>我没有写过书，也能做吗？</td><td>可以。核心资料可以来自访谈、会议、课程、文章、视频、案例和日常表达。</td></tr>
-    <tr><td>它能完全代替我吗？</td><td>不能。它用于辅助思考、表达、训练和服务，本人仍保留最终判断。</td></tr>
-    <tr><td>我思想还会变化怎么办？</td><td>克隆体可以迭代。重要变化需要更新原则、资料和使用边界。</td></tr>
-    <tr><td>所有人都适合做吗？</td><td>不适合。还没有形成稳定经验、观点或方法的人，应先积累，而不是急着克隆。</td></tr>
-    <tr><td>它和企业知识库有什么区别？</td><td>知识库回答"公司知道什么"；思维克隆还要回答"这个人为什么这样判断和表达"。</td></tr>
+    <tr><td>它能完全代替我吗？</td><td>不能。它用于辅助思考、表达、训练与服务，本人始终保留最终判断；它沉淀的是思想、经历、方法与表达，不是对人本身的复制。</td></tr>
+    <tr><td>我没有写过书，也能做吗？</td><td>可以。核心资料可来自访谈、会议、课程、文章、视频、案例和日常表达，不要求你写过书。</td></tr>
+    <tr><td>我的思想还会变化怎么办？</td><td>克隆体可以迭代，重要变化由维护人更新原则、资料与使用边界。</td></tr>
+    <tr><td>所有人都适合做吗？</td><td>不一定。还没有形成稳定经验、观点或方法的人，应先积累，再考虑克隆。</td></tr>
+    <tr><td>我的数据安全吗？</td><td>分身基于你授权的资料构建。哪些资料可用、谁可访问、是否脱敏、结束后如何保存或删除，均在启动前明确；未经授权，道序不将你的资料用于其他客户项目或公开传播。</td></tr>
   </table>
-</section>
-
-<!-- 边界 -->
-<section class="psec">
-  <div class="boundary rv">
-    <p>思维克隆用于知识服务、经验复用、内容辅助和决策辅助，不替代本人最终判断。法律、医疗、财税、金融等专业场景，最终责任仍由专业人员承担。它是把思想、经历、判断逻辑和表达方式，转化为可辅助使用的 AI 能力——把一生形成的思想与经验，做成 AI 时代可以持续使用的智慧资产。</p>
+  <div class="boundary rv d2" style="margin-top:30px">
+    <p>思维克隆用于知识服务、经验复用、内容辅助与决策辅助，不替代本人最终判断。法律、医疗、财税、金融等专业场景，最终责任仍由专业人员承担。</p>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="sub-cta rv">
+<!-- ⑪ 下一步 -->
+<section class="sub-cta rv" id="cta">
   <h2>不确定构想™ 适不适合你？</h2>
-  <p>先预约一次 30 分钟 AI 落地诊断——我们先看你的真实业务场景，再给方案。<br>每一次合作，都从一个真实问题开始。</p>
+  <p>先让明一看看你的真实场景与资料情况，再判断要不要做、怎么做。<br>每一次合作，都从一个真实问题开始。</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-    <a class="btn bo" href="/?agent=main">和明一聊聊</a>
-    <a class="btn bg" href="/products.html">看完整产品体系</a>
+    <a class="btn bo" href="/?agent=main">让明一判断是否适合我</a>
+    <a class="btn bg" href="/products.html">预约人工沟通</a>
   </div>
   <p style="font-size:13px;color:var(--tx4);letter-spacing:1px;margin-top:26px;margin-bottom:0">咨询 / 预约：微信 · 电话 CL13889506035（同号）</p>
 </section>
@@ -431,12 +398,13 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
 <footer>
   <div class="ft-links">
     <a href="/">首页</a>
-    <a href="/products.html">产品</a>
-    <a href="/systems.html">系统</a>
-    <a href="/cases.html">案例</a>
     <a href="/about.html">关于</a>
+    <a href="/products.html">产品中心</a>
+    <a href="/systems.html">系统登录</a>
+    <a href="/cases.html">案例</a>
     <a href="/agents.html">智能体</a>
-    <a href="/thoughts.html">明一日报</a>
+    <a href="/thoughts.html">日报</a>
+    <a href="/#cnt">联系</a>
     <a href="/faq.html">常见问题</a>
   </div>
   <div class="ft-meta">

@@ -50,6 +50,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .nr a:hover,.nr a.active{color:var(--gd)}
 .nr .np{display:inline-flex;align-items:center;gap:7px;letter-spacing:3px;font-size:10px;padding:7px 18px;border:1px solid rgba(196,162,101,.3);color:var(--gd);transition:all .6s}
 .nr .np:hover{background:var(--gd);color:var(--bg)}
+.nr .np.guest{color:var(--tx4)}
+.nr .nc-chat{background:var(--gd);color:var(--bg)!important;padding:8px 18px;border-radius:3px;letter-spacing:3px;font-size:10px;transition:all .5s var(--e2)}
+.nr .nc-chat:hover{box-shadow:0 0 18px rgba(196,162,101,.45);letter-spacing:4px}
 .nr .np-dot{display:none}
 .nr .np.set{padding:0 0 0 14px;border:0;border-left:1px solid rgba(196,162,101,.2);color:var(--gd)}
 .nr .np.set:hover{background:transparent;color:var(--tx)}
@@ -64,7 +67,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .phero{padding:150px 32px 24px;text-align:center;max-width:840px;margin:0 auto}
 .phero .lb{font-size:11px;color:var(--tx4);letter-spacing:6px;display:block;margin-bottom:26px}
 .phero h1{font-family:var(--sf);font-size:clamp(28px,4.4vw,48px);font-weight:700;letter-spacing:clamp(3px,1vw,8px);color:var(--tx);line-height:1.4;margin-bottom:24px}
-.phero p{font-size:15px;color:var(--tx3);letter-spacing:1.5px;line-height:2.3;font-weight:300;max-width:660px;margin:0 auto}
+.phero p{font-size:15px;color:var(--tx2);letter-spacing:1.5px;line-height:2.3;font-weight:300;max-width:660px;margin:0 auto}
 .phero .dv{height:1px;max-width:80px;margin:34px auto 0;background:linear-gradient(90deg,transparent,rgba(196,162,101,.35),transparent)}
 .orn{text-align:center;padding:14px 0}
 .orn-dots{display:flex;gap:10px;justify-content:center;align-items:center}
@@ -72,8 +75,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 52px;display:f
 .orn-dots span:nth-child(2){width:6px;height:6px;opacity:.5}
 /* 系统卡 */
 .sys-wrap{max-width:1000px;margin:0 auto;padding:30px 32px 20px}
-.sysc{border:1px solid rgba(196,162,101,.12);border-radius:4px;padding:44px 44px;margin-bottom:18px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(196,162,101,.025),transparent 60%);transition:border-color .6s}
-.sysc:hover{border-color:rgba(196,162,101,.28)}
+.sysc{border:1px solid rgba(196,162,101,.12);border-radius:4px;padding:44px 44px;margin-bottom:18px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(196,162,101,.025),transparent 60%);transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2)}
+.sysc:hover{border-color:rgba(196,162,101,.28);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 .sysc::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.25),transparent)}
 .sysc .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .sysc .badges span{font-size:9px;color:var(--gd);letter-spacing:2px;padding:3px 10px;border:1px solid rgba(196,162,101,.22)}
@@ -122,20 +125,11 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr">
-    <a href="/">首页</a>
-    <a href="/products.html">产品</a>
-    <a href="/systems.html" class="active">系统</a>
-    <a href="/cases.html">案例</a>
-    <a href="/about.html">关于</a>
-    <a href="/thoughts.html">明一日报</a>
-    <a href="/#cnt">联系</a>
-    <a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">登 录</span></a>
-  </div>
+  <div class="nr"><a href="/">首页</a><a href="/products.html">产品与服务</a><a href="/about.html">关于道序</a><a href="/cases.html">案例</a><a href="/agents.html">AI 应用中心</a><a href="/thoughts.html">洞察</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">客 户 登 录</span></a><a href="/?agent=main" class="nc-chat">与 明 一 聊 聊</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 <div class="overlay" onclick="toggleMenu()"></div>
-<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||user.username;if(dot)dot.style.display=''}}catch(e){}})();</script>
+<script>(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||'个人中心';if(dot)dot.style.display=''}}catch(e){}})();</script>
 
 <header class="phero">
   <span class="lb">SYSTEMS · 在 线 系 统</span>
@@ -162,15 +156,15 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
 
   <!-- 2. 数字人工作台 -->
   <article class="sysc rv d1">
-    <div class="badges"><span>内容生产</span><span>工作台</span><span class="soon">● 云端版部署中</span></div>
+    <div class="badges"><span>内容生产</span><span>工作台</span><span>● 在线可用</span></div>
     <h2>道序数字人工作台</h2>
     <div class="en">DIGITAL HUMAN STUDIO</div>
     <p class="moo">用数字人 + 声音克隆 + AI 脚本，<br>让你的口播内容不受真人产能限制。</p>
-    <p class="what">道序「数字人内容矩阵」的生产工作台。上传形象与声音样本，克隆出你的数字人与声音，批量生成口播视频、做切片、配字幕。本地版已在用，云端版正在部署，开放后从这里直接进入。</p>
+    <p class="what">道序「数字人内容矩阵」的生产工作台，已云端上线。注册登录道序账号、充值数字人余额，即可上传形象与声音样本，克隆你的数字人与声音，在线批量生成口播视频、做切片、配字幕。按视频时长计费，用多少算多少。</p>
     <div class="feats"><span>数字人形象</span><span>声音克隆</span><span>AI 口播脚本</span><span>口播视频生成</span><span>视频切片</span><span>字幕处理</span></div>
     <div class="foot">
       <div class="who"><b>适合：</b>招商加盟、课程销售、门店获客、个人 IP，需要持续口播内容的团队。</div>
-      <a class="btn bo" href="/?agent=main">预约体验 →</a>
+      <a class="btn bs" href="https://studio.daoxu.com.cn" target="_blank" rel="noopener">登录使用 →</a>
     </div>
   </article>
 
@@ -206,7 +200,7 @@ footer .ft-meta a{color:var(--tx4)}footer .ft-meta a:hover{color:var(--gd)}
 
 <footer>
   <div class="ft-links">
-    <a href="/">首页</a><a href="/products.html">产品</a><a href="/systems.html">系统</a><a href="/cases.html">案例</a><a href="/about.html">关于</a><a href="/thoughts.html">明一日报</a><a href="/faq.html">常见问题</a>
+    <a href="/">首页</a><a href="/about.html">关于</a><a href="/products.html">产品中心</a><a href="/systems.html">系统登录</a><a href="/cases.html">案例</a><a href="/agents.html">智能体</a><a href="/thoughts.html">日报</a><a href="/#cnt">联系</a><a href="/faq.html">常见问题</a>
   </div>
   <div class="ft-meta">
     道序科技 DAO ORDER · 让科技融入生活，让思想创造价值<br>

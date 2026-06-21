@@ -208,6 +208,9 @@ img{display:block}
 @keyframes vline{0%{transform:scaleY(0)}100%{transform:scaleY(1)}}
 @keyframes breathe{0%,100%{opacity:.6}50%{opacity:1}}
 @keyframes drift{0%,100%{transform:translateX(-50%)}50%{transform:translateX(-50%) translateY(6px)}}
+@keyframes goldsweep{0%{background-position:-160% 0}100%{background-position:260% 0}}
+.gshimmer{background:linear-gradient(100deg,var(--gd) 28%,#F4E4BE 50%,var(--gd) 72%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;background-size:220% auto;animation:goldsweep 7s linear infinite}
+@media(prefers-reduced-motion:reduce){.gshimmer{animation:none;-webkit-text-fill-color:var(--gd)}}
 @keyframes glowpulse{
   0%,100%{box-shadow:0 0 40px rgba(196,162,101,0),inset 0 0 40px rgba(196,162,101,0)}
   50%{box-shadow:0 0 60px rgba(196,162,101,.04),inset 0 0 60px rgba(196,162,101,.02)}
@@ -231,7 +234,7 @@ img{display:block}
 .S{padding:80px 64px;max-width:1400px;margin:0 auto;position:relative}
 .Sn{max-width:900px;margin-left:auto;margin-right:auto}
 /* ─── flowing ambient glows ─── */
-.glow-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.glow-wrap{display:none}
 .glow-wrap span{position:absolute;border-radius:50%;filter:blur(80px)}
 .glow-a{width:400px;height:350px;background:rgba(196,162,101,.08);top:-10%;left:-5%;animation:bgbreathe 12s ease-in-out infinite}
 .glow-b{width:350px;height:300px;background:rgba(196,162,101,.065);bottom:-10%;right:-5%;animation:bgbreathe 14s ease-in-out 3s infinite}
@@ -271,6 +274,16 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .nr .np.set{padding:0 0 0 14px;border:0;border-left:1px solid rgba(196,162,101,.2);color:var(--gd)}
 .nr .np.set:hover{background:transparent;color:var(--tx)}
 .nr .np.set .np-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gd);box-shadow:0 0 6px rgba(196,162,101,.5)}
+.nr .nc-chat{background:var(--gd);color:var(--bg)!important;padding:8px 18px;border-radius:3px;letter-spacing:3px;font-size:10px;transition:all .5s var(--e2)}
+.nr .nc-chat:hover{box-shadow:0 0 18px rgba(196,162,101,.45);letter-spacing:4px}
+.nr .np.guest{color:var(--tx4)}
+.qrow{display:flex;align-items:center;gap:14px 18px;flex-wrap:wrap;border:1px solid rgba(196,162,101,.14);border-radius:4px;padding:20px 26px;transition:border-color .45s var(--e2),transform .45s var(--e2);text-decoration:none}
+.qrow:hover{border-color:rgba(196,162,101,.42);transform:translateX(6px)}
+.qrow .qno{font-size:11px;color:var(--gd);opacity:.55;min-width:22px;letter-spacing:1px}
+.qrow .qmid{flex:1;min-width:210px}
+.qrow .qq{font-size:15px;color:var(--tx);font-weight:400;letter-spacing:.5px}
+.qrow .qfit{font-size:12px;color:var(--tx4);margin-top:5px;letter-spacing:.5px}
+.qrow .qto{font-size:13px;color:var(--gd);white-space:nowrap;letter-spacing:1px}
 
 /* ─── HERO ─── */
 .hero{min-height:100vh;min-height:100dvh;display:flex;justify-content:center;align-items:center;position:relative;overflow:hidden}
@@ -286,15 +299,15 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .hscr span{font-size:7px;color:var(--tx5);letter-spacing:6px}
 
 /* ─── CARDS ─── */
-.crd{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;transition:border-color 1.2s var(--e2);border-radius:4px;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
+.crd{background:transparent;border:1px solid rgba(196,162,101,.12);padding:48px 44px;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2);border-radius:4px;position:relative;overflow:hidden}
 .crd::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.1),transparent);transition:all 1.2s}
 .crd:hover::before{left:10%;right:10%;background:linear-gradient(90deg,transparent,rgba(196,162,101,.2),transparent)}
-.crd:hover{border-color:rgba(196,162,101,.15)}
+.crd:hover{border-color:rgba(196,162,101,.34);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}
 
 /* ─── PRODUCTS ─── */
 .pg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:52px}
 .pg.pg3{grid-template-columns:repeat(3,1fr)}
-.pc{background:var(--bg);border:1px solid rgba(196,162,101,.08);padding:48px 44px;position:relative;overflow:hidden;transition:all 1.2s var(--e2);border-radius:4px;box-shadow:inset 0 1px 0 rgba(196,162,101,.04)}
+.pc{background:transparent;border:1px solid rgba(196,162,101,.12);padding:48px 44px;position:relative;overflow:hidden;transition:border-color .45s var(--e2),box-shadow .45s var(--e2),transform .45s var(--e2);border-radius:4px}
 .svc-list{list-style:none;padding:0;margin:0}
 .svc-list li{font-size:14px;color:var(--tx2);line-height:1.8;font-weight:300;padding-left:22px;position:relative;letter-spacing:.5px;margin-bottom:8px}
 .svc-list li:last-child{margin-bottom:0}
@@ -302,7 +315,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .pc:hover .svc-list li::before{width:14px;opacity:.85}
 .svc-list li .svc-sub{display:block;font-size:11px;color:var(--tx4);letter-spacing:2px;margin-top:4px;font-weight:300;opacity:.7}
 .pc::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.1),transparent);transition:all 1.2s}
-.pc:hover{border-color:rgba(196,162,101,.15)}.pc:hover::before{background:linear-gradient(90deg,transparent,rgba(196,162,101,.12),transparent);left:10%;right:10%}
+.pc:hover{border-color:rgba(196,162,101,.34);box-shadow:0 0 30px rgba(196,162,101,.06);transform:translateY(-2px)}.pc:hover::before{background:linear-gradient(90deg,transparent,rgba(196,162,101,.2),transparent);left:10%;right:10%}
 .pc.fw{grid-column:1/-1}
 .pn{font-family:var(--sf);font-size:96px;font-weight:900;color:var(--gd);opacity:.015;position:absolute;right:28px;top:-6px;line-height:1;pointer-events:none;transition:opacity 1.2s}.pc:hover .pn{opacity:.04}
 
@@ -635,6 +648,7 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .statband .stat:last-child{border-right:none}
 .statband .stat .sv{font-family:var(--sf);font-size:clamp(28px,4vw,42px);color:var(--gd);font-weight:700;line-height:1.1}
 .statband .stat .sl{font-size:11px;color:var(--tx3);letter-spacing:1.5px;margin-top:14px;line-height:1.8;font-weight:300}
+.statband.sb4{grid-template-columns:repeat(4,1fr)}
 .flagship{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;border:1px solid rgba(196,162,101,.12);padding:56px 52px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(196,162,101,.035),transparent 62%);border-radius:4px}
 .flagship::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,162,101,.3),transparent)}
 .flagship .fl-badge{font-size:10px;color:var(--gd);letter-spacing:5px;border:1px solid rgba(196,162,101,.3);padding:5px 14px;display:inline-block;margin-bottom:22px}
@@ -653,18 +667,29 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
 .why-anchor{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:36px}
 .why-anchor .wa{border:1px solid rgba(196,162,101,.12);padding:18px 26px;font-size:12.5px;color:var(--tx3);letter-spacing:.5px;line-height:1.9;font-weight:300;max-width:330px;text-align:left}
 .why-anchor .wa b{color:var(--gd);font-weight:600;font-family:var(--sf)}
-@media(max-width:1024px){.flagship{padding:44px 36px;gap:36px}.pdoor .pc{padding:30px 24px}}
+@media(max-width:1024px){.flagship{padding:44px 36px;gap:36px}.pdoor .pc{padding:30px 24px}.statband.sb4{grid-template-columns:repeat(2,1fr)}.statband.sb4 .stat:nth-child(2){border-right:none}}
 @media(max-width:768px){
   .triage{grid-template-columns:1fr 1fr;gap:8px}
   .tcard{padding:24px 18px 40px}.tcard .tc-q{min-height:0;font-size:13px}
-  .statband{grid-template-columns:1fr}
-  .statband .stat{border-right:none;border-bottom:1px solid rgba(255,255,255,.03);padding:28px 16px}
+  .statband,.statband.sb4{grid-template-columns:1fr}
+  .statband .stat,.statband.sb4 .stat{border-right:none;border-bottom:1px solid rgba(255,255,255,.03);padding:28px 16px}
   .statband .stat:last-child{border-bottom:none}
   .flagship{grid-template-columns:1fr;padding:36px 26px;gap:28px}
   .pdoor{grid-template-columns:1fr}
   .why-anchor .wa{max-width:100%}
 }
 @media(max-width:480px){.triage{grid-template-columns:1fr}}
+
+.hchip{font-size:12px;color:var(--tx3);border:1px solid rgba(196,162,101,.18);border-radius:30px;padding:8px 18px;letter-spacing:1px;transition:border-color .4s,color .4s;text-decoration:none}
+.hchip:hover{border-color:rgba(196,162,101,.45);color:var(--gd)}
+.qrow{display:flex;align-items:center;gap:22px;padding:24px 28px;border:1px solid rgba(196,162,101,.12);border-radius:4px;margin-bottom:12px;text-decoration:none;transition:border-color .45s,background .45s,transform .45s var(--e2)}
+.qrow:hover{border-color:rgba(196,162,101,.34);background:rgba(196,162,101,.02);transform:translateX(4px)}
+.qrow .qn{font-family:var(--sf);font-size:22px;color:var(--gd);opacity:.65;letter-spacing:1px;flex:0 0 auto}
+.qrow .qmain{flex:1}
+.qrow .qq{font-size:16px;color:var(--tx);line-height:1.6;font-weight:400}
+.qrow .qfor{font-size:12.5px;color:var(--tx4);letter-spacing:.5px;margin-top:7px}
+.qrow .qto{font-size:12.5px;color:var(--gd);letter-spacing:1px;white-space:nowrap;opacity:.85;flex:0 0 auto}
+@media(max-width:680px){.qrow{flex-wrap:wrap;gap:8px 12px}.qrow .qto{flex-basis:100%}}
 </style>
 </head>
 <body>
@@ -676,231 +701,97 @@ nav.s{background:rgba(7,7,10,.96);backdrop-filter:blur(40px);-webkit-backdrop-fi
     <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 46C24 38 30 32 36 30" stroke="#C4A265" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".45"/></svg>
     <span class="nb">道 序 科 技</span>
   </a>
-  <div class="nr"><a href="/" class="active">首页</a><a href="/products.html">产品</a><a href="/systems.html">系统</a><a href="/cases.html">案例</a><a href="/about.html">关于</a><a href="/agents.html">智能体</a><a href="/thoughts.html">明一日报</a><a href="#cnt">联系</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">登 录</span></a></div>
+  <div class="nr"><a href="/" class="active">首页</a><a href="/products.html">产品与服务</a><a href="/about.html">关于道序</a><a href="/cases.html">案例</a><a href="/agents.html">AI 应用中心</a><a href="/thoughts.html">洞察</a><a href="/login.html" class="np guest" id="profileBtn"><span class="np-dot" style="display:none"></span><span class="np-name">客 户 登 录</span></a><a href="#" onclick="toggleChat();return false" class="nc-chat">与 明 一 聊 聊</a></div>
   <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 <div class="overlay" onclick="toggleMenu()"></div>
 
 <script>
-(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||user.username;if(dot)dot.style.display=''}}catch(e){}})();
+(function(){var btn=document.getElementById('profileBtn');if(!btn)return;var name=btn.querySelector('.np-name');var dot=btn.querySelector('.np-dot');try{var token=localStorage.getItem('daoxu_session_token');var user=JSON.parse(localStorage.getItem('daoxu_current_user')||'null');if(token&&user&&((user.profile&&user.profile.nickname)||user.username)){btn.classList.add('set');btn.classList.remove('guest');btn.href='/profile.html';if(name)name.textContent=(user.profile&&user.profile.nickname)||'个人中心';if(dot)dot.style.display=''}}catch(e){}})();
 </script>
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="top">
-  <div class="hz">
-    <div class="ha h0 hl"><img src="logo.png" alt="道序科技 DAO ORDER" style="width:100%;height:auto;display:block"></div>
-    <h1 class="ha h0 ht">道 序</h1>
+  <canvas id="cnet" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none"></canvas>
+  <div class="hz" style="position:relative;z-index:2;max-width:860px;padding:0 24px">
+    <img src="/logo.png" alt="道序科技 DAO ORDER TECHNOLOGY" class="ha h0" style="height:clamp(86px,11vw,118px);width:auto;margin:0 auto 26px;display:block">
+    <h1 class="ha h0" style="font-family:var(--sf);font-size:clamp(30px,5.4vw,58px);color:var(--tx);letter-spacing:clamp(2px,1vw,7px);line-height:1.4;font-weight:700;margin-top:22px">让 AI 真正进入你的业务</h1>
     <div class="hln"></div>
-    <p class="ha h1" style="font-family:var(--sf);font-size:clamp(18px,2.6vw,28px);color:var(--gd);letter-spacing:3px;line-height:2.4;font-weight:400">让 AI 进入场景<br>让问题得以解决<br>让思想可以落地</p>
-    <p class="ha h2" style="font-size:13.5px;color:var(--tx3);letter-spacing:2.5px;margin-top:30px;line-height:2">道序科技 DAO ORDER · 以 AI 为核心的场景应用与价值创造公司</p>
-    <div class="ha h3" style="margin-top:52px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap">
-      <a class="btn bs" href="#lead" style="font-size:13px;padding:18px 46px;letter-spacing:5px">预 约 AI 诊 断</a>
-      <a class="btn bo" href="#" onclick="toggleChat();return false" style="font-size:13px;padding:18px 46px;letter-spacing:5px">和 明 一 聊 聊</a>
+    <p class="ha h1" style="font-size:15px;color:var(--tx2);letter-spacing:1px;line-height:2.1;font-weight:300;max-width:680px;margin:0 auto">道序把人的思想、组织经验与业务流程，做成<b style="color:var(--tx);font-weight:400">可使用、可验收、可持续迭代</b>的 AI 产品与系统。</p>
+    <div class="ha h2" style="margin-top:38px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap">
+      <a class="btn bs" href="#" onclick="toggleChat();return false" style="font-size:13px;padding:17px 40px;letter-spacing:4px">让 明 一 帮 我 判 断</a>
+      <a class="btn bo" href="#who" style="font-size:13px;padding:17px 40px;letter-spacing:4px">看 真 实 案 例</a>
+    </div>
+    <div class="ha h3" style="margin-top:28px;display:flex;justify-content:center;gap:8px 10px;flex-wrap:wrap">
+      <a href="/about.html" class="hchip">了解道序</a>
+      <a href="#products" class="hchip">产品中心</a>
+      <a href="#who" class="hchip">客户见证</a>
+      <a href="/systems.html" class="hchip">三个系统</a>
+      <a href="#" onclick="toggleChat();return false" class="hchip">和明一聊一聊</a>
     </div>
   </div>
   <div class="hscr"><span>SCROLL</span></div>
 </section>
 
-<!-- ═══ 我们是谁 · 创始人背书 ═══ -->
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-<section class="S Sn" style="text-align:center" id="who">
-  <div class="glow-wrap"><span class="glow-b"></span></div>
-  <div class="rv"><span class="lb">WHO WE ARE · 我 们 是 谁</span><h2 style="font-family:var(--sf);font-size:clamp(24px,3.6vw,38px);letter-spacing:clamp(2px,1vw,6px);margin-top:20px;font-weight:600;color:var(--tx);line-height:1.5">把 AI 做进场景的公司</h2></div>
-  <div class="rv d1"><p style="font-size:15px;color:var(--tx2);line-height:2.6;margin-top:22px;font-weight:300;max-width:600px;margin-left:auto;margin-right:auto">不做底层大模型，也不止于教 AI、卖软件、做咨询。<br>我们从真实问题出发，把 AI、思想与方法，做成能用的产品、系统与服务。</p></div>
-  <div class="crd rv d2" style="text-align:center;max-width:720px;margin:40px auto 0">
-    <span class="tag-seal" style="font-size:11px !important;letter-spacing:5px !important">子 枫 · 道 序 科 技 创 始 人</span>
-    <p style="font-family:var(--sf);font-size:clamp(20px,2.6vw,27px);color:var(--tx);line-height:1.9;font-weight:600;letter-spacing:2px;margin-top:8px">「我们不卖 AI 工具，<br>帮你把 AI 真正用起来。」</p>
-    <p style="font-size:14px;color:var(--tx3);line-height:2.5;margin-top:22px;font-weight:300;max-width:540px;margin-left:auto;margin-right:auto">操盘过全网 10 亿+ 播放的爆款 IP，把"克隆思维"做成被上市公司收购并表的 AI 公司。如今亲自带队。</p>
-  </div>
-  <div class="statband rv d3">
-    <div class="stat"><div class="sv">10亿+</div><div class="sl">操盘内容总播放</div></div>
-    <div class="stat"><div class="sv">上市公司</div><div class="sl">「克隆思维 AI」被博美集团<br>收购并表</div></div>
-    <div class="stat"><div class="sv">5 类客户</div><div class="sl">企业 · 门店 · 专业人士<br>政企园区 · 集团行业</div></div>
-  </div>
-</section>
-
-<!-- ═══ 我们解决什么 · 服务谁 ═══ -->
-<div class="orn"><svg class="orn-seal" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="2"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
-<section class="S">
-  <div class="glow-wrap"><span class="glow-c"></span><span class="glow-d"></span></div>
-  <div class="rv" style="text-align:center;margin-bottom:8px"><span class="lb">WHAT WE SOLVE · 我 们 解 决 什 么</span><h2 style="font-family:var(--sf);font-size:clamp(22px,3.4vw,34px);letter-spacing:clamp(2px,1vw,6px);margin-top:18px;font-weight:600;color:var(--tx);line-height:1.5">AI 不缺工具，缺的是真正落进业务</h2><p style="font-size:14px;color:var(--tx3);letter-spacing:2px;line-height:2.2;margin-top:14px;font-weight:300">这是道序最常被找来解决的几类问题——总有一个像你。</p></div>
-  <div class="eg rv d1" style="grid-template-columns:1fr 1fr;gap:20px 40px">
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">AI 不知道从哪开始</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">知道 AI 重要，却不知道第一个场景该落在哪。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">增长缺方法、缺内容、缺承接</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">内容产出不稳定，客户接不住，销售不会跟。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">组织能力过度依赖少数人</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">老板、销冠、店长一走，经验就断层。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">专业能力无法规模化</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">专业能力很值钱，却被个人时间锁死。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">政企 · 行业场景需要 AI 化</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">政策、文旅、医保、行业系统，门槛高、响应慢。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">从一个小切口开始</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">先跑通一个最该解决的点，再逐步放大。</p></div>
-  </div>
-  <div class="rv d2" style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:44px"><span style="font-size:13px;color:var(--tx4)">企业与组织</span><span style="color:rgba(196,162,101,.15)">·</span><span style="font-size:13px;color:var(--tx4)">门店与小老板</span><span style="color:rgba(196,162,101,.15)">·</span><span style="font-size:13px;color:var(--tx4)">专业人士与机构</span><span style="color:rgba(196,162,101,.15)">·</span><span style="font-size:13px;color:var(--tx4)">政府园区与协会</span><span style="color:rgba(196,162,101,.15)">·</span><span style="font-size:13px;color:var(--tx4)">集团与行业客户</span></div>
-  <div class="rv d3" style="text-align:center;margin-top:24px"><p style="font-size:11.5px;color:var(--tx5);letter-spacing:1px;line-height:2;font-weight:300">麦肯锡 2025：88% 组织已用 AI，仅约 1/3 实现规模化　·　德勤 2026：37% 仍停留表层使用</p></div>
-</section>
-
-<!-- ═══ 分流器 · 你想解决什么 ═══ -->
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-<section class="S" id="start">
-  <div class="rv" style="text-align:center"><span class="lb">WHERE TO START · 你 想 解 决 什 么</span><h2 style="font-family:var(--sf);font-size:clamp(22px,3.4vw,34px);letter-spacing:clamp(2px,1vw,6px);margin-top:18px;font-weight:600;color:var(--tx);line-height:1.5">从一个真实问题开始</h2><p style="font-size:14px;color:var(--tx3);letter-spacing:2px;line-height:2.2;margin-top:14px;font-weight:300">选一个最像你的，点进去就懂。</p></div>
-  <div class="triage rv d2">
-    <a class="tcard" href="/products/gouxiang.html"><div class="tc-q">老板、专家的经验复制不出去，事事都要问本人</div><div class="tc-go">把经验做成 AI 分身<small>构想™ 思维克隆 →</small></div></a>
-    <a class="tcard" href="/products/growth.html"><div class="tc-q">销售新人慢、销冠经验复制不了、对话不会复盘</div><div class="tc-go">让成交有方法<small>销售教练智能体 →</small></div></a>
-    <a class="tcard" href="/products/geo.html"><div class="tc-q">客户用搜索、用 AI 都找不到你、读不懂你</div><div class="tc-go">让人和 AI 都读懂你<small>AI 官网 · GEO →</small></div></a>
-    <a class="tcard" href="/products/ai-landing.html"><div class="tc-q">政企 / 集团级的复杂场景、数据与系统</div><div class="tc-go">企业 AI 落地与定制<small>诊断 → 定制开发 →</small></div></a>
-  </div>
-</section>
-
-<!-- ═══ 旗舰 · 构想™思维克隆 ═══ -->
-<div class="orn"><svg class="orn-cloud" viewBox="0 0 120 28" fill="none"><path d="M10 20Q20 8 35 16Q45 4 60 14Q75 4 85 16Q100 8 110 20" stroke="#C4A265" stroke-width="1" fill="none" stroke-linecap="round"/></svg></div>
-<section class="S">
-  <div class="glow-wrap"><span class="glow-c"></span><span class="glow-d"></span></div>
-  <div class="flagship rv">
-    <div>
-      <span class="fl-badge">FLAGSHIP · 旗 舰 产 品</span>
-      <h2 style="font-family:var(--sf);font-size:clamp(26px,3.6vw,40px);color:var(--tx);letter-spacing:3px;font-weight:700;line-height:1.4">构 想 ™<br>思维克隆系统</h2>
-      <p style="font-family:var(--sf);font-size:clamp(16px,2vw,21px);color:var(--gd);line-height:1.9;margin-top:18px;font-weight:400">把一个人的经验、判断与表达，<br>做成一个永不下班的他。</p>
-      <p style="font-size:14px;color:var(--tx3);line-height:2.4;margin-top:18px;font-weight:300">不是复制表面话术，而是提炼判断逻辑、方法体系与语言风格，让团队、客户、组织都能反复调用。</p>
-      <div style="margin-top:30px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
-        <a class="btn bo" href="/products/gouxiang.html" style="font-size:12px;padding:15px 38px;letter-spacing:4px">了 解 构 想 ™</a>
-        <span style="font-size:13px;color:var(--tx4);letter-spacing:1px">个人版 19,800 · 企业版定制</span>
-      </div>
-    </div>
-    <div>
-      <ul class="fl-pts">
-        <li>深度访谈 + 资料采集，梳理你的判断逻辑</li>
-        <li>思想结构化：核心理念 / 方法体系 / 语言风格</li>
-        <li>AI 分身搭建：可对话、可输出、可训练</li>
-        <li>风格调优 + 使用培训 + 上线持续优化</li>
-        <li>通常 2–4 周交付，代码与数据都属于你</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ 产品体系 ═══ -->
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-<section class="S" id="products">
-  <div class="glow-wrap"><span class="glow-b"></span><span class="glow-d"></span></div>
-  <div class="rv" style="text-align:center"><span class="lb">WHAT WE DO · 产 品 体 系</span><h2 style="font-family:var(--sf);font-size:clamp(22px,3.6vw,36px);letter-spacing:clamp(2px,1vw,8px);margin-top:20px;font-weight:600;color:var(--tx);line-height:1.5">五个明星产品，从一个真实问题开始</h2><p style="font-size:14px;color:var(--tx3);letter-spacing:2px;line-height:2.2;margin-top:16px;font-weight:300">不用先学会所有 AI 工具。先找一个最该解决的问题，挑对应的产品。</p></div>
-  <div class="pdoor rv d1">
-    <a class="pc" href="/products/gouxiang.html" style="text-decoration:none"><span class="pd-flag">旗舰</span><div class="pd-no">01 · CLONE</div><div class="pd-name">构想™ 思维克隆系统</div><div class="pd-desc">把一个人的思想、经验、判断与表达，做成可调用的 AI 分身。老板、专家、名师、个人 IP 都适合。</div><div class="pd-go">个人版 19,800 · 企业版定制 →</div></a>
-    <a class="pc" href="/products/growth.html" style="text-decoration:none"><div class="pd-no">02 · SALES</div><div class="pd-name">销售教练智能体</div><div class="pd-desc">把产品知识、销售流程、销冠经验和真实对话，做成销售可问、可练、可复盘的 AI 教练。</div><div class="pd-go">9,800 · 了解 →</div></a>
-    <a class="pc" href="/products/geo.html" style="text-decoration:none"><div class="pd-no">03 · WEBSITE</div><div class="pd-name">AI 官网定制</div><div class="pd-desc">客户看得懂、AI 读得懂的企业官方信息入口。公司 / 产品 / 案例页、留资、AI 可读结构。</div><div class="pd-go">12,800 · 了解 →</div></a>
-    <a class="pc" href="/products/geo.html#geo" style="text-decoration:none"><div class="pd-no">04 · GEO</div><div class="pd-name">GEO · AI 可见度系统</div><div class="pd-desc">品牌事实库 + 问题库 + 内容结构 + 持续检测，让 AI 准确理解、提及、引用你的品牌。</div><div class="pd-go">9,800 / 年 · 了解 →</div></a>
-    <a class="pc" href="/products/ai-landing.html" style="text-decoration:none"><div class="pd-no">05 · ENTERPRISE</div><div class="pd-name">企业 AI 落地与定制开发</div><div class="pd-desc">从业务诊断到智能体、知识库、平台、App、小程序与行业系统。先一个小切口跑通，再放大。</div><div class="pd-go">定制报价 · 了解 →</div></a>
-    <a class="pc" href="/products/brand.html" style="text-decoration:none"><div class="pd-no">+ · BRAND</div><div class="pd-name">品牌视觉升级</div><div class="pd-desc">把定位、产品、案例和价值，变成统一、专业、可信的品牌表达系统——让实力被正确看见。</div><div class="pd-go">定制报价 · 了解 →</div></a>
-  </div>
-  <div class="rv d3" style="text-align:center;margin-top:36px"><a href="/products.html" style="font-size:11px;color:var(--gd);letter-spacing:5px;border-bottom:1px solid rgba(196,162,101,.3);padding-bottom:3px">看 完 整 产 品 体 系 与 价 格 →</a></div>
-</section>
-
-<!-- ═══ 在线系统 ═══ -->
-<div class="orn"><svg class="orn-cloud" viewBox="0 0 120 28" fill="none"><path d="M10 20Q20 8 35 16Q45 4 60 14Q75 4 85 16Q100 8 110 20" stroke="#C4A265" stroke-width="1" fill="none" stroke-linecap="round"/></svg></div>
-<section class="S" id="systems">
-  <div class="glow-wrap"><span class="glow-c"></span></div>
-  <div class="rv" style="text-align:center"><span class="lb">SYSTEMS · 在 线 系 统</span><h2 style="font-family:var(--sf);font-size:clamp(22px,3.6vw,36px);letter-spacing:clamp(2px,1vw,8px);margin-top:20px;font-weight:600;color:var(--tx);line-height:1.5">不止方案，还有能直接用的系统</h2><p style="font-size:14px;color:var(--tx3);letter-spacing:2px;line-height:2.2;margin-top:16px;font-weight:300">从企业到个人，三套系统对应三种用法——可登录、可下载、能上手。</p></div>
-  <div class="pdoor rv d1">
-    <a class="pc" href="/systems.html" style="text-decoration:none"><div class="pd-no">企业级 · 在线平台</div><div class="pd-name">智创宝 Starbox</div><div class="pd-desc">企业 AI 系统。获客、销售、客服、知识库智能体，装进一个可登录、可协作的后台。</div><div class="pd-go">进入系统 →</div></a>
-    <a class="pc" href="/systems.html" style="text-decoration:none"><div class="pd-no">内容生产 · 工作台</div><div class="pd-name">数字人工作台</div><div class="pd-desc">数字人 + 声音克隆 + AI 脚本，批量产口播视频与切片。让内容不受真人产能限制。</div><div class="pd-go">了解 / 预约 →</div></a>
-    <a class="pc" href="/systems.html" style="text-decoration:none"><div class="pd-no">桌面端 · 个人</div><div class="pd-name">DaoxuBrain 个人参谋</div><div class="pd-desc">道序大脑。桌面端个人第二大脑，把资料、笔记、判断装进随身参谋。可下载。</div><div class="pd-go">下载 / 了解 →</div></a>
-  </div>
-  <div class="rv d3" style="text-align:center;margin-top:36px"><a href="/systems.html" style="font-size:11px;color:var(--gd);letter-spacing:5px;border-bottom:1px solid rgba(196,162,101,.3);padding-bottom:3px">查 看 三 套 系 统 →</a></div>
-</section>
-
-<!-- ═══ 真实案例 ═══ -->
-<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
-<section class="S" id="cases">
-  <div class="glow-wrap"><span class="glow-c"></span></div>
-  <div class="rv" style="text-align:center;margin-bottom:44px"><span class="lb">EVIDENCE · 案 例</span><h2 style="font-family:var(--sf);font-size:clamp(22px,3.6vw,36px);letter-spacing:clamp(2px,1vw,8px);margin-top:20px;font-weight:600;color:var(--tx);line-height:1.5">让 AI 真正进入场景</h2><p style="font-size:13px;color:var(--tx3);letter-spacing:2px;line-height:2.2;margin-top:16px;font-weight:300;max-width:620px;margin-left:auto;margin-right:auto">每个案例都回答三件事：原来卡在哪、道序做了什么、能复制到哪。部分案例已匿名化。</p></div>
-  <div class="pg pg3" style="gap:16px">
-    <div class="pc rv" style="padding:32px 26px">
-      <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap"><span style="font-size:9px;color:var(--gd);letter-spacing:2px;padding:3px 9px;border:1px solid rgba(196,162,101,.25)">客服智能体</span><span style="font-size:9px;color:var(--gd);letter-spacing:2px;padding:3px 9px;border:1px solid rgba(196,162,101,.25)">知识库</span></div>
-      <h3 style="font-family:var(--sf);font-size:17px;color:var(--tx);letter-spacing:1px;font-weight:600;margin-bottom:14px">文旅公众号智能客服</h3>
-      <p style="font-size:13px;color:var(--tx3);line-height:2.1;margin-bottom:16px;font-weight:300">旺季咨询接不住、历史攻略分散——把历史文章和景区资料做成知识库 + 拟人客服，先答、不确定再转人工。</p>
-      <div style="padding-top:14px;border-top:1px solid rgba(196,162,101,.08);font-size:12px;color:var(--gd);font-weight:400;line-height:1.9">可复制到：景区 · 博物馆 · 园区 · 政务咨询</div>
-    </div>
-    <div class="pc rv d1" style="padding:32px 26px">
-      <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap"><span style="font-size:9px;color:var(--gd);letter-spacing:2px;padding:3px 9px;border:1px solid rgba(196,162,101,.25)">数字人</span><span style="font-size:9px;color:var(--gd);letter-spacing:2px;padding:3px 9px;border:1px solid rgba(196,162,101,.25)">获客内容</span></div>
-      <h3 style="font-family:var(--sf);font-size:17px;color:var(--tx);letter-spacing:1px;font-weight:600;margin-bottom:14px">连锁餐饮数字人招商</h3>
-      <p style="font-size:13px;color:var(--tx3);line-height:2.1;margin-bottom:16px;font-weight:300">招商靠真人出镜、产能有限——数字人 + AI 脚本批量生成口播，多平台矩阵持续分发，线索接进私域。</p>
-      <div style="padding-top:14px;border-top:1px solid rgba(196,162,101,.08);font-size:12px;color:var(--gd);font-weight:400;line-height:1.9">可复制到：餐饮加盟 · 教育招商 · 美业 · 区域代理</div>
-    </div>
-    <div class="pc rv d2" style="padding:32px 26px">
-      <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap"><span style="font-size:9px;color:var(--gd);letter-spacing:2px;padding:3px 9px;border:1px solid rgba(196,162,101,.25)">构想™</span><span style="font-size:9px;color:var(--gd);letter-spacing:2px;padding:3px 9px;border:1px solid rgba(196,162,101,.25)">知识库</span></div>
-      <h3 style="font-family:var(--sf);font-size:17px;color:var(--tx);letter-spacing:1px;font-weight:600;margin-bottom:14px">律师 AI 助手</h3>
-      <p style="font-size:13px;color:var(--tx3);line-height:2.1;margin-bottom:16px;font-weight:300">案件经验全锁在个人脑中——把判断逻辑、文书模板、谈单话术做成专业分身，新人能学、客户可初步交互。</p>
-      <div style="padding-top:14px;border-top:1px solid rgba(196,162,101,.08);font-size:12px;color:var(--gd);font-weight:400;line-height:1.9">可复制到：律师 · 财税 · 咨询 · 企业顾问</div>
-    </div>
-  </div>
-  <div class="rv d3" style="text-align:center;margin-top:36px"><a href="/cases.html" style="font-size:11px;color:var(--gd);letter-spacing:5px;border-bottom:1px solid rgba(196,162,101,.3);padding-bottom:3px">看 全 部 案 例 →</a></div>
-</section>
-
-<!-- ═══ 为什么选道序 · 信任区 ═══ -->
+<!-- ═══ 你最想解决哪件事（问题分流）═══ -->
 <div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
 <section class="S">
-  <div class="glow-wrap"><span class="glow-b"></span></div>
-  <div class="rv" style="text-align:center;margin-bottom:8px"><span class="lb">WHY DAO ORDER · 为 什 么 选 道 序</span><h2 style="font-family:var(--sf);font-size:clamp(22px,3.4vw,34px);letter-spacing:clamp(2px,1vw,6px);margin-top:18px;font-weight:600;color:var(--tx);line-height:1.5">交付的是能用的结果，不是漂亮的概念</h2></div>
-  <div class="eg rv d1">
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">从真实问题出发，不从工具出发</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">客户买的是问题被解决，不是又一个模型或软件。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">不只讲技术，也提炼思想与方法</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">真正值钱的能力，往往藏在老板、专家、销冠的经验里。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">不只做培训，也交付产品与系统</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">培训帮你找到入口，智能体、知识库、官网、GEO 让能力真正落地。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">从 9,800 到集团平台，都能承接</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">既能从一个 9,800 的销售教练起步，也能进政企、园区、行业平台定制。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">重使用、重验收，不止交工具</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">每个项目都有清单、边界、真实问题测试、培训与交接。</p></div>
-    <div class="ei"><h4 style="font-size:16px;color:var(--tx);margin-bottom:10px;font-weight:400">不承诺神话，坚持长期可信</h4><p style="font-size:14px;color:var(--tx3);line-height:2.1;font-weight:300">不保证赚钱、不替代员工、不保证排名——交付可用、可验证、可优化的能力。</p></div>
+  <div class="rv" style="text-align:center"><span class="lb">YOUR PROBLEM · 对 号 入 座</span><h2 style="font-family:var(--sf);font-size:clamp(24px,3.6vw,38px);letter-spacing:clamp(2px,1vw,6px);margin-top:18px;font-weight:600;color:var(--tx);line-height:1.5">你现在最想解决哪件事？</h2><p style="font-size:16px;color:var(--tx2);letter-spacing:.5px;line-height:2;margin-top:16px;font-weight:300;max-width:620px;margin-left:auto;margin-right:auto">多数人知道自己卡在哪，却不一定分得清产品叫什么。所以——先认出你的问题，再决定用哪一套 AI。</p></div>
+  <div class="rv d1" style="max-width:900px;margin:44px auto 0">
+    <a href="/products/gouxiang.html" class="qrow"><span class="qn">01</span><div class="qmain"><div class="qq">我有思想、经历和方法，希望留下来、用起来</div><div class="qfor">适合 企业家 · 专家 · 教授 · 顾问 · 主理人 · 个人 IP</div></div><div class="qto">构想™ 思维克隆 →</div></a>
+    <a href="/products/growth.html" class="qrow"><span class="qn">02</span><div class="qmain"><div class="qq">销售新人不会聊，销冠经验复制不出去</div><div class="qfor">适合 高客单服务 · 招商加盟 · 企业服务 · 销售团队</div></div><div class="qto">销售教练智能体 →</div></a>
+    <a href="/products/geo.html" class="qrow"><span class="qn">03</span><div class="qmain"><div class="qq">客户看不懂我的品牌，AI 也找不到我</div><div class="qfor">适合 官网老旧 · 品牌表达混乱 · 需要长期 AI 可见度</div></div><div class="qto">AI 官网 / GEO →</div></a>
+    <a href="/products/ai-landing.html" class="qrow"><span class="qn">04</span><div class="qmain"><div class="qq">企业资料散、流程重复，不知道第一刀落在哪里</div><div class="qfor">适合 企业 · 集团 · 园区 · 多部门组织</div></div><div class="qto">企业 AI 落地 →</div></a>
+    <a href="#" onclick="toggleChat();return false" class="qrow"><span class="qn">05</span><div class="qmain"><div class="qq">我有平台、App、小程序或复杂行业需求</div><div class="qfor">适合 政企 · 行业客户 · 复杂系统建设</div></div><div class="qto">让明一先判断 →</div></a>
   </div>
+</section>
+
+<!-- ═══ ① 产品货架（首页主角）═══ -->
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+<section class="S" id="products" style="padding-top:8px">
+  <div class="rv" style="text-align:center"><span class="lb">PRODUCTS · 道 序 在 做 的 产 品</span><h2 style="font-family:var(--sf);font-size:clamp(24px,3.6vw,38px);letter-spacing:clamp(2px,1vw,6px);margin-top:18px;font-weight:600;color:var(--tx);line-height:1.5">道序在做的产品</h2><p style="font-size:15px;color:var(--tx2);letter-spacing:1px;line-height:2.1;margin-top:16px;font-weight:300;max-width:600px;margin-left:auto;margin-right:auto">不只卖工具、不止做演示——每个都做成你能用、可验收的 AI 系统。</p></div>
+  <div class="pdoor rv d1" style="margin-top:40px">
+    <a class="pc" href="/products/gouxiang.html" style="text-decoration:none;position:relative"><span class="pd-flag">旗舰</span><div class="pd-name" style="font-size:18px">构想™ 思维克隆系统</div><div class="pd-desc">把一个人的思想、经验与判断，做成能对话、可复用的 AI 分身。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">个人版 19,800 · 企业版定制</div><div class="pd-go">了 解 →</div></a>
+    <a class="pc" href="/products/growth.html" style="text-decoration:none"><div class="pd-name" style="font-size:18px">销售教练智能体</div><div class="pd-desc">把销冠经验、流程与真实对话，做成可问、可练、可复盘的 AI 教练。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">9,800</div><div class="pd-go">了 解 →</div></a>
+    <a class="pc" href="/products/geo.html" style="text-decoration:none"><div class="pd-name" style="font-size:18px">AI 官网定制</div><div class="pd-desc">客户看得懂、AI 也读得懂的企业官方信息入口。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">12,800</div><div class="pd-go">了 解 →</div></a>
+    <a class="pc" href="/products/geo.html#geo" style="text-decoration:none"><div class="pd-name" style="font-size:18px">GEO · AI 可见度系统</div><div class="pd-desc">让 AI 准确理解、提及并引用你的品牌。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">9,800 / 年</div><div class="pd-go">了 解 →</div></a>
+    <a class="pc" href="/products/ai-landing.html" style="text-decoration:none"><div class="pd-name" style="font-size:18px">企业 AI 落地与定制开发</div><div class="pd-desc">知识库、岗位智能体、工作流、平台、小程序与定制开发。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">诊断后报价</div><div class="pd-go">了 解 →</div></a>
+    <a class="pc" href="/products/brand.html" style="text-decoration:none"><div class="pd-name" style="font-size:18px">品牌视觉升级</div><div class="pd-desc">把定位、产品与价值，变成统一、专业、可信的品牌表达。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">定制报价</div><div class="pd-go">了 解 →</div></a>
+    <a class="pc" href="/systems.html" style="text-decoration:none;position:relative"><span class="pd-flag">在线可用</span><div class="pd-name" style="font-size:18px">智创宝 · 企业 AI 系统</div><div class="pd-desc">登录即用，把内容、销售、交付接进一套企业 AI 工作系统。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">在线开通</div><div class="pd-go">了 解 →</div></a>
+    <a class="pc" href="/systems.html" style="text-decoration:none;position:relative"><span class="pd-flag">在线可用</span><div class="pd-name" style="font-size:18px">数字人工作台</div><div class="pd-desc">在线克隆形象与声音、生成口播视频，按时长计费。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">按时长计费</div><div class="pd-go">了 解 →</div></a>
+    <a class="pc" href="/systems.html" style="text-decoration:none;position:relative"><span class="pd-flag">在线可用</span><div class="pd-name" style="font-size:18px">DaoxuBrain · 个人参谋</div><div class="pd-desc">桌面端的 AI 军师与第二大脑，可下载安装。</div><div style="font-size:12px;color:var(--gd);letter-spacing:.5px;margin-top:12px;opacity:.85">下载使用</div><div class="pd-go">了 解 →</div></a>
+  </div>
+  <div class="rv d2" style="text-align:center;margin-top:34px"><p style="font-size:13px;color:var(--tx3);letter-spacing:.5px;line-height:1.9;font-weight:300">不知道选哪个？<a href="#" onclick="toggleChat();return false" style="color:var(--gd);border-bottom:1px solid rgba(196,162,101,.3)">把你的情况说给明一 →</a><span style="margin:0 12px;color:var(--tx5)">|</span><a href="/products.html" style="color:var(--tx3);border-bottom:1px solid rgba(196,162,101,.2)">看完整产品与价格 →</a></p></div>
+</section>
+
+<!-- ═══ ② 落地证据 ═══ -->
+<div class="orn"><div class="orn-dots"><span></span><span></span><span></span></div></div>
+<section class="S" id="who">
+  <div class="glow-wrap"><span class="glow-b"></span><span class="glow-c"></span></div>
+  <div class="rv" style="text-align:center"><span class="lb">REAL CASES · 真 实 案 例</span><h2 style="font-family:var(--sf);font-size:clamp(24px,3.6vw,38px);letter-spacing:clamp(2px,1vw,6px);margin-top:18px;font-weight:600;color:var(--tx);line-height:1.5">不是演示，是真交付</h2><p style="font-size:15px;color:var(--tx2);letter-spacing:1px;line-height:2.1;margin-top:16px;font-weight:300;max-width:600px;margin-left:auto;margin-right:auto">不堆形容词——看道序真做过什么、交付了什么。（客户名已匿名化）</p></div>
+  <div class="rv d1" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:16px;margin-top:42px">
+    <div class="pc" style="padding:32px 28px"><div class="pd-no">公共服务 · 某省会城市文旅单位</div><div class="pd-name">公众号智能客服</div><div class="pd-desc">公众号历史内容与景区资料做成文旅知识库，接入客服智能体，游客咨询即时应答，沉睡的历史内容被重新激活。</div><div style="font-size:11px;color:var(--tx4);letter-spacing:.5px;border-top:1px solid rgba(196,162,101,.1);margin-top:14px;padding-top:10px">道序角色：场景诊断 · 知识库与客服智能体交付</div></div>
+    <div class="pc" style="padding:32px 28px"><div class="pd-no">思想资产化 · 实体连锁主理人</div><div class="pd-name">经验产品化</div><div class="pd-desc">把多年的管理、话术与配方经验做成 AI 助手，对内训练团队、对外形成可复用的行业经验产品。</div><div style="font-size:11px;color:var(--tx4);letter-spacing:.5px;border-top:1px solid rgba(196,162,101,.1);margin-top:14px;padding-top:10px">道序角色：场景诊断 · 思想与知识建模 · 智能体交付</div></div>
+    <div class="pc" style="padding:32px 28px"><div class="pd-no">大健康 · 某大型健康集团</div><div class="pd-name">适老化健康管理 App</div><div class="pd-desc">大模型 + 医疗知识库，为中老年人提供零门槛、适老化的 AI 健康管理服务。</div><div style="font-size:11px;color:var(--tx4);letter-spacing:.5px;border-top:1px solid rgba(196,162,101,.1);margin-top:14px;padding-top:10px">道序角色：方案统筹 · 联合技术实施 · 项目管理</div></div>
+  </div>
+  <div class="rv d2" style="text-align:center;margin-top:32px"><p style="font-size:13.5px;color:var(--tx3);letter-spacing:.5px;line-height:1.95;font-weight:300">每个项目都交付：<b style="color:var(--tx2);font-weight:400">需求清单 · 边界规则 · 真实问题验收 · 培训交接</b>——重使用、重验收，不是做完就走。</p></div>
+  <div class="rv d2" style="text-align:center;margin-top:24px"><a href="/cases.html" style="font-size:11px;color:var(--gd);letter-spacing:5px;border-bottom:1px solid rgba(196,162,101,.3);padding-bottom:3px">看 全 部 案 例 →</a></div>
 </section>
 
 <!-- ═══ 明一 · AI 信使 ═══ -->
 <div class="orn"><svg class="orn-seal" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="2"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
 <section class="S" id="mingyi">
   <div class="glow-wrap"><span class="glow-b"></span><span class="glow-c"></span></div>
-  <div class="rv" style="text-align:center;margin-bottom:8px"><span class="lb">MINGYI · AI 信 使</span><h2 style="font-family:var(--sf);font-size:clamp(22px,3.4vw,34px);letter-spacing:clamp(2px,1vw,6px);margin-top:18px;font-weight:600;color:var(--tx);line-height:1.5">不确定哪个适合你？先问明一</h2><p style="font-size:14px;color:var(--tx3);letter-spacing:2px;line-height:2.2;margin-top:14px;font-weight:300;max-width:620px;margin-left:auto;margin-right:auto">道序体系孕育的 AI 信使，身后是 14 个专项智能体。<br>免费、即时——直接问它「我这种情况，该先做什么」。</p></div>
-  <div class="rv d1" style="text-align:center;margin:28px 0 4px"><a class="btn bo" href="#" onclick="toggleChat();return false" style="font-size:12px;padding:15px 42px;letter-spacing:4px">和 明 一 对 话</a></div>
-  <div class="intro-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;margin-top:36px">
-    <div class="rv">
-      <div class="thought-card" onclick="openThought()">
-        <span class="lb" style="text-align:left">DAILY INSIGHT</span>
-        <h2 style="font-family:var(--sf);font-size:clamp(22px,2.8vw,28px);color:var(--gd);letter-spacing:4px;margin:16px 0 0;font-weight:600">明一带你看世界</h2>
-        <div class="tc-divider"></div>
-        <p style="font-size:11px;color:var(--tx5);letter-spacing:3px;margin-bottom:16px"><span style="color:var(--gd);opacity:.7">每日 9:00 更新</span><span style="margin:0 10px;opacity:.2">·</span><span id="thoughtDate"></span></p>
-        <div class="thought-title" id="thoughtTitle"></div>
-        <div class="thought-summary" id="thoughtSummary"></div>
-        <div class="tc-btn">展 开 阅 读</div>
-      </div>
-    </div>
-    <div class="rv d2">
-      <div class="thought-card" style="cursor:pointer" onclick="location.href='/agents.html';return false">
-        <span class="lb" style="text-align:left">AGENT SQUARE · 免 费 入 口</span>
-        <h2 style="font-family:var(--sf);font-size:clamp(22px,2.8vw,28px);color:var(--gd);letter-spacing:4px;margin:16px 0 0;font-weight:600">智 能 体 广 场</h2>
-        <div class="tc-divider"></div>
-        <p style="font-size:15px;color:var(--tx2);line-height:2.2;font-weight:300;margin-bottom:20px">在道序，免费使用全世界顶尖 AI 模型。14 个专业智能体各司其职，云端同步你的设定与记忆，换设备也能继续用。</p>
-        <p style="font-size:12px;letter-spacing:4px;color:var(--gd);font-weight:400;margin-bottom:24px;opacity:.85">免费 · 三端互通 · 14 智能体</p>
-        <span class="tc-btn" style="color:var(--gd)">进 入 智 能 体 广 场 ▸</span>
-      </div>
-    </div>
+  <div class="rv" style="text-align:center;margin-bottom:8px"><span class="lb">MINGYI · AI 需 求 顾 问</span><h2 style="font-family:var(--sf);font-size:clamp(22px,3.4vw,34px);letter-spacing:clamp(2px,1vw,6px);margin-top:18px;font-weight:600;color:var(--tx);line-height:1.5">不确定哪个适合你？先问明一</h2><p style="font-size:14px;color:var(--tx3);letter-spacing:1px;line-height:2.1;margin-top:14px;font-weight:300;max-width:600px;margin-left:auto;margin-right:auto">明一是道序的 AI 需求顾问。先问清你卡在哪，再帮你定位一个产品——不群发推销。</p></div>
+  <div class="rv d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:26px auto 0;max-width:720px">
+    <span onclick="toggleChat();return false" style="cursor:pointer;font-size:12px;color:var(--tx2);border:1px solid rgba(196,162,101,.18);border-radius:3px;padding:10px 16px;letter-spacing:.5px;transition:border-color .4s" onmouseenter="this.style.borderColor='rgba(196,162,101,.4)'" onmouseleave="this.style.borderColor='rgba(196,162,101,.18)'">我想把自己的经验做成 AI 分身</span>
+    <span onclick="toggleChat();return false" style="cursor:pointer;font-size:12px;color:var(--tx2);border:1px solid rgba(196,162,101,.18);border-radius:3px;padding:10px 16px;letter-spacing:.5px;transition:border-color .4s" onmouseenter="this.style.borderColor='rgba(196,162,101,.4)'" onmouseleave="this.style.borderColor='rgba(196,162,101,.18)'">我想让销售更能打</span>
+    <span onclick="toggleChat();return false" style="cursor:pointer;font-size:12px;color:var(--tx2);border:1px solid rgba(196,162,101,.18);border-radius:3px;padding:10px 16px;letter-spacing:.5px;transition:border-color .4s" onmouseenter="this.style.borderColor='rgba(196,162,101,.4)'" onmouseleave="this.style.borderColor='rgba(196,162,101,.18)'">我想让客户和 AI 都找得到我</span>
   </div>
+  <div class="rv d1" style="text-align:center;margin:28px 0 0"><a class="btn bs" href="#" onclick="toggleChat();return false" style="font-size:13px;padding:16px 44px;letter-spacing:4px">和 明 一 聊 聊</a></div>
+  <div class="rv d2" style="text-align:center;margin-top:24px"><p style="font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:1.9">也可以 <a href="#" onclick="openThought();return false" style="color:var(--gd);border-bottom:1px solid rgba(196,162,101,.25)">看明一的今日洞察</a> · <a href="/agents.html" style="color:var(--gd);border-bottom:1px solid rgba(196,162,101,.25)">进免费智能体广场</a></p><span id="thoughtTitle" class="thought-title" style="display:none"></span><span id="thoughtDate" style="display:none"></span><span id="thoughtSummary" class="thought-summary" style="display:none"></span></div>
 </section>
 
-<!-- ═══ THE GREAT HALL ═══ -->
-<div class="orn"><svg class="orn-cloud" viewBox="0 0 120 28" fill="none"><path d="M10 20Q20 8 35 16Q45 4 60 14Q75 4 85 16Q100 8 110 20" stroke="#C4A265" stroke-width="1" fill="none" stroke-linecap="round"/></svg></div>
-<section class="S" style="text-align:center">
-  <div class="glow-wrap"><span class="glow-c"></span><span class="glow-d"></span></div>
-  <div class="rv"><span class="lb">PHILOSOPHY · 道 序 天 成</span></div>
-  <div class="rv d1"><p style="font-family:var(--sf);font-size:clamp(22px,3.4vw,40px);color:var(--tx);letter-spacing:3px;line-height:1.9;font-weight:600;margin-top:28px">道，是规律与方向。<br>序，是次序与落地。</p></div>
-  <div class="rv d2"><p style="font-size:13px;color:var(--tx4);letter-spacing:2px;line-height:2.2;font-weight:300;margin-top:22px">先看懂道，再有序地落——不为技术而技术。</p></div>
-  <div class="rv d2" style="margin-top:56px"><h2 style="font-family:var(--sf);font-size:clamp(44px,8vw,92px);letter-spacing:clamp(12px,3vw,28px);font-weight:900;color:var(--tx);opacity:.92">道序天成</h2></div>
-  <div class="spr">
-    <div class="spi rv d1"><div class="spch">道</div><p style="font-size:13px;color:var(--tx3);line-height:2.4;font-weight:200">找到你<br>独特的路</p></div>
-    <div class="spi rv d2"><div class="spch">序</div><p style="font-size:13px;color:var(--tx3);line-height:2.4;font-weight:200">让混沌<br>变成有序</p></div>
-    <div class="spi rv d3"><div class="spch">承</div><p style="font-size:13px;color:var(--tx3);line-height:2.4;font-weight:200">让经验<br>成为资产</p></div>
-    <div class="spi rv d4"><div class="spch">创</div><p style="font-size:13px;color:var(--tx3);line-height:2.4;font-weight:200">让智慧<br>创造价值</p></div>
-  </div>
-</section>
-
-<!-- 生态/思想共同体区块已并入「关于」页 -->
-
-
-<!-- （此处旧区块已重构为「产品体系」） -->
-
-
-<!-- 旧案例预览已被新「真实案例」区块替代 -->
 
 
 <!-- ═══ CTA + 留资表单 收尾 ═══ -->
@@ -983,12 +874,41 @@ function submitLead(e){
   </div>
 </section>
 
-<footer style="padding:40px;text-align:center;border-top:1px solid rgba(255,255,255,.015)">
-  <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px">
-    <svg width="16" height="16" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round"/></svg>
-    <span style="font-family:var(--sf);font-size:10px;color:var(--gd);letter-spacing:6px;font-weight:300">道 序 科 技</span>
+<footer style="padding:60px 40px 38px;border-top:1px solid rgba(255,255,255,.04)">
+  <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:36px 30px;text-align:left">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <svg width="16" height="16" viewBox="0 0 60 60" fill="none"><rect x="6" y="6" width="48" height="48" rx="2" stroke="#C4A265" stroke-width="3"/><path d="M14 42C18 32 24 24 32 20C38 18 44 22 40 30C36 36 28 36 26 30" stroke="#C4A265" stroke-width="2.8" fill="none" stroke-linecap="round"/></svg>
+        <span style="font-family:var(--sf);font-size:11px;color:var(--gd);letter-spacing:5px;font-weight:400">道 序 科 技</span>
+      </div>
+      <p style="font-size:12px;color:var(--tx4);line-height:2;font-weight:300;max-width:280px">道序科技是一家以 AI 为核心的场景应用与价值创造公司，从真实问题出发，把思想、经验、知识与业务流程，做成可使用的 AI 产品与系统。</p>
+    </div>
+    <div>
+      <div style="font-size:10px;color:var(--tx3);letter-spacing:3px;margin-bottom:16px">产品与服务</div>
+      <a href="/products/gouxiang.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">思维克隆系统</a>
+      <a href="/products/growth.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">销售教练智能体</a>
+      <a href="/products/geo.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">AI 官网定制</a>
+      <a href="/products/geo.html#geo" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">GEO 可见度系统</a>
+      <a href="/products/ai-landing.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">企业 AI 落地</a>
+    </div>
+    <div>
+      <div style="font-size:10px;color:var(--tx3);letter-spacing:3px;margin-bottom:16px">了解道序</div>
+      <a href="/about.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">关于道序</a>
+      <a href="/cases.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">案例</a>
+      <a href="/thoughts.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">洞察</a>
+      <a href="/agents.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">AI 应用中心</a>
+    </div>
+    <div>
+      <div style="font-size:10px;color:var(--tx3);letter-spacing:3px;margin-bottom:16px">合作与支持</div>
+      <a href="#" onclick="toggleChat();return false" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">与明一聊聊</a>
+      <a href="#cnt" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">联系我们</a>
+      <a href="/login.html" style="display:block;font-size:12px;color:var(--tx4);letter-spacing:1px;line-height:2.4">客户登录</a>
+    </div>
   </div>
-  <p style="font-size:9px;color:var(--tx5);letter-spacing:1px">道序科技（北京）有限公司 · © 2024-2026 DaoXu Technology</p>
+  <div style="max-width:1080px;margin:34px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.03);text-align:center">
+    <p style="font-size:11px;color:var(--tx3);letter-spacing:1px;line-height:2">微信 · 电话 CL13889506035　|　邮箱 764496864@qq.com</p>
+    <p style="font-size:9px;color:var(--tx5);letter-spacing:1px;margin-top:10px">道序科技（北京）有限公司 · © 2024-2026 DaoXu Technology · 京 ICP 备 XXXXXXXX 号（待补备案号）</p>
+  </div>
 </footer>
 
 <!-- 明一聊天浮窗 (chat FAB + panel, opened by toggleChat()) -->
@@ -1207,7 +1127,7 @@ function selectAgent(agentId,agentName){
   document.querySelector('.chat-body').style.height='calc(100% - 52px)';
   
   // Insert greeting message bubble
-  var greetings={'main':'你好，我是明一，道序科技的AI信使。AI 落地、认知提升、增长策略、产品选型，什么都可以聊。','ai-advisor':'你好，我是道序的AI赋能顾问。告诉我你的行业和业务，我帮你找到AI最该切入的那个点。','ip-builder':'你好，我是道序的IP操盘教练。你现在做IP到了什么阶段？有定位了吗？有流量了吗？有变现了吗？从哪个阶段开始聊都行。','biz-doctor':'你好，我是道序的商业诊断师。把你的生意或想法说给我听，我不急着给答案，先帮你把问题本身搞清楚。','content-ops':'你好，我是道序的内容操盘手。你是想诊断一篇内容、优化短视频开头、还是从零写一篇文案？直接发内容过来也行。','think-room':'你好，欢迎来到思想聊天室。给我一个话题，我帮你召集最合适的思想家，一起从多个角度把它聊透。','action-coach':'你好，我是道序的执行力教练。如果你有一件事知道该做但就是做不动，说出来，我帮你找到卡住的真正原因。','concept-breaker':'你好，我是道序的概念拆解师。给我一个词或一个概念，我帮你把它从模糊拆到精确。','prompt-engineer':'你好，我是道序的提示词工程师。告诉我你想让AI帮你做什么事，我直接帮你写提示词。','deep-analyst':'你好，我是道序的深度分析师。给我一个人、一家公司、或一个决策，我帮你从多个维度看透它。','startup-coach':'你好，我是道序的创业教练。如果你在认真考虑做一件事，我会帮你搞清楚它到底值不值得做。提醒你：我会问到你不舒服。','austrian-room':'你好，欢迎来到奥派经济聊天室。给我一个经济或商业话题，哈耶克和米塞斯已经准备好了。','lacan-analyst':'……','knowledge-distiller':'你好，我是道序的知识萃取师。你在什么行业做了多少年？我帮你把脑子里的经验变成一套别人也能学的方法论。'};
+  var greetings={'main':'你好，我是明一，道序科技的 AI 需求顾问。你不需要先懂 AI，只要告诉我：你是谁、做什么、现在最想解决什么。我会通过几个问题，帮你判断最值得先做的 AI 场景，并给你一个清楚的下一步。','ai-advisor':'你好，我是道序的AI赋能顾问。告诉我你的行业和业务，我帮你找到AI最该切入的那个点。','ip-builder':'你好，我是道序的IP操盘教练。你现在做IP到了什么阶段？有定位了吗？有流量了吗？有变现了吗？从哪个阶段开始聊都行。','biz-doctor':'你好，我是道序的商业诊断师。把你的生意或想法说给我听，我不急着给答案，先帮你把问题本身搞清楚。','content-ops':'你好，我是道序的内容操盘手。你是想诊断一篇内容、优化短视频开头、还是从零写一篇文案？直接发内容过来也行。','think-room':'你好，欢迎来到思想聊天室。给我一个话题，我帮你召集最合适的思想家，一起从多个角度把它聊透。','action-coach':'你好，我是道序的执行力教练。如果你有一件事知道该做但就是做不动，说出来，我帮你找到卡住的真正原因。','concept-breaker':'你好，我是道序的概念拆解师。给我一个词或一个概念，我帮你把它从模糊拆到精确。','prompt-engineer':'你好，我是道序的提示词工程师。告诉我你想让AI帮你做什么事，我直接帮你写提示词。','deep-analyst':'你好，我是道序的深度分析师。给我一个人、一家公司、或一个决策，我帮你从多个维度看透它。','startup-coach':'你好，我是道序的创业教练。如果你在认真考虑做一件事，我会帮你搞清楚它到底值不值得做。提醒你：我会问到你不舒服。','austrian-room':'你好，欢迎来到奥派经济聊天室。给我一个经济或商业话题，哈耶克和米塞斯已经准备好了。','lacan-analyst':'……','knowledge-distiller':'你好，我是道序的知识萃取师。你在什么行业做了多少年？我帮你把脑子里的经验变成一套别人也能学的方法论。'};
   var greeting=greetings[agentId]||'你好，有什么可以帮你的？';
   var gRow=document.createElement('div');gRow.className='msg-row bot';
   var gBubble=document.createElement('div');gBubble.className='msg-bubble';gBubble.textContent=greeting;
@@ -1816,20 +1736,29 @@ function dismissAuthPrompt(){
   if(mask){ mask.classList.remove('show'); mask.style.display='none' }
 }
 (function autoShowAuthPrompt(){
-  // 等 DaoxuAuth 加载好 + 延迟 1s（不遮首屏）
+  // 高级官网原则：首屏绝不弹窗打扰。等用户滚动过首屏、表现出浏览兴趣后，再温和地弹一次登录引导。
   var tries = 0;
-  function tick(){
-    if(!window.DaoxuAuth && tries < 20){ tries++; setTimeout(tick, 100); return }
+  function arm(){
     // 已登录 → 不弹
     if(window.DaoxuAuth && DaoxuAuth.isLoggedIn()) return;
     // 本次 session 已关过 → 不再弹
     try{ if(sessionStorage.getItem('daoxu_auth_prompt_dismissed') === '1') return }catch(e){}
-    // URL 带 ?agent= 参数（从智能体广场跳回来的）→ 不弹（不打扰正在进入聊天的用户）
+    // URL 带 ?agent=（从智能体广场跳回来的）→ 不弹
     try{ if(new URLSearchParams(location.search).get('agent')) return }catch(e){}
-    setTimeout(function(){
+    var shown = false;
+    function maybeShow(){
+      if(shown) return;
+      if(window.scrollY < window.innerHeight * 1.3) return; // 滚过首屏才弹
+      shown = true;
+      window.removeEventListener('scroll', maybeShow);
       var mask = document.getElementById('authPromptMask');
       if(mask){ mask.style.display='flex'; mask.classList.add('show') }
-    }, 1000);
+    }
+    /* 对方要求：官网阅读不被弹窗打断。仅在用户点击 AI 应用 / 在线系统等需要登录的入口时才提示登录，此处不再自动弹出。 */
+  }
+  function tick(){
+    if(!window.DaoxuAuth && tries < 20){ tries++; setTimeout(tick, 100); return }
+    arm();
   }
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', tick);
@@ -1862,5 +1791,30 @@ function dismissAuthPrompt(){
   }catch(e){console.warn('[autoOpenAgent] failed:',e)}
 })();
 </script>
+<script>
+/* Hero 星图：缓慢漂移的金色节点网络（东方星象·秩序感），克制不抢眼，尊重 reduced-motion */
+(function(){
+  var c=document.getElementById('cnet'); if(!c||!c.getContext) return;
+  var ctx=c.getContext('2d'), dpr=Math.min(window.devicePixelRatio||1,2);
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nodes=[], W=0, H=0, raf=0;
+  function build(){ var n=Math.max(26,Math.min(58,Math.round(W*H/24000))); nodes=[]; for(var i=0;i<n;i++){nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.11,vy:(Math.random()-.5)*.11,r:Math.random()*1.3+.4});} }
+  function size(){ var r=c.getBoundingClientRect(); W=r.width; H=r.height; if(W<2||H<2) return; c.width=W*dpr; c.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); build(); }
+  function dots(alpha){ for(var k=0;k<nodes.length;k++){var p=nodes[k]; ctx.fillStyle='rgba(196,162,101,'+alpha+')'; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.2832); ctx.fill();} }
+  function frame(){ ctx.clearRect(0,0,W,H);
+    for(var i=0;i<nodes.length;i++){ var a=nodes[i]; a.x+=a.vx; a.y+=a.vy; if(a.x<0||a.x>W)a.vx*=-1; if(a.y<0||a.y>H)a.vy*=-1;
+      for(var j=i+1;j<nodes.length;j++){ var b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d=dx*dx+dy*dy; if(d<15000){var o=(1-d/15000)*.15; ctx.strokeStyle='rgba(196,162,101,'+o+')'; ctx.lineWidth=.6; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();} } }
+    dots(.42); raf=requestAnimationFrame(frame);
+  }
+  size();
+  function start(){ if(reduce){ ctx.clearRect(0,0,W,H); dots(.32); return; } if(!raf) raf=requestAnimationFrame(frame); }
+  function stop(){ if(raf){ cancelAnimationFrame(raf); raf=0; } }
+  window.addEventListener('resize',function(){ stop(); size(); start(); });
+  // 性能：星图离开视口即暂停 canvas，回到视口恢复（对方硬要求）
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ es[0].isIntersecting ? start() : stop(); },{threshold:0}).observe(c); } else { start(); }
+})();
+</script>
+
+
 </body>
 </html>
